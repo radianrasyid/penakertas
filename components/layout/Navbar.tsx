@@ -3,7 +3,7 @@ import { GetSessionData, SigningOut } from "@/lib/actions";
 import { nameInitials } from "@/lib/functions";
 import { UI, useUiStore } from "@/zustand/UI/ui";
 // import { deleteCookie, getCookie, getCookies } from "cookies-next";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdMenu } from "react-icons/md";
@@ -21,18 +21,37 @@ const Navbar = () => {
   const { setSidebarOpen, sidebarOpen, sidebarWidth } = useUiStore(
     (state: UI) => state
   );
-
-  const [userData, setUserData] = useState({
-    expires: "",
-    refreshToken: "",
-    token: "",
+  const [currentUser, setCurrentUser] = useState<{
+    user: {
+      email: string;
+      image: string | null;
+      name: string;
+    };
+  }>({
     user: {
       email: "",
-      jwtToken: "",
+      image: null,
       name: "",
-      refreshToken: "",
     },
   });
+
+  async function getUserData() {
+    let res = await GetSessionData();
+
+    setCurrentUser({
+      ...currentUser,
+      user: {
+        ...currentUser.user,
+        email: res.user?.email as string,
+        image: res.user?.image as string | null,
+        name: res.user?.name as string,
+      },
+    });
+  }
+
+  useMemo(() => {
+    getUserData();
+  }, []);
 
   const processData = async () => {
     let res = await GetSessionData();
@@ -86,10 +105,10 @@ const Navbar = () => {
       {/* PROFILE */}
       <div className="flex gap-1 justify-between items-center md:hidden">
         <Button size={"icon"} className="bg-black bg-opacity-50">
-          {nameInitials(userData.user.email)}
+          {nameInitials(currentUser.user.name)}
         </Button>
         <div className="flex flex-col">
-          <span className="text-xs font-semibold">{userData.user.email}</span>
+          <span className="text-xs font-semibold">{currentUser.user.name}</span>
           <span className="text-xs font-light">Company</span>
         </div>
         <DropdownMenu>
@@ -122,7 +141,7 @@ const Navbar = () => {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Button size={"icon"} className="bg-black bg-opacity-50">
-              {nameInitials(userData.user.email)}
+              {nameInitials(currentUser.user.name)}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>

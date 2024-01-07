@@ -1,4 +1,8 @@
-// export type UserSession = {
-//     jwt: string;
-//     session: s
-// }
+export type UserSession = {
+  id: string;
+  name: string;
+  email: string;
+  jwtToken: string;
+  image?: string;
+  username: string;
+};

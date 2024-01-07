@@ -43,7 +43,7 @@ const Sidebar = () => {
       }}
       className={`${
         sidebarOpen
-          ? "translate-x-0 w-60 md:absolute md:left-0"
+          ? "translate-x-0 w-60 md:absolute md:left-0 md:z-50"
           : "md:w-0 tab_port:w-0 md:opacity-0 tab_port:opacity-0 w-14"
       } transition-all duration-300 ease-in-out rounded-tr-sm backdrop-blur-sm bg-gradient-to-tr from-blue-950 to-blue-800 min-h-screen`}
     >
@@ -82,7 +82,7 @@ const Sidebar = () => {
                       <Button
                         key={`${index}-${item.name}`}
                         className={`flex gap-2 w-full justify-start items-center bg-transparent shadow-none ${
-                          item.route.includes(pathname)
+                          pathname.includes(item.route)
                             ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60 hover:bg-reddish hover:brightness-125 transition-all"
                             : ""
                         }`}
@@ -100,7 +100,7 @@ const Sidebar = () => {
                         key={`${index}-${item.route}`}
                         type="single"
                         collapsible
-                        className="w-full p-0 text-white bg-transparent shadow-none rounded-md mb-2"
+                        className="w-full p-0 text-white bg-transparent shadow-none rounded-md"
                       >
                         <AccordionItem value="item-1" className="border-none">
                           <AccordionTrigger
@@ -117,18 +117,21 @@ const Sidebar = () => {
                               </span>
                             </div>
                           </AccordionTrigger>
-                          <AccordionContent className="pl-4 mt-1 w-full">
+                          <AccordionContent className="pl-4 mt-1 w-full max-h-screen overflow-y-auto">
                             <ul className="text-white font-sm font-semibold pl-3">
                               {item.children.map((i, ind) => {
                                 return (
                                   <li
                                     key={ind + 3}
-                                    className={`cursor-pointer hover:bg-reddish w-full flex items-center justify-center py-2 rounded-md ${
+                                    className={`cursor-pointer hover:bg-reddish w-full flex items-center justify-start pl-3 py-2 rounded-md ${
                                       i.route.includes(pathname)
                                         ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
                                         : ""
-                                    }`}
-                                    onClick={() => router.push(i.route)}
+                                    } mb-1`}
+                                    onClick={() => {
+                                      console.log("ini route");
+                                      router.push(i.route);
+                                    }}
                                   >
                                     <span>{i.name}</span>
                                   </li>
@@ -162,7 +165,7 @@ const Sidebar = () => {
                   return (
                     <Button
                       className={`bg-transparent shadow-none ${
-                        item.route.includes(pathname)
+                        pathname.includes(item.route)
                           ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
                           : ""
                       }`}
@@ -178,7 +181,9 @@ const Sidebar = () => {
                       <TooltipTrigger asChild>
                         <Button
                           className={`shadow-none ${
-                            pathname.includes(item.route)
+                            pathname
+                              .replaceAll("/", "")
+                              .includes(item.route.replaceAll("/", ""))
                               ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
                               : ""
                           }`}

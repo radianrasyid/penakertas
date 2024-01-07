@@ -26,18 +26,21 @@ export const { auth, signIn, signOut } = NextAuth({
 
         const response = (await jwtDecode(resLogin.data)) as {
           id: string;
-          fullName: string;
+          fullname: string;
           username: string;
           email: string;
           image: string;
         };
 
+        console.log("ini decode", response);
+
         return {
           id: response.id,
           email: response.email,
           image: response.image,
-          name: response.fullName,
+          name: response.fullname,
           jwt: resLogin.data,
+          username: response.username,
         };
       },
     }),

@@ -28,5 +28,7 @@ export const SigningOut = async () => {
 
 export const GetSessionData = async () => {
   let data = await auth();
-  return data;
+  return {
+    ...data,
+  };
 };
