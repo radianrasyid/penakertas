@@ -32,8 +32,6 @@ export const { auth, signIn, signOut } = NextAuth({
           image: string;
         };
 
-        console.log("ini decode", response);
-
         return {
           id: response.id,
           email: response.email,

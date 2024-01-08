@@ -22,6 +22,12 @@ export const authConfig: NextAuthConfig = {
         }
         return false;
       }
+
+      if (!isLoggedIn) {
+        return Response.redirect(
+          new URL(`${nextUrl.basePath}/sign-in`, nextUrl)
+        );
+      }
       return true;
     },
     jwt: ({ token, user }) => {

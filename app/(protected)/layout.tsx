@@ -1,3 +1,5 @@
+import { GetSessionData } from "@/lib/actions";
+import { POSTCheckUserRole } from "@/services/user/api";
 import dynamic from "next/dynamic";
 import { ReactNode } from "react";
 
@@ -16,11 +18,19 @@ const SidebarPartial = dynamic(() => import("@/components/layout/Layout"), {
   ssr: false,
 });
 
-const ProtectedLayout = ({ children }: { children: ReactNode }) => {
+const getRole = async () => {
+  const data = await GetSessionData();
+  const res = await POSTCheckUserRole(data?.user?.email as string);
+
+  return res;
+};
+
+const ProtectedLayout = async ({ children }: { children: ReactNode }) => {
+  const dataRole = await getRole();
   return (
     <div className="flex w-full">
       {/* SIDEBAR */}
-      <SidebarPartial />
+      <SidebarPartial role={dataRole.data as string} />
 
       {/* NAVBAR AND CONTENT */}
       <div className="flex flex-col flex-1 flex-grow gap-3 transition-all duration-200 ease-in-out md:gap-0">

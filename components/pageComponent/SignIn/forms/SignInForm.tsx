@@ -10,14 +10,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authenticate } from "@/lib/actions";
+import { POSTBulkInsertUser } from "@/services/user/api";
 import { useFormState, useFormStatus } from "react-dom";
+import { toast } from "sonner";
 
 const SignInForm = () => {
   const { pending } = useFormStatus();
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
 
   return (
-    <Card className="lg:min-w-96">
+    <Card className="lg:min-w-96 xl:min-w-96">
       <CardHeader>
         <CardTitle>Sign In</CardTitle>
         <CardDescription>Pena Kertas Project</CardDescription>
@@ -52,7 +54,7 @@ const SignInForm = () => {
               Log In
             </Button>
           </div>
-          {/* <div>
+          <div>
             <Button
               type="button"
               onClick={async () => {
@@ -71,7 +73,7 @@ const SignInForm = () => {
             >
               BULK INSERT
             </Button>
-          </div> */}
+          </div>
         </form>
         {errorMessage && (
           <span className="text-sm text-red-500">{errorMessage}</span>

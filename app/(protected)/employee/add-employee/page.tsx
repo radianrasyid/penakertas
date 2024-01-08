@@ -14,6 +14,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Autocomplete, Checkbox } from "@mui/material";
 import dayjs from "dayjs";
+import { useFormik } from "formik";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
@@ -23,6 +24,37 @@ const AddEmployee = () => {
     { name: string; value: string }[]
   >([]);
   const [pickedDate, setPickedDate] = useState<Date>(new Date());
+
+  const {} = useFormik({
+    initialValues: {
+      nrpt: "",
+      firstName: "",
+      lastName: "",
+      prefixDegree: "",
+      suffixDegree: "",
+      workGroup: "",
+      workUnit: "",
+      workPart: "",
+      religion: "",
+      gender: "",
+      latestEducation: "",
+      maritalStatus: "",
+      workDescription: "",
+      placement: "",
+      startYear: new Date(),
+      skNumber: "",
+      neighborhood: "",
+      neighborhoodHead: "",
+      province: "",
+      district: "",
+      homeAddress: "",
+      subdistrict: "",
+      ward: "",
+      birthPlace: "",
+    },
+    onSubmit: () => {},
+  });
+
   return (
     <div>
       <form>
@@ -38,27 +70,33 @@ const AddEmployee = () => {
           </div>
           <div className="w-full bg-white px-4 py-4 rounded-bl-lg rounded-br-lg">
             {/* NRPT, NAMA LENGKAP, GELAR DEPAN, GELAR BELAKANG */}
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className="flex flex-wrap flex-auto gap-2 mb-4">
               {/* NRPT */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">NRPT/PIN</Label>
                 <Input id="nrpt-pin-textfield" className="" />
               </div>
 
-              {/* NAMA LENGKAP */}
-              <div className="flex flex-col gap-2 flex-1">
-                <Label htmlFor="nama-lengkap-textfield">Nama Lengkap</Label>
+              {/* NAMA DEPAN */}
+              <div className="flex flex-col gap-2 flex-1 md:basis-1/2">
+                <Label htmlFor="nama-lengkap-textfield">Nama Depan</Label>
+                <Input id="nama-lengkap-textfield" className="" />
+              </div>
+
+              {/* NAMA BELAKANG */}
+              <div className="flex flex-col gap-2 flex-1 md:basis-1/2">
+                <Label htmlFor="nama-lengkap-textfield">Nama Belakang</Label>
                 <Input id="nama-lengkap-textfield" className="" />
               </div>
 
               {/* GELAR DEPAN */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">Gelar Depan</Label>
                 <Input id="gelar-depan-textfield" className="" />
               </div>
 
               {/* GELAR BELAKANG */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-belakang-textfield">Gelar Belakang</Label>
                 <Input id="gelar-belakang-textfield" className="" />
               </div>
@@ -67,7 +105,7 @@ const AddEmployee = () => {
             {/* KELOMPOK PEKERJAAN, UNIT KERJA, BAGIAN */}
             <div className="flex flex-wrap gap-2">
               {/* KELOMPOK PEKERJAAN */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">
                   Kelompok Pekerjaan
                 </Label>
@@ -113,7 +151,7 @@ const AddEmployee = () => {
               </div>
 
               {/* UNIT KERJA */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">
                   Unit Kerja
                 </Label>
@@ -159,7 +197,7 @@ const AddEmployee = () => {
               </div>
 
               {/* BAGIAN */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">Bagian</Label>
                 <Autocomplete
                   multiple
@@ -215,7 +253,7 @@ const AddEmployee = () => {
             {/* AGAMA, JENIS KELAMIN, PENDIDIKAN TERAKHIR, STATUS PERKAWINAN */}
             <div className="flex flex-wrap gap-2 mb-4">
               {/* AGAMA */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">Agama</Label>
                 <Autocomplete
                   multiple
@@ -259,7 +297,7 @@ const AddEmployee = () => {
               </div>
 
               {/* JENIS KELAMIN */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">
                   Jenis Kelamin
                 </Label>
@@ -305,7 +343,7 @@ const AddEmployee = () => {
               </div>
 
               {/* PENDIDIKAN TERAKHIR */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">
                   Pendidikan Terakhir
                 </Label>
@@ -351,7 +389,7 @@ const AddEmployee = () => {
               </div>
 
               {/* STATUS PERKAWINAN */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">
                   Status Perkawinan
                 </Label>
@@ -400,25 +438,25 @@ const AddEmployee = () => {
             {/* URAIAN KERJA, PENEMPATAN, TAHUN MASUK */}
             <div className="flex flex-wrap gap-2 mb-4">
               {/* URAIAN KERJA */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">Uraian Kerja</Label>
                 <Input id="nrpt-pin-textfield" className="" />
               </div>
 
               {/* PENEMPATAN */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nama-lengkap-textfield">Penempatan</Label>
                 <Input id="nama-lengkap-textfield" className="" />
               </div>
 
               {/* TAHUN MASUK */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">Tahun Masuk</Label>
                 <Input id="gelar-depan-textfield" className="" />
               </div>
 
               {/* NOMOR SK */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">Nomor SK</Label>
                 <Input id="nrpt-pin-textfield" className="" />
               </div>
@@ -427,19 +465,19 @@ const AddEmployee = () => {
             {/* RT, RW, PROVINSI, KABUPATEN/KOTA */}
             <div className="flex flex-wrap gap-2 mb-4">
               {/* RT */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-1/2">
                 <Label htmlFor="nama-lengkap-textfield">RT</Label>
                 <Input id="nama-lengkap-textfield" className="" />
               </div>
 
               {/* RW */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-1/2">
                 <Label htmlFor="nama-lengkap-textfield">RW</Label>
                 <Input id="nama-lengkap-textfield" className="" />
               </div>
 
               {/* PROVINSI */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">
                   Provinsi
                 </Label>
@@ -485,7 +523,7 @@ const AddEmployee = () => {
               </div>
 
               {/* KABUPATEN */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">
                   Kabupaten/Kota
                 </Label>
@@ -534,7 +572,7 @@ const AddEmployee = () => {
             {/* ALAMAT RUMAH */}
             <div className="flex flex-wrap gap-2 mb-4">
               {/* ALAMAT RUMAH */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nama-lengkap-textfield">Alamat Rumah</Label>
                 <Textarea rows={2} id="nama-lengkap-textfield" className="" />
               </div>
@@ -543,9 +581,9 @@ const AddEmployee = () => {
             {/* KECAMATAN, KELURAHAN, TEMPAT LAHIR, TANGGAL LAHIR */}
             <div className="flex flex-wrap gap-2 mb-4">
               {/* KECAMATAN */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">
-                  Provinsi
+                  Kecamatan
                 </Label>
                 <Autocomplete
                   multiple
@@ -589,7 +627,7 @@ const AddEmployee = () => {
               </div>
 
               {/* KELURAHAN */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">
                   Kelurahan
                 </Label>
@@ -635,14 +673,14 @@ const AddEmployee = () => {
               </div>
 
               {/* TEMPAT LAHIR */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">Tempat Lahir</Label>
                 <Input id="nrpt-pin-textfield" className="" />
               </div>
 
               {/* TANGGAL LAHIR */}
-              <div className="flex flex-col gap-2 flex-1">
-                <Label htmlFor="nrpt-pin-textfield">Nomor SK</Label>
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
+                <Label htmlFor="nrpt-pin-textfield">Tanggal Lahir</Label>
                 <InputCustom
                   className="w-full"
                   inputClassname="w-full text-center"
@@ -677,19 +715,19 @@ const AddEmployee = () => {
             {/* NOMOR HP, NOMOR TELEPON, EMIAL */}
             <div className="flex flex-wrap gap-2 mb-4">
               {/* NOMOR HP */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">Nomor Hp</Label>
                 <Input id="nrpt-pin-textfield" className="" />
               </div>
 
               {/* NOMOR TELEPON */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nama-lengkap-textfield">Nomor Telp</Label>
                 <Input id="nama-lengkap-textfield" className="" />
               </div>
 
               {/* EMAIL */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">Email</Label>
                 <Input id="gelar-depan-textfield" className="" />
               </div>
@@ -698,31 +736,31 @@ const AddEmployee = () => {
             {/* NOMOR KK, NOMOR IDENTITAS, NPWP, BPJS TENAGA KERJA, BPJS KESEHATAN */}
             <div className="flex flex-wrap gap-2 mb-4">
               {/* NOMOR KK */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">Nomor KK</Label>
                 <Input id="nrpt-pin-textfield" className="" />
               </div>
 
               {/* NOMOR IDENTITAS */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nama-lengkap-textfield">Nomor Identitas</Label>
                 <Input id="nama-lengkap-textfield" className="" />
               </div>
 
               {/* NPWP */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">NPWP</Label>
                 <Input id="gelar-depan-textfield" className="" />
               </div>
 
               {/* BPJS TENAGA KERJA */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">BPJS Tenaga Kerja</Label>
                 <Input id="gelar-depan-textfield" className="" />
               </div>
 
               {/* BPJS KESEHATAN */}
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">BPJS KESEHATAN</Label>
                 <Input id="gelar-depan-textfield" className="" />
               </div>
@@ -784,8 +822,10 @@ const AddEmployee = () => {
                 <Input id="nrpt-pin-textfield" type="file" className="" />
               </div>
             </div>
-            <div className="flex justify-end">
-              <Button type="submit">Submit</Button>
+            <div className="flex justify-end md:mt-4">
+              <Button type="submit" className="md:w-full">
+                Submit
+              </Button>
             </div>
           </div>
         </div>

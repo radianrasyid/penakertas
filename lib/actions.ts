@@ -7,7 +7,6 @@ export async function authenticate(
   formData: FormData
 ) {
   try {
-    console.log("ini formData", formData);
     await signIn("credentials", formData);
   } catch (error) {
     if (error instanceof AuthError) {
@@ -28,7 +27,5 @@ export const SigningOut = async () => {
 
 export const GetSessionData = async () => {
   let data = await auth();
-  return {
-    ...data,
-  };
+  return data;
 };

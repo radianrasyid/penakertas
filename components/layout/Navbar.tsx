@@ -42,9 +42,9 @@ const Navbar = () => {
       ...currentUser,
       user: {
         ...currentUser.user,
-        email: res.user?.email as string,
-        image: res.user?.image as string | null,
-        name: res.user?.name as string,
+        email: res?.user?.email as string,
+        image: res?.user?.image as string | null,
+        name: res?.user?.name as string,
       },
     });
   }
@@ -56,7 +56,6 @@ const Navbar = () => {
   const processData = async () => {
     let res = await GetSessionData();
     // setUserData(res as any);
-    console.log("ini res", res);
   };
 
   useEffect(() => {

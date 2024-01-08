@@ -1,6 +1,10 @@
 "use client";
 import MainLogo from "@/assets/images/kepri-logo.png";
-import { sidebarData } from "@/lib/sidebarData";
+import {
+  sidebarData,
+  sidebarDataAdmin,
+  sidebarDataUser,
+} from "@/lib/sidebarData";
 import { UI, useUiStore } from "@/zustand/UI/ui";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
@@ -20,18 +24,30 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 
-const Sidebar = () => {
+const Sidebar = ({ role }: { role: string }) => {
   const { sidebarOpen, setSidebarWidth, sidebarWidth, setSidebarOpen } =
     useUiStore((state: UI) => state);
   const [sidebarW, setSidebarW] = useState(sidebarWidth);
   const pathname = usePathname();
   const router = useRouter();
+  const [menuData, setMenuData] = useState(sidebarData);
   const sidebarRef = useRef<HTMLElement | null>(null);
+  const processRole = () => {
+    switch (role) {
+      case "ADMIN":
+        return setMenuData(sidebarDataAdmin);
+      case "SUPER_ADMIN":
+        return setMenuData(sidebarData);
+      case "USER":
+        return setMenuData(sidebarDataUser);
+    }
+  };
 
   useEffect(() => {
     () => {
       setSidebarWidth(sidebarRef.current?.clientWidth as number);
     };
+    processRole();
   }, [sidebarOpen]);
 
   return (
@@ -76,7 +92,7 @@ const Sidebar = () => {
                 </Button>
               </div>
               <div className="flex-1 w-full">
-                {sidebarData.map((item, index) => {
+                {menuData.map((item, index) => {
                   if (item.children.length < 1) {
                     return (
                       <Button
@@ -129,7 +145,6 @@ const Sidebar = () => {
                                         : ""
                                     } mb-1`}
                                     onClick={() => {
-                                      console.log("ini route");
                                       router.push(i.route);
                                     }}
                                   >
@@ -160,7 +175,7 @@ const Sidebar = () => {
                   className="h-11 rounded-full object-cover"
                 />
               </div>
-              {sidebarData.map((item, index) => {
+              {menuData.map((item, index) => {
                 if (item.children.length < 1) {
                   return (
                     <Button

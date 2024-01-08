@@ -40,8 +40,9 @@ model User {
     workGroup            String?
     workUnit             String?
     workPart             String?
-    gender               Gender?
-    role                 userRole?
+    genderId             String?
+    gender               Gender?        @relation(fields: [genderId], references: [id])
+    role                 userRole
     createdAt            DateTime       @default(now()) @map(name: "created_at")
     updatedAt            DateTime       @updatedAt @map(name: "updated_at")
     leaves               UserLeave[]
@@ -76,11 +77,10 @@ model User {
 }
 
 model Gender {
-    id     String     @id @default(cuid())
-    name   userGender
-    value  userGender
-    userId String     @unique
-    user   User       @relation(fields: [userId], references: [id])
+    id    String     @id @default(cuid())
+    name  userGender @unique
+    value userGender
+    users User[]
 }
 
 model WorkGroup {

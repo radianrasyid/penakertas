@@ -37,6 +37,7 @@ export const POST = async (req: NextRequest) => {
         id: user?.id,
         email: user?.email,
         image: user?.photograph,
+        role: user?.role,
       },
       "radianrasyid"
     );
