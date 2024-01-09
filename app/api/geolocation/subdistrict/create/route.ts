@@ -9,8 +9,11 @@ export const POST = async (req: NextRequest) => {
       data: {
         name: subdistrict,
         value: subdistrict.toUpperCase(),
-        cityDistrictName: district,
-        cityDistricts: district,
+        cityDistricts: {
+          connect: {
+            id: district.id,
+          },
+        },
       },
     });
 
@@ -25,6 +28,7 @@ export const POST = async (req: NextRequest) => {
       }
     );
   } catch (error) {
+    console.log("ini error", error);
     return NextResponse.json(
       {
         status: "failed",

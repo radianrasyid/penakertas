@@ -9,15 +9,16 @@ export const POST = async (req: NextRequest) => {
       data: {
         name: cityDistrictName,
         value: cityDistrictName.toUpperCase(),
-        provinceName: province,
-        province: province,
+        province: {
+          connect: { id: province.id },
+        },
       },
     });
 
     return NextResponse.json(
       {
         status: "success",
-        message: "create education level successfull",
+        message: "create district successfull",
         data: res,
       },
       {
@@ -25,10 +26,11 @@ export const POST = async (req: NextRequest) => {
       }
     );
   } catch (error) {
+    console.log("ini error", error);
     return NextResponse.json(
       {
         status: "failed",
-        message: "create education level failed",
+        message: "create district failed",
         data: error,
       },
       {

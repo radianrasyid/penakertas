@@ -1,18 +1,14 @@
 import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (req: NextRequest) => {
+export const GET = async (req: NextRequest) => {
+  const provinceName = req.nextUrl.searchParams.get("province") as string;
   try {
-    const { wardName, subdistrict } = await req.json();
-
-    const res = await prisma.ward.create({
-      data: {
-        name: wardName,
-        value: wardName.toUpperCase(),
-        subdistrict: {
-          connect: {
-            id: subdistrict.id,
-          },
+    const res = await prisma.cityDistrict.findMany({
+      where: {
+        provinceId: {
+          contains: provinceName,
+          mode: "insensitive",
         },
       },
     });
@@ -20,7 +16,7 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json(
       {
         status: "success",
-        message: "create education level successfull",
+        message: "list of districts",
         data: res,
       },
       {
@@ -31,7 +27,7 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json(
       {
         status: "failed",
-        message: "create education level failed",
+        message: "something went wrong",
         data: error,
       },
       {

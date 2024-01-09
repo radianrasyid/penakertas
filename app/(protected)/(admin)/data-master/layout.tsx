@@ -3,6 +3,7 @@ import { POSTCheckUserRole } from "@/services/user/api";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 import { ReactNode } from "react";
+import { Toaster } from "sonner";
 
 const isAdmin = async () => {
   const data = await GetSessionData();
@@ -20,7 +21,13 @@ const DataMasterLayout = async ({
   req: NextRequest;
 }) => {
   const isAdminCheck = await isAdmin();
-  if (isAdminCheck) return <>{children}</>;
+  if (isAdminCheck)
+    return (
+      <>
+        {children}
+        <Toaster />
+      </>
+    );
   return redirect("/");
 };
 

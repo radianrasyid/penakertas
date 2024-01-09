@@ -13,7 +13,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FaPlus } from "react-icons/fa6";
 
 const data: Payment[] = [...Array(10)].map((item, index) => {
   return {
@@ -115,8 +117,20 @@ const ProvinceMasterPage = () => {
   const [totalPage, setTotalPage] = useState<number>(1);
   const [totalData, setTotalData] = useState<number>(data.length);
   const [pageSize, setPageSize] = useState<number>(5);
+  const router = useRouter();
   return (
     <div className="">
+      <div className="flex justify-between">
+        <span className="text-lg font-medium">Data Provinsi</span>
+
+        <Button
+          variant={"default"}
+          className="flex gap-2 items-center"
+          onClick={() => router.push("/data-master/province/create")}
+        >
+          <FaPlus /> Provinsi
+        </Button>
+      </div>
       <DataTableServerside
         key={pageSize + currentPage}
         columns={columns}

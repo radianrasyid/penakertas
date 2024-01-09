@@ -124,26 +124,26 @@ model CityDistrict {
     id           String        @id @default(cuid())
     name         String
     value        String
-    provinceName String
-    province     Province      @relation(fields: [provinceName], references: [id])
+    provinceId   String
+    province     Province      @relation(fields: [provinceId], references: [id])
     subdistricts Subdistrict[]
 }
 
 model Subdistrict {
-    id               String       @id @default(cuid())
-    name             String
-    value            String
-    cityDistrictName String
-    cityDistricts    CityDistrict @relation(fields: [cityDistrictName], references: [id])
-    wards            Ward[]
+    id             String       @id @default(cuid())
+    name           String
+    value          String
+    cityDistrictId String
+    cityDistricts  CityDistrict @relation(fields: [cityDistrictId], references: [id])
+    wards          Ward[]
 }
 
 model Ward {
-    id              String      @id @default(cuid())
-    name            String
-    value           String
-    subdistrictName String
-    subdistrict     Subdistrict @relation(fields: [subdistrictName], references: [id])
+    id            String      @id @default(cuid())
+    name          String
+    value         String
+    subdistrictId String
+    subdistrict   Subdistrict @relation(fields: [subdistrictId], references: [id])
 }
 
 model LeaveType {

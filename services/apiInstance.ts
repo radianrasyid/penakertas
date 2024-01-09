@@ -11,7 +11,7 @@ export async function useFetch<T>({
   authorization?: string;
   headers: HeadersInit;
   cache?: RequestCache;
-  method: string;
+  method: "POST" | "GET" | "PUT" | "PATCH" | "POST";
 }) {
   let data: T;
   return await fetch(`${url}`, {
