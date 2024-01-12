@@ -108,7 +108,7 @@ const ProvinceCreate = () => {
                 }}
                 fullWidth
                 renderInput={(params) => (
-                  <CustomTextfield {...params} placeholder="Provinsi" />
+                  <CustomTextfield {...params} placeholder="Kecamatan" />
                 )}
               />
               <Button type="submit">Save</Button>

@@ -13,23 +13,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GETListDistrictPaginate } from "@/services/geolocation/api";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
-
-const data: Payment[] = [...Array(10)].map((item, index) => {
-  return {
-    id: `m5gr84i9-${index + 4}`,
-    no: index + 1,
-    province: "Kepulauan Riau",
-    aksi: null,
-  };
-});
 
 export type Payment = {
   id: string;
   no: number;
-  province: string;
+  district: string;
   aksi: null | string;
 };
 
@@ -62,21 +54,19 @@ const columns: ColumnDef<Payment>[] = [
     cell: ({ row }) => <div className="capitalize">{row.getValue("no")}</div>,
   },
   {
-    accessorKey: "province",
+    accessorKey: "district",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Province
+          District
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("province")}</div>
-    ),
+    cell: ({ row }) => <div>{row.getValue("district")}</div>,
   },
   {
     id: "actions",
@@ -95,12 +85,12 @@ const columns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.province)}
+              onClick={() => navigator.clipboard.writeText(payment.district)}
             >
               Ubah
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.province)}
+              onClick={() => navigator.clipboard.writeText(payment.district)}
               className="hover:bg-red-500"
             >
               Hapus
@@ -116,8 +106,34 @@ const ProvinceMasterPage = () => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
-  const [totalData, setTotalData] = useState<number>(data.length);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [rows, setRows] = useState<Payment[]>([]);
+  const [totalData, setTotalData] = useState<number>(rows.length);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [pageSize, setPageSize] = useState<number>(5);
+
+  const getData = async () => {
+    const fetching = await GETListDistrictPaginate({
+      pageNumber: currentPage,
+      pageSize: pageSize,
+      searchQuery: searchQuery,
+    });
+
+    setRows(
+      fetching.data.map((item: any, index: number) => {
+        return {
+          id: `${item.id}`,
+          no: index + 1,
+          district: item.name,
+          aksi: null,
+        };
+      })
+    );
+  };
+
+  useMemo(() => {
+    getData();
+  }, [currentPage, pageSize, searchQuery]);
   return (
     <div className="">
       <div className="flex justify-between">
@@ -134,7 +150,7 @@ const ProvinceMasterPage = () => {
       <DataTableServerside
         key={pageSize + currentPage}
         columns={columns}
-        data={data}
+        data={rows}
         currentPage={currentPage}
         pageSize={pageSize}
         totalData={totalData}

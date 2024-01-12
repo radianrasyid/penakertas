@@ -6,7 +6,7 @@ export const GET = async (req: NextRequest) => {
     const subdistrict = req.nextUrl.searchParams.get("subdistrict");
     const res = await prisma.ward.findMany({
       where: {
-        subdistrictName: {
+        subdistrictId: {
           contains: subdistrict as string,
           mode: "insensitive",
         },

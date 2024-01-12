@@ -32,7 +32,7 @@ const ProvinceCreate = () => {
           handleSubmit();
         }}
       >
-        <Label>Nama Provinsi</Label>
+        <Label onClick={() => console.log(values)}>Nama Provinsi</Label>
         <div className="flex gap-2">
           <Input
             type="text"

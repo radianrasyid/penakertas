@@ -13,8 +13,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GETListProvincePaginate } from "@/services/geolocation/api";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 
 const data: Payment[] = [...Array(10)].map((item, index) => {
@@ -74,9 +75,7 @@ const columns: ColumnDef<Payment>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("province")}</div>
-    ),
+    cell: ({ row }) => <div>{row.getValue("province")}</div>,
   },
   {
     id: "actions",
@@ -117,7 +116,37 @@ const ProvinceMasterPage = () => {
   const [totalPage, setTotalPage] = useState<number>(1);
   const [totalData, setTotalData] = useState<number>(data.length);
   const [pageSize, setPageSize] = useState<number>(5);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [rows, setRows] = useState<Payment[]>([]);
   const router = useRouter();
+
+  const getData = async () => {
+    setLoading(true);
+    const fetching = await GETListProvincePaginate({
+      pageNumber: currentPage,
+      pageSize: pageSize,
+      searchQuery: searchQuery,
+    });
+
+    setRows(
+      fetching.data.map((item: any, index: number) => {
+        return {
+          id: `${item.id}`,
+          no: index + 1,
+          province: item.name,
+          aksi: null,
+        };
+      })
+    );
+    setTotalData(fetching.totalData);
+    setLoading(false);
+  };
+
+  useMemo(() => {
+    getData();
+  }, [pageSize, currentPage, searchQuery]);
+
   return (
     <div className="">
       <div className="flex justify-between">
@@ -134,7 +163,8 @@ const ProvinceMasterPage = () => {
       <DataTableServerside
         key={pageSize + currentPage}
         columns={columns}
-        data={data}
+        loading={loading}
+        data={rows}
         currentPage={currentPage}
         pageSize={pageSize}
         totalData={totalData}

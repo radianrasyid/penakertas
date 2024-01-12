@@ -3,10 +3,7 @@ import { Button } from "@/components/ui/button";
 import { CustomTextfield } from "@/components/ui/custom-textfield-mui";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  GETDistrictList,
-  POSTCreateSubdistrict,
-} from "@/services/geolocation/api";
+import { GETSubdistrictList, POSTCreateWard } from "@/services/geolocation/api";
 import { Autocomplete, Checkbox } from "@mui/material";
 import { useFormik } from "formik";
 import { useMemo, useState } from "react";
@@ -16,16 +13,16 @@ import { toast } from "sonner";
 const ProvinceCreate = () => {
   const { values, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
-      districtName: "",
+      wardName: "",
       province: {
         name: "",
         id: "",
       },
     },
     onSubmit: async (val) => {
-      const fetching = POSTCreateSubdistrict({
-        subdistrict: val.districtName,
-        district: {
+      const fetching = POSTCreateWard({
+        wardName: val.wardName,
+        subdistrict: {
           id: val.province.id,
           name: val.province.name,
         },
@@ -45,7 +42,7 @@ const ProvinceCreate = () => {
     { id: string; name: string; value: string }[]
   >([]);
   const getData = async () => {
-    const res = await GETDistrictList({ province: "" });
+    const res = await GETSubdistrictList({ district: "" });
     console.log("ini response", res);
     return setProvinceList(res.data);
   };
@@ -62,19 +59,19 @@ const ProvinceCreate = () => {
       >
         <div className="flex gap-2 flex-wrap">
           <div className="flex-1 md:basis-1/2">
-            <Label onClick={() => console.log(values)}>Nama Kecamatan</Label>
+            <Label onClick={() => console.log(values)}>Nama Kelurahan</Label>
             <div className="flex gap-2">
               <Input
                 type="text"
-                name="districtName"
-                value={values.districtName}
+                name="wardName"
+                value={values.wardName}
                 onChange={handleChange}
                 className="w-full"
               />
             </div>
           </div>
           <div className="flex-1 md:basis-1/2">
-            <Label>Kabupaten/Kota</Label>
+            <Label>Kecamatan</Label>
             <div className="flex gap-2">
               <Autocomplete
                 size="small"
@@ -111,7 +108,7 @@ const ProvinceCreate = () => {
                 }}
                 fullWidth
                 renderInput={(params) => (
-                  <CustomTextfield {...params} placeholder="Provinsi" />
+                  <CustomTextfield {...params} placeholder="Kecamatan" />
                 )}
               />
               <Button type="submit">Save</Button>

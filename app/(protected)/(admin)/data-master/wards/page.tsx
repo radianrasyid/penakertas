@@ -13,15 +13,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GETListWardPaginate } from "@/services/geolocation/api";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 
 const data: Payment[] = [...Array(10)].map((item, index) => {
   return {
     id: `m5gr84i9-${index + 4}`,
     no: index + 1,
-    province: "Kepulauan Riau",
+    ward: "Kepulauan Riau",
     aksi: null,
   };
 });
@@ -29,7 +30,7 @@ const data: Payment[] = [...Array(10)].map((item, index) => {
 export type Payment = {
   id: string;
   no: number;
-  province: string;
+  ward: string;
   aksi: null | string;
 };
 
@@ -62,21 +63,19 @@ const columns: ColumnDef<Payment>[] = [
     cell: ({ row }) => <div className="capitalize">{row.getValue("no")}</div>,
   },
   {
-    accessorKey: "province",
+    accessorKey: "ward",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Province
+          Kelurahan
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("province")}</div>
-    ),
+    cell: ({ row }) => <div className="lowercase">{row.getValue("ward")}</div>,
   },
   {
     id: "actions",
@@ -95,12 +94,12 @@ const columns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.province)}
+              onClick={() => navigator.clipboard.writeText(payment.ward)}
             >
               Ubah
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.province)}
+              onClick={() => navigator.clipboard.writeText(payment.ward)}
               className="hover:bg-red-500"
             >
               Hapus
@@ -117,7 +116,38 @@ const ProvinceMasterPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [totalData, setTotalData] = useState<number>(data.length);
+  const [rows, setRows] = useState<Payment[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [pageSize, setPageSize] = useState<number>(5);
+
+  const getData = async () => {
+    setLoading(true);
+    const fetching = await GETListWardPaginate({
+      pageNumber: currentPage,
+      pageSize: pageSize,
+      searchQuery: searchQuery,
+    });
+
+    setRows(
+      fetching.data.map((item: any, index: number) => {
+        return {
+          id: `${item.uid}`,
+          no: index + 1,
+          ward: item.ward,
+          aksi: null,
+        };
+      })
+    );
+    setTotalData(fetching.totalData);
+    setTotalPage(fetching.totalPages);
+    setLoading(false);
+  };
+
+  useMemo(() => {
+    getData();
+  }, [currentPage, pageSize, searchQuery]);
+
   return (
     <div className="">
       <div className="flex justify-between">
@@ -134,7 +164,8 @@ const ProvinceMasterPage = () => {
       <DataTableServerside
         key={pageSize + currentPage}
         columns={columns}
-        data={data}
+        data={rows}
+        loading={loading}
         currentPage={currentPage}
         pageSize={pageSize}
         totalData={totalData}

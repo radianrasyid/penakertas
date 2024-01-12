@@ -151,3 +151,79 @@ export const GETWardList = async ({
 
   return res;
 };
+
+export const GETListProvincePaginate = async ({
+  pageNumber = 1,
+  pageSize = 5,
+  searchQuery = "",
+}: {
+  pageNumber: number;
+  pageSize: number;
+  searchQuery: string;
+}) => {
+  const res = await useFetch({
+    url: `${process.env.AUTH_URL}/api/geolocation/province/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    method: "GET",
+    headers: {},
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const GETListDistrictPaginate = async ({
+  pageNumber = 1,
+  pageSize = 5,
+  searchQuery = "",
+}: {
+  pageNumber: number;
+  pageSize: number;
+  searchQuery: string;
+}) => {
+  const res = await useFetch({
+    url: `${process.env.AUTH_URL}/api/geolocation/district/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    method: "GET",
+    headers: {},
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const GETListSubdistrictPaginate = async ({
+  pageNumber = 1,
+  pageSize = 5,
+  searchQuery = "",
+}: {
+  pageNumber: number;
+  pageSize: number;
+  searchQuery: string;
+}) => {
+  const res = await useFetch({
+    url: `${process.env.AUTH_URL}/api/geolocation/subdistrict/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    method: "GET",
+    headers: {},
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const GETListWardPaginate = async ({
+  pageNumber = 1,
+  pageSize = 5,
+  searchQuery = "",
+}: {
+  pageNumber: number;
+  pageSize: number;
+  searchQuery: string;
+}) => {
+  const res = await useFetch({
+    url: `${process.env.AUTH_URL}/api/geolocation/ward/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    method: "GET",
+    headers: {},
+    cache: "no-cache",
+  });
+
+  return res;
+};

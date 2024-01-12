@@ -13,7 +13,7 @@ export async function useFetch<T>({
   cache?: RequestCache;
   method: "POST" | "GET" | "PUT" | "PATCH" | "POST";
 }) {
-  let data: T;
+  let data: T | any;
   return await fetch(`${url}`, {
     method,
     headers: {
@@ -23,5 +23,8 @@ export async function useFetch<T>({
     body: body,
   })
     .then(async (res) => await res.json())
-    .then((result) => (data = result));
+    .then((result) => {
+      data = result;
+      return data;
+    });
 }
