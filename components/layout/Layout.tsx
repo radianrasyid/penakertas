@@ -97,7 +97,7 @@ const Sidebar = ({ role }: { role: string }) => {
                     return (
                       <Button
                         key={`${index}-${item.name}`}
-                        className={`flex gap-2 w-full justify-start items-center bg-transparent shadow-none ${
+                        className={`flex gap-2 w-full justify-start items-center bg-transparent shadow-none mb-2 ${
                           pathname.includes(item.route)
                             ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60 hover:bg-reddish hover:brightness-125 transition-all"
                             : ""
@@ -120,7 +120,7 @@ const Sidebar = ({ role }: { role: string }) => {
                       >
                         <AccordionItem value="item-1" className="border-none">
                           <AccordionTrigger
-                            className={`w-full hover:bg-reddish rounded-md flex justify-start items-center gap-2 p-0 px-4 py-2 hover:no-underline ${
+                            className={`w-full mb-2 hover:bg-reddish rounded-md flex justify-start items-center gap-2 p-0 px-4 py-2 hover:no-underline ${
                               pathname.includes(item.route)
                                 ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
                                 : ""

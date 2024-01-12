@@ -11,7 +11,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ChevronDown, ChevronDownIcon } from "lucide-react";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -40,18 +40,23 @@ export function DataTableServerside<TData, TValue>({
   pageSize,
   loading,
   columnVisible,
+  isServerSearch = false,
+  onSearchChange,
+
   onPageSizeChange,
 }: {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   currentPage: number;
   totalPage: number;
+  isServerSearch?: boolean;
   onPageChange?: (e: number) => void;
   loading?: boolean;
   totalData: number;
   pageSize: number;
   columnVisible?: VisibilityState;
   onPageSizeChange?: (e: number) => void;
+  onSearchChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -108,9 +113,13 @@ export function DataTableServerside<TData, TValue>({
         <div className="flex gap-2 flex-wrap">
           <Input
             placeholder="Filter emails..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+            // value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
+              isServerSearch
+                ? !!onSearchChange
+                  ? onSearchChange(event)
+                  : null
+                : table.getColumn("email")?.setFilterValue(event.target.value)
             }
             className="flex-1 bg-white"
           />

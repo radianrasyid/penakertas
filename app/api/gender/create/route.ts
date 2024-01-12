@@ -1,7 +1,7 @@
 import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POSTCreateGender = async (req: NextRequest) => {
+export const POST = async (req: NextRequest) => {
   try {
     const { genderName } = await req.json();
 

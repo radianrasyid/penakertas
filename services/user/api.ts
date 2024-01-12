@@ -1,14 +1,19 @@
+"use server";
 import { useFetch } from "../apiInstance";
 
 export const POSTBulkInsertUser = async () => {
-  const res = await useFetch({
-    url: "/api/user/bulk-insert",
-    headers: {},
-    method: "POST",
-    cache: "no-cache",
-  });
+  try {
+    const res = await useFetch({
+      url: `${process.env.AUTH_URL}/api/user/bulk-insert`,
+      headers: {},
+      method: "POST",
+      cache: "no-cache",
+    });
 
-  return res;
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const POSTLoginUser = async (username: string, password: string) => {

@@ -34,16 +34,38 @@ export const GET = async (req: NextRequest) => {
         name: "desc",
       },
     });
+    const allDatas = await prisma.province.count({
+      where: {
+        AND: [
+          {
+            OR: [
+              {
+                name: {
+                  contains: searchQuery as string,
+                  mode: "insensitive",
+                },
+              },
+              {
+                value: {
+                  contains: searchQuery as string,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
 
     return NextResponse.json(
       {
         status: "success",
         message: "retreive data successful",
         data: datas,
-        totalPages: Math.ceil(datas.length / Number(pageSize)),
+        totalPages: Math.ceil(allDatas / Number(pageSize)),
         currentPage: Number(pageNumber),
         pageSize: Number(pageSize),
-        totalData: datas.length,
+        totalData: allDatas,
       },
       {
         status: 200,
