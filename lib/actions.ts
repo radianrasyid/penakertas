@@ -7,12 +7,7 @@ export async function authenticate(
   formData: FormData
 ) {
   try {
-    await signIn("credentials", {
-      username: formData.get("username"),
-      password: formData.get("password"),
-      redirect: true,
-      redirectTo: "/",
-    });
+    await signIn("credentials", formData);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
