@@ -1,4 +1,3 @@
-"use server";
 import { useFetch } from "../apiInstance";
 
 export const POSTCreateProvince = async (provinceName: string) => {

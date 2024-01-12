@@ -9,7 +9,7 @@ export const { auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       id: "credentials",
-      name: "Credentials",
+      name: "credentials",
       type: "credentials",
       authorize: async (credentials) => {
         const { password, username } = credentials as {

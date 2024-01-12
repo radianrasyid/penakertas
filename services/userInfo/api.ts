@@ -1,4 +1,3 @@
-"use server";
 import { useFetch } from "../apiInstance";
 
 export const POSTCreateReligion = async (name: string) => {
