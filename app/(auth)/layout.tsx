@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
-export const dynamic = "force-dynamic";
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {
   return (
