@@ -1,3 +1,4 @@
+"use server";
 import { useFetch } from "../apiInstance";
 
 export const GETEmployeeStatistic = async () => {

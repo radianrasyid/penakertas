@@ -72,10 +72,15 @@ export const GET = async (req: NextRequest) => {
       }
     );
   } catch (error) {
-    return NextResponse.json({
-      status: "failed",
-      message: "retreive data failed",
-      data: error,
-    });
+    return NextResponse.json(
+      {
+        status: "failed",
+        message: "retreive data failed",
+        data: error,
+      },
+      {
+        status: 400,
+      }
+    );
   }
 };
