@@ -11,24 +11,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authenticate } from "@/lib/actions";
 import { POSTBulkInsertUser } from "@/services/user/api";
-import { useMemo } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import { toast } from "sonner";
 
 const SignInForm = () => {
   const { pending } = useFormStatus();
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
 
-  useMemo(() => {
-    async () => {
-      await POSTBulkInsertUser();
-    };
-  }, []);
-
   return (
     <Card className="lg:min-w-96 xl:min-w-96">
       <CardHeader>
         <CardTitle>Sign In</CardTitle>
-        <CardDescription>Pena Kertas Project</CardDescription>
+        <CardDescription
+          onClick={async () => {
+            let fetching = POSTBulkInsertUser();
+
+            toast.promise(fetching, {
+              loading: "Uploading user...",
+              success: () => {
+                return "Success!";
+              },
+              error: () => {
+                return "Something went wrong.";
+              },
+            });
+          }}
+        >
+          Pena Kertas Project
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form action={dispatch}>
