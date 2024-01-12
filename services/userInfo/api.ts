@@ -3,7 +3,7 @@ import { useFetch } from "../apiInstance";
 
 export const POSTCreateReligion = async (name: string) => {
   const res = await useFetch({
-    url: `${process.env.AUTH_URL}/api/religion/create`,
+    url: `/api/religion/create`,
     method: "POST",
     body: JSON.stringify({
       name,

@@ -14,7 +14,7 @@ export async function useFetch<T>({
   method: "POST" | "GET" | "PUT" | "PATCH" | "POST";
 }) {
   let data: T | any;
-  return await fetch(`${url}`, {
+  return await fetch(`${process.env.AUTH_URL}${url}`, {
     method,
     headers: {
       ...headers,
