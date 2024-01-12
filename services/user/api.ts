@@ -2,7 +2,7 @@ import { useFetch } from "../apiInstance";
 export const POSTBulkInsertUser = async () => {
   try {
     const res = await useFetch({
-      url: `${process.env.AUTH_URL}/api/user/bulk-insert`,
+      url: `/api/user/bulk-insert`,
       headers: {},
       method: "POST",
       cache: "no-cache",
@@ -16,7 +16,7 @@ export const POSTBulkInsertUser = async () => {
 
 export const POSTLoginUser = async (username: string, password: string) => {
   const res = await useFetch({
-    url: `${process.env.AUTH_URL}/api/user/login`,
+    url: `/api/user/login`,
     headers: {},
     method: "POST",
     cache: "no-cache",
@@ -31,7 +31,7 @@ export const POSTLoginUser = async (username: string, password: string) => {
 
 export const POSTCheckUserRole = async (email: string) => {
   const res = await useFetch({
-    url: `${process.env.AUTH_URL}/api/user/check-role`,
+    url: `/api/user/check-role`,
     method: "POST",
     body: JSON.stringify({
       email,
