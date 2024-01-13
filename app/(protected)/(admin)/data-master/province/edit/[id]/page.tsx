@@ -1,4 +1,3 @@
-import { GETProvinceById } from "@/services/geolocation/api";
 import dynamic from "next/dynamic";
 import { VscLoading } from "react-icons/vsc";
 
@@ -16,14 +15,6 @@ const ProvinceEditPagePartial = dynamic(
   }
 );
 
-const getData = async (id: string) => {
-  const provinceDetail = await GETProvinceById({
-    id: id,
-  });
-
-  return provinceDetail;
-};
-
 const EditProvince = async ({
   params,
 }: {
@@ -31,8 +22,7 @@ const EditProvince = async ({
     id: string;
   };
 }) => {
-  const data = await getData(params.id);
-  return <ProvinceEditPagePartial provinceData={data.data} />;
+  return <ProvinceEditPagePartial id={params.id} />;
 };
 
 export default EditProvince;

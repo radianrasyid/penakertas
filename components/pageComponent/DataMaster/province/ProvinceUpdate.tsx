@@ -2,29 +2,22 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PUTEDitProvince } from "@/services/geolocation/api";
+import { GETProvinceById, PUTEDitProvince } from "@/services/geolocation/api";
 import { useFormik } from "formik";
+import { useMemo } from "react";
 import { toast } from "sonner";
 
-const ProvinceEditPage = ({
-  provinceData,
-}: {
-  provinceData: {
-    name: string;
-    value: string;
-    id: string;
-  };
-}) => {
-  const { values, handleChange, handleSubmit } = useFormik({
+const ProvinceEditPage = ({ id }: { id: string }) => {
+  const { values, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
-      provinceName: provinceData.name,
+      provinceName: "",
     },
     onSubmit: async (val) => {
       const fetching = PUTEDitProvince({
         data: {
           name: val.provinceName,
         },
-        id: provinceData.id,
+        id: id,
         additionalUrl: "",
       });
       toast.promise(fetching, {
@@ -38,6 +31,19 @@ const ProvinceEditPage = ({
       });
     },
   });
+
+  const getData = async () => {
+    const fetching = await GETProvinceById({
+      id: id,
+      additionalUrl: "",
+    });
+
+    setFieldValue("provinceName", fetching.data.name);
+  };
+
+  useMemo(() => {
+    getData();
+  }, []);
   return (
     <div className="bg-white rounded-lg px-4 py-4">
       <form
@@ -46,7 +52,7 @@ const ProvinceEditPage = ({
           handleSubmit();
         }}
       >
-        <Label onClick={() => console.log(provinceData)}>Nama Provinsi</Label>
+        <Label onClick={() => console.log(values)}>Nama Provinsi</Label>
         <div className="flex gap-2">
           <Input
             type="text"
