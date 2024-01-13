@@ -1,5 +1,4 @@
 "use client";
-import { signIn } from "@/auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,31 +9,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { authenticate } from "@/lib/actions";
 import { POSTBulkInsertUser } from "@/services/user/api";
-import { AuthError } from "next-auth";
 import { useFormState, useFormStatus } from "react-dom";
 import { toast } from "sonner";
 
 const SignInForm = () => {
   const { pending } = useFormStatus();
-  const [errorMessage, dispatch] = useFormState(
-    async (prevState: string | undefined, formData: FormData) => {
-      try {
-        await signIn("credentials", formData);
-      } catch (error) {
-        if (error instanceof AuthError) {
-          switch (error.type) {
-            case "CredentialsSignin":
-              return "Invalid credentials.";
-            default:
-              return "Something went wrong.";
-          }
-        }
-        throw error;
-      }
-    },
-    undefined
-  );
+  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
 
   return (
     <Card className="lg:min-w-96 xl:min-w-96">
