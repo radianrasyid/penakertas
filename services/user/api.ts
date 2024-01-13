@@ -14,9 +14,17 @@ export const POSTBulkInsertUser = async () => {
   }
 };
 
-export const POSTLoginUser = async (username: string, password: string) => {
+export const POSTLoginUser = async ({
+  password,
+  username,
+  additionalUrl = process.env.AUTH_URL,
+}: {
+  username: string;
+  password: string;
+  additionalUrl?: string;
+}) => {
   const res = await useFetch({
-    url: `/api/user/login`,
+    url: `${additionalUrl}/api/user/login`,
     headers: {},
     method: "POST",
     cache: "no-cache",
@@ -29,9 +37,15 @@ export const POSTLoginUser = async (username: string, password: string) => {
   return res;
 };
 
-export const POSTCheckUserRole = async (email: string) => {
+export const POSTCheckUserRole = async ({
+  email,
+  additionalUrl = process.env.AUTH_URL,
+}: {
+  email: string;
+  additionalUrl?: string;
+}) => {
   const res = await useFetch({
-    url: `/api/user/check-role`,
+    url: `${additionalUrl}/api/user/check-role`,
     method: "POST",
     body: JSON.stringify({
       email,

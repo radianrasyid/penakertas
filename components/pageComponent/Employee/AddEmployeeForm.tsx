@@ -96,7 +96,10 @@ const AddEmployeeForm = ({
   const getDistrict = async () => {
     if (values.province === null) return null;
 
-    const fetching = GETDistrictList({ province: values.province.id });
+    const fetching = GETDistrictList({
+      province: values.province.id,
+      additionalUrl: "",
+    });
     toast.promise(fetching, {
       loading: "Memuat kabupaten/kota...",
       success: (data) => {
@@ -112,7 +115,10 @@ const AddEmployeeForm = ({
   const getSubdistrict = async () => {
     if (values.district === null) return null;
 
-    const fetching = GETSubdistrictList({ district: values.district.id });
+    const fetching = GETSubdistrictList({
+      district: values.district.id,
+      additionalUrl: "",
+    });
     toast.promise(fetching, {
       loading: "Memuat kecamatan...",
       success: (data) => {
@@ -128,7 +134,10 @@ const AddEmployeeForm = ({
   const getWard = async () => {
     if (values.subdistrict === null) return null;
 
-    const fetching = GETWardList({ subdistrict: values.subdistrict.id });
+    const fetching = GETWardList({
+      subdistrict: values.subdistrict.id,
+      additionalUrl: "",
+    });
     toast.promise(fetching, {
       loading: "Memuat kelurahan...",
       success: (data) => {
@@ -208,7 +217,6 @@ const AddEmployeeForm = ({
                   Kelompok Pekerjaan
                 </Label>
                 <Autocomplete
-                  multiple
                   size="small"
                   options={workGroupList}
                   disableCloseOnSelect
@@ -254,7 +262,6 @@ const AddEmployeeForm = ({
                   Unit Kerja
                 </Label>
                 <Autocomplete
-                  multiple
                   size="small"
                   options={workGroupList}
                   disableCloseOnSelect
@@ -298,7 +305,6 @@ const AddEmployeeForm = ({
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">Bagian</Label>
                 <Autocomplete
-                  multiple
                   size="small"
                   options={workGroupList}
                   disableCloseOnSelect
@@ -354,7 +360,6 @@ const AddEmployeeForm = ({
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">Agama</Label>
                 <Autocomplete
-                  multiple
                   size="small"
                   options={workGroupList}
                   disableCloseOnSelect
@@ -400,7 +405,6 @@ const AddEmployeeForm = ({
                   Jenis Kelamin
                 </Label>
                 <Autocomplete
-                  multiple
                   size="small"
                   options={workGroupList}
                   disableCloseOnSelect
@@ -446,7 +450,6 @@ const AddEmployeeForm = ({
                   Pendidikan Terakhir
                 </Label>
                 <Autocomplete
-                  multiple
                   size="small"
                   options={workGroupList}
                   disableCloseOnSelect
@@ -492,7 +495,6 @@ const AddEmployeeForm = ({
                   Status Perkawinan
                 </Label>
                 <Autocomplete
-                  multiple
                   size="small"
                   options={workGroupList}
                   disableCloseOnSelect

@@ -6,7 +6,10 @@ import { Toaster } from "sonner";
 
 const isAdmin = async () => {
   const data = await GetSessionData();
-  const res = await POSTCheckUserRole(data?.user?.email as string);
+  const res = await POSTCheckUserRole({
+    email: data?.user?.email as string,
+    additionalUrl: process.env.AUTH_URL,
+  });
   console.log("ini response", res.data);
   if (res.data === "ADMIN" || res.data === "SUPER_ADMIN") return true;
   else return false;

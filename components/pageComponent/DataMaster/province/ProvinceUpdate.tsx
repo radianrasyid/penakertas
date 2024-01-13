@@ -2,21 +2,33 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { POSTCreateProvince } from "@/services/geolocation/api";
+import { PUTEDitProvince } from "@/services/geolocation/api";
 import { useFormik } from "formik";
 import { toast } from "sonner";
 
-const ProvinceCreate = () => {
+const ProvinceEditPage = ({
+  provinceData,
+}: {
+  provinceData: {
+    name: string;
+    value: string;
+    id: string;
+  };
+}) => {
   const { values, handleChange, handleSubmit } = useFormik({
     initialValues: {
-      provinceName: "",
+      provinceName: provinceData.name,
     },
     onSubmit: async (val) => {
-      const fetching = POSTCreateProvince({
-        provinceName: val.provinceName,
+      const fetching = PUTEDitProvince({
+        data: {
+          name: val.provinceName,
+        },
+        id: provinceData.id,
+        additionalUrl: "",
       });
       toast.promise(fetching, {
-        loading: "Saving new province...",
+        loading: "Editing province...",
         success: (data) => {
           return data.message;
         },
@@ -34,7 +46,7 @@ const ProvinceCreate = () => {
           handleSubmit();
         }}
       >
-        <Label onClick={() => console.log(values)}>Nama Provinsi</Label>
+        <Label onClick={() => console.log(provinceData)}>Nama Provinsi</Label>
         <div className="flex gap-2">
           <Input
             type="text"
@@ -50,4 +62,4 @@ const ProvinceCreate = () => {
   );
 };
 
-export default ProvinceCreate;
+export default ProvinceEditPage;

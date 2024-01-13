@@ -1,8 +1,12 @@
 import { useFetch } from "../apiInstance";
 
-export const GETEmployeeStatistic = async () => {
+export const GETEmployeeStatistic = async ({
+  additionalUrl = "",
+}: {
+  additionalUrl?: string;
+}) => {
   const res = await useFetch({
-    url: `/api/statistic/admin/dashboard`,
+    url: `${additionalUrl}/api/statistic/admin/dashboard`,
     method: "GET",
     cache: "no-cache",
     headers: {},

@@ -23,10 +23,15 @@ export const POST = async (req: NextRequest) => {
       }
     );
   } catch (error) {
-    return NextResponse.json({
-      status: "failed",
-      message: "create gender failed",
-      data: error,
-    });
+    return NextResponse.json(
+      {
+        status: "failed",
+        message: "create gender failed",
+        data: error,
+      },
+      {
+        status: 400,
+      }
+    );
   }
 };

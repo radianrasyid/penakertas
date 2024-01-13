@@ -1,8 +1,14 @@
 import { useFetch } from "../apiInstance";
 
-export const POSTCreateProvince = async (provinceName: string) => {
+export const POSTCreateProvince = async ({
+  provinceName,
+  additionalUrl = process.env.AUTH_URL,
+}: {
+  provinceName: string;
+  additionalUrl?: string;
+}) => {
   const res = await useFetch({
-    url: `/api/geolocation/province/create`,
+    url: `${additionalUrl}/api/geolocation/province/create`,
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,15 +25,17 @@ export const POSTCreateProvince = async (provinceName: string) => {
 export const POSTCreateDistrict = async ({
   cityDistrictName,
   province,
+  additionalUrl = process.env.AUTH_URL,
 }: {
   cityDistrictName: string;
   province: {
     name: string;
     id: string;
   };
+  additionalUrl?: string;
 }) => {
   const res = await useFetch({
-    url: `/api/geolocation/district/create`,
+    url: `${additionalUrl}/api/geolocation/district/create`,
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -45,15 +53,17 @@ export const POSTCreateDistrict = async ({
 export const POSTCreateSubdistrict = async ({
   subdistrict,
   district,
+  additionalUrl = process.env.AUTH_URL,
 }: {
   subdistrict: string;
   district: {
     id: string;
     name: string;
   };
+  additionalUrl?: string;
 }) => {
   const res = await useFetch({
-    url: `/api/geolocation/subdistrict/create`,
+    url: `${process.env.AUTH_URL}/api/geolocation/subdistrict/create`,
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -71,15 +81,17 @@ export const POSTCreateSubdistrict = async ({
 export const POSTCreateWard = async ({
   subdistrict,
   wardName,
+  additionalUrl = process.env.AUTH_URL,
 }: {
   wardName: string;
   subdistrict: {
     name: string;
     id: string;
   };
+  additionalUrl?: string;
 }) => {
   const res = await useFetch({
-    url: `/api/geolocation/ward/create`,
+    url: `${additionalUrl}/api/geolocation/ward/create`,
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -94,9 +106,13 @@ export const POSTCreateWard = async ({
   return res;
 };
 
-export const GETProvinceList = async () => {
+export const GETProvinceList = async ({
+  additionalUrl = process.env.AUTH_URL,
+}: {
+  additionalUrl?: string;
+}) => {
   const res = await useFetch({
-    url: `/api/geolocation/province/get-all`,
+    url: `${additionalUrl}/api/geolocation/province/get-all`,
     method: "GET",
     headers: {},
     cache: "no-cache",
@@ -105,13 +121,72 @@ export const GETProvinceList = async () => {
   return res;
 };
 
-export const GETDistrictList = async ({
-  province = "",
+export const GETProvinceById = async ({
+  id,
+  additionalUrl = process.env.AUTH_URL,
 }: {
-  province: string;
+  id: string;
+  additionalUrl?: string;
 }) => {
   const res = await useFetch({
-    url: `/api/geolocation/district/get-all?province=${province}`,
+    url: `${additionalUrl}/api/geolocation/province/get-by-id?id=${id}`,
+    method: "GET",
+    headers: {},
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const PUTEDitProvince = async ({
+  id,
+  additionalUrl = process.env.AUTH_URL,
+  data,
+}: {
+  id: string;
+  additionalUrl?: string;
+  data: {
+    name: string;
+  };
+}) => {
+  const res = await useFetch({
+    url: `${additionalUrl}/api/geolocation/province/edit?id=${id}`,
+    method: "PUT",
+    headers: {},
+    cache: "no-cache",
+    body: JSON.stringify({
+      name: data.name,
+    }),
+  });
+
+  return res;
+};
+
+export const DELETEProvince = async ({
+  id,
+  additionalUrl = process.env.AUTH_URL,
+}: {
+  id: string;
+  additionalUrl?: string;
+}) => {
+  const res = await useFetch({
+    url: `${additionalUrl}/api/geolocation/province/delete?id=${id}`,
+    headers: {},
+    method: "DELETE",
+  });
+
+  return res;
+};
+
+export const GETDistrictList = async ({
+  province = "",
+  additionalUrl = process.env.AUTH_URL,
+}: {
+  province: string;
+  additionalUrl?: string;
+}) => {
+  const res = await useFetch({
+    url: `${additionalUrl}/api/geolocation/district/get-all?province=${province}`,
     headers: {},
     method: "GET",
 
@@ -123,11 +198,13 @@ export const GETDistrictList = async ({
 
 export const GETSubdistrictList = async ({
   district = "",
+  additionalUrl = process.env.AUTH_URL,
 }: {
   district: string;
+  additionalUrl?: string;
 }) => {
   const res = await useFetch({
-    url: `/api/geolocation/subdistrict/get-all?district=${district}`,
+    url: `${additionalUrl}/api/geolocation/subdistrict/get-all?district=${district}`,
     headers: {},
     method: "GET",
     cache: "no-cache",
@@ -138,11 +215,13 @@ export const GETSubdistrictList = async ({
 
 export const GETWardList = async ({
   subdistrict = "",
+  additionalUrl = process.env.AUTH_URL,
 }: {
   subdistrict: string;
+  additionalUrl?: string;
 }) => {
   const res = await useFetch({
-    url: `/api/geolocation/ward/get-all?subdistrict=${subdistrict}`,
+    url: `${additionalUrl}/api/geolocation/ward/get-all?subdistrict=${subdistrict}`,
     headers: {},
     method: "GET",
     cache: "no-cache",
@@ -155,13 +234,15 @@ export const GETListProvincePaginate = async ({
   pageNumber = 1,
   pageSize = 5,
   searchQuery = "",
+  additionalUrl = process.env.AUTH_URL,
 }: {
   pageNumber: number;
   pageSize: number;
   searchQuery: string;
+  additionalUrl?: string;
 }) => {
   const res = await useFetch({
-    url: `/api/geolocation/province/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    url: `${additionalUrl}/api/geolocation/province/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
     method: "GET",
     headers: {},
     cache: "no-cache",
@@ -174,13 +255,15 @@ export const GETListDistrictPaginate = async ({
   pageNumber = 1,
   pageSize = 5,
   searchQuery = "",
+  additionalUrl = process.env.AUTH_URL,
 }: {
   pageNumber: number;
   pageSize: number;
   searchQuery: string;
+  additionalUrl?: string;
 }) => {
   const res = await useFetch({
-    url: `/api/geolocation/district/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    url: `${additionalUrl}/api/geolocation/district/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
     method: "GET",
     headers: {},
     cache: "no-cache",
@@ -193,13 +276,15 @@ export const GETListSubdistrictPaginate = async ({
   pageNumber = 1,
   pageSize = 5,
   searchQuery = "",
+  additionalUrl = process.env.AUTH_URL,
 }: {
   pageNumber: number;
   pageSize: number;
   searchQuery: string;
+  additionalUrl?: string;
 }) => {
   const res = await useFetch({
-    url: `/api/geolocation/subdistrict/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    url: `${additionalUrl}/api/geolocation/subdistrict/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
     method: "GET",
     headers: {},
     cache: "no-cache",
@@ -212,13 +297,15 @@ export const GETListWardPaginate = async ({
   pageNumber = 1,
   pageSize = 5,
   searchQuery = "",
+  additionalUrl = process.env.AUTH_URL,
 }: {
   pageNumber: number;
   pageSize: number;
   searchQuery: string;
+  additionalUrl?: string;
 }) => {
   const res = await useFetch({
-    url: `/api/geolocation/ward/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    url: `${additionalUrl}/api/geolocation/ward/get-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
     method: "GET",
     headers: {},
     cache: "no-cache",

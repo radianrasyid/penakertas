@@ -1,32 +1,32 @@
 import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (req: NextRequest) => {
+export const DELETE = async (req: NextRequest) => {
   try {
-    const { provinceName } = await req.json();
+    const id = req.nextUrl.searchParams.get("id");
 
-    const res = await prisma.province.create({
-      data: {
-        name: provinceName,
-        value: provinceName.toUpperCase(),
+    const result = await prisma.province.delete({
+      where: {
+        id: id as string,
       },
     });
 
     return NextResponse.json(
       {
         status: "success",
-        message: "create province successfull",
-        data: res,
+        message: "delete province data success",
+        data: result,
       },
       {
         status: 200,
       }
     );
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       {
         status: "failed",
-        message: "create province failed",
+        message: "delete province data failed",
         data: error,
       },
       {

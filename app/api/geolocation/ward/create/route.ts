@@ -20,7 +20,7 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json(
       {
         status: "success",
-        message: "create education level successfull",
+        message: "create ward successfull",
         data: res,
       },
       {
@@ -31,7 +31,7 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json(
       {
         status: "failed",
-        message: "create education level failed",
+        message: "create ward failed",
         data: error,
       },
       {

@@ -7,13 +7,18 @@ import { GoPersonFill } from "react-icons/go";
 import { RiGovernmentFill } from "react-icons/ri";
 
 const getStatisticData = async () => {
-  const res = await GETEmployeeStatistic();
+  const res = await GETEmployeeStatistic({
+    additionalUrl: process.env.AUTH_URL,
+  });
   return res;
 };
 
 const getRoleData = async () => {
   const data = await GetSessionData();
-  const res = await POSTCheckUserRole(data?.user?.email as string);
+  const res = await POSTCheckUserRole({
+    email: data?.user?.email as string,
+    additionalUrl: process.env.AUTH_URL,
+  });
 
   return res;
 };
