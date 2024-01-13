@@ -22,6 +22,8 @@ export const { auth, signIn, signOut } = NextAuth({
           data?: string;
         } = await POSTLoginUser(username, password);
 
+        console.log("ini masokkkk", resLogin);
+
         if (resLogin.data == undefined) return null;
 
         const response = (await jwtDecode(resLogin.data)) as {

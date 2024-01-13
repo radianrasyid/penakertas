@@ -14,10 +14,11 @@ export async function useFetch<T>({
   method: "POST" | "GET" | "PUT" | "PATCH" | "POST";
 }) {
   let data: T | any;
-  return await fetch(`${url}`, {
+  return await fetch(`https://relaxed-caiman-strongly.ngrok-free.app${url}`, {
     method,
     headers: {
       ...headers,
+      "ngrok-skip-browser-warning": "9901",
     },
     cache: cache,
     body: body,

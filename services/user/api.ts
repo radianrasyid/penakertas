@@ -17,7 +17,9 @@ export const POSTBulkInsertUser = async () => {
 export const POSTLoginUser = async (username: string, password: string) => {
   const res = await useFetch({
     url: `/api/user/login`,
-    headers: {},
+    headers: {
+      "Content-Type": "application/json",
+    },
     method: "POST",
     cache: "no-cache",
     body: JSON.stringify({
@@ -37,12 +39,10 @@ export const POSTCheckUserRole = async (email: string) => {
       email,
     }),
     cache: "no-cache",
-    headers: {},
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
-  return res as {
-    status: "success" | "failed";
-    message: string;
-    data?: string | undefined;
-  };
+  return res;
 };

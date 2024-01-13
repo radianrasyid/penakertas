@@ -5,7 +5,9 @@ export const GETEmployeeStatistic = async () => {
     url: `/api/statistic/admin/dashboard`,
     method: "GET",
     cache: "no-cache",
-    headers: {},
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
   return res;
