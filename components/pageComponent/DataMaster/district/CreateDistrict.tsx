@@ -29,6 +29,7 @@ const DistrictCreateForm = () => {
           id: val.province.id,
           name: val.province.name,
         },
+        additionalUrl: "",
       });
       toast.promise(fetching, {
         loading: "Saving new district...",
@@ -45,7 +46,7 @@ const DistrictCreateForm = () => {
     { id: string; name: string; value: string }[]
   >([]);
   const getData = async () => {
-    const res = await GETProvinceList({});
+    const res = await GETProvinceList({ additionalUrl: "" });
     console.log("ini response", res);
     return setProvinceList(res.data);
   };

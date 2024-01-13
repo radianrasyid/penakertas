@@ -117,6 +117,7 @@ const DistrictMasterPage = () => {
       pageNumber: currentPage,
       pageSize: pageSize,
       searchQuery: searchQuery,
+      additionalUrl: "",
     });
 
     setRows(

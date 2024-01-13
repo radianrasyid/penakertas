@@ -26,6 +26,7 @@ const WardCreate = () => {
           id: val.province.id,
           name: val.province.name,
         },
+        additionalUrl: "",
       });
       toast.promise(fetching, {
         loading: "Saving new district...",
@@ -42,7 +43,7 @@ const WardCreate = () => {
     { id: string; name: string; value: string }[]
   >([]);
   const getData = async () => {
-    const res = await GETSubdistrictList({ district: "" });
+    const res = await GETSubdistrictList({ district: "", additionalUrl: "" });
     console.log("ini response", res);
     return setProvinceList(res.data);
   };

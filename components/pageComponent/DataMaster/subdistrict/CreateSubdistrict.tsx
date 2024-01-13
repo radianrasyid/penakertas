@@ -29,6 +29,7 @@ const SubdistrictCreate = () => {
           id: val.province.id,
           name: val.province.name,
         },
+        additionalUrl: "",
       });
       toast.promise(fetching, {
         loading: "Saving new district...",
@@ -45,7 +46,7 @@ const SubdistrictCreate = () => {
     { id: string; name: string; value: string }[]
   >([]);
   const getData = async () => {
-    const res = await GETDistrictList({ province: "" });
+    const res = await GETDistrictList({ province: "", additionalUrl: "" });
     console.log("ini response", res);
     return setProvinceList(res.data);
   };

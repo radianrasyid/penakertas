@@ -126,6 +126,7 @@ const SubdistrictMasterPage = () => {
       pageNumber: currentPage,
       pageSize: pageSize,
       searchQuery: searchQuery,
+      additionalUrl: "",
     });
     setRows(
       fetching.data.map((item: any, index: number) => {

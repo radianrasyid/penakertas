@@ -14,6 +14,7 @@ const ProvinceCreate = () => {
     onSubmit: async (val) => {
       const fetching = POSTCreateProvince({
         provinceName: val.provinceName,
+        additionalUrl: "",
       });
       toast.promise(fetching, {
         loading: "Saving new province...",
