@@ -20,7 +20,10 @@ export const { auth, signIn, signOut } = NextAuth({
           status: "success" | "failed";
           message: string;
           data?: string;
-        } = await POSTLoginUser(username, password);
+        } = await POSTLoginUser({
+          username,
+          password,
+        });
 
         console.log("ini masokkkk", resLogin);
 

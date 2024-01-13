@@ -1,6 +1,10 @@
 import { useFetch } from "../apiInstance";
 
-export const POSTCreateProvince = async (provinceName: string) => {
+export const POSTCreateProvince = async ({
+  provinceName,
+}: {
+  provinceName: string;
+}) => {
   const res = await useFetch({
     url: `/api/geolocation/province/create`,
     method: "POST",
@@ -94,12 +98,55 @@ export const POSTCreateWard = async ({
   return res;
 };
 
-export const GETProvinceList = async () => {
+export const GETProvinceList = async ({}: {}) => {
   const res = await useFetch({
     url: `/api/geolocation/province/get-all`,
     method: "GET",
     headers: {},
     cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const GETProvinceById = async ({ id }: { id: string }) => {
+  const res = await useFetch({
+    url: `/api/geolocation/province/get-by-id?id=${id}`,
+    method: "GET",
+    headers: {},
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const PUTEDitProvince = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: {
+    name: string;
+  };
+}) => {
+  const res = await useFetch({
+    url: `/api/geolocation/province/edit?id=${id}`,
+    method: "PUT",
+    headers: {},
+    cache: "no-cache",
+    body: JSON.stringify({
+      name: data.name,
+    }),
+  });
+
+  return res;
+};
+
+export const DELETEProvince = async ({ id }: { id: string }) => {
+  const res = await useFetch({
+    url: `/api/geolocation/province/delete?id=${id}`,
+    headers: {},
+    method: "DELETE",
   });
 
   return res;

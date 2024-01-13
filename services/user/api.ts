@@ -14,7 +14,13 @@ export const POSTBulkInsertUser = async () => {
   }
 };
 
-export const POSTLoginUser = async (username: string, password: string) => {
+export const POSTLoginUser = async ({
+  password,
+  username,
+}: {
+  username: string;
+  password: string;
+}) => {
   const res = await useFetch({
     url: `/api/user/login`,
     headers: {
@@ -31,7 +37,7 @@ export const POSTLoginUser = async (username: string, password: string) => {
   return res;
 };
 
-export const POSTCheckUserRole = async (email: string) => {
+export const POSTCheckUserRole = async ({ email }: { email: string }) => {
   const res = await useFetch({
     url: `/api/user/check-role`,
     method: "POST",

@@ -20,7 +20,9 @@ const SidebarPartial = dynamic(() => import("@/components/layout/Layout"), {
 
 const getRole = async () => {
   const data = await GetSessionData();
-  const res = await POSTCheckUserRole(data?.user?.email as string);
+  const res = await POSTCheckUserRole({
+    email: data?.user?.email as string,
+  });
 
   return res;
 };

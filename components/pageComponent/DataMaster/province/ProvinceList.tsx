@@ -12,10 +12,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { GETListProvincePaginate } from "@/services/geolocation/api";
+import {
+  DELETEProvince,
+  GETListProvincePaginate,
+} from "@/services/geolocation/api";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
+import { toast } from "sonner";
 
 const data: Payment[] = [...Array(10)].map((item, index) => {
   return {
@@ -33,83 +37,6 @@ export type Payment = {
   aksi: null | string;
 };
 
-const columns: ColumnDef<Payment>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "no",
-    header: "No",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("no")}</div>,
-  },
-  {
-    accessorKey: "province",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Province
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div>{row.getValue("province")}</div>,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.province)}
-            >
-              Ubah
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.province)}
-              className="hover:bg-red-500"
-            >
-              Hapus
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
-
 const ProvinceMasterPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
@@ -118,7 +45,100 @@ const ProvinceMasterPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [rows, setRows] = useState<Payment[]>([]);
+  const [pageTick, setPageTick] = useState<number>(0);
   const router = useRouter();
+
+  const columns: ColumnDef<Payment>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "no",
+      header: "No",
+      cell: ({ row }) => <div className="capitalize">{row.getValue("no")}</div>,
+    },
+    {
+      accessorKey: "province",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Province
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div>{row.getValue("province")}</div>,
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const payment = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => {
+                  console.log("testing routing");
+                  router.push(`/data-master/province/edit/${payment.id}`);
+                }}
+              >
+                Ubah
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={async () => {
+                  const fetching = DELETEProvince({
+                    id: payment.id,
+                  });
+                  toast.promise(fetching, {
+                    loading: "Deleting data...",
+                    success: (data) => {
+                      setPageTick(pageTick + 1);
+                      return (data as any).message;
+                    },
+                    error: (data) => data.message,
+                  });
+                }}
+                className="hover:bg-red-500"
+              >
+                Hapus
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
 
   const getData = async () => {
     setLoading(true);
@@ -144,7 +164,7 @@ const ProvinceMasterPage = () => {
 
   useMemo(() => {
     getData();
-  }, [pageSize, currentPage, searchQuery]);
+  }, [pageSize, currentPage, searchQuery, pageTick]);
 
   return (
     <div className="">

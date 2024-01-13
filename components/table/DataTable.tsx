@@ -176,7 +176,7 @@ export function DataTableServerside<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center bg-slate-300 animate-pulse  "
                 >
                   Loading...
                 </TableCell>

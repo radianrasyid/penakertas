@@ -1,6 +1,6 @@
 import { useFetch } from "../apiInstance";
 
-export const GETEmployeeStatistic = async () => {
+export const GETEmployeeStatistic = async ({}: {}) => {
   const res = await useFetch({
     url: `/api/statistic/admin/dashboard`,
     method: "GET",

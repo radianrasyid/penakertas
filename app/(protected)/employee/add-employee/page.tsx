@@ -17,7 +17,7 @@ const AddEmployeeFormPartial = dynamic(
 );
 
 const getData = async () => {
-  const ProvinceData = await GETProvinceList();
+  const ProvinceData = await GETProvinceList({});
   console.log(ProvinceData);
   return ProvinceData.data;
 };

@@ -11,7 +11,7 @@ export async function useFetch<T>({
   authorization?: string;
   headers: HeadersInit;
   cache?: RequestCache;
-  method: "POST" | "GET" | "PUT" | "PATCH" | "POST";
+  method: "POST" | "GET" | "PUT" | "PATCH" | "POST" | "DELETE";
 }) {
   let data: T | any;
   return await fetch(`https://relaxed-caiman-strongly.ngrok-free.app${url}`, {

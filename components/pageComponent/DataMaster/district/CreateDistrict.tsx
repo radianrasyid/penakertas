@@ -45,7 +45,7 @@ const DistrictCreateForm = () => {
     { id: string; name: string; value: string }[]
   >([]);
   const getData = async () => {
-    const res = await GETProvinceList();
+    const res = await GETProvinceList({});
     console.log("ini response", res);
     return setProvinceList(res.data);
   };

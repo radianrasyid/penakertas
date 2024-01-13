@@ -1,22 +1,27 @@
 "use client";
+export const dynamic = "force-dynamic";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { POSTCreateProvince } from "@/services/geolocation/api";
+import { GETProvinceById, PUTEDitProvince } from "@/services/geolocation/api";
 import { useFormik } from "formik";
+import { useMemo } from "react";
 import { toast } from "sonner";
 
-const ProvinceCreate = () => {
-  const { values, handleChange, handleSubmit } = useFormik({
+const ProvinceEditPage = ({ id }: { id: string }) => {
+  const { values, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
       provinceName: "",
     },
     onSubmit: async (val) => {
-      const fetching = POSTCreateProvince({
-        provinceName: val.provinceName,
+      const fetching = PUTEDitProvince({
+        data: {
+          name: val.provinceName,
+        },
+        id: id,
       });
       toast.promise(fetching, {
-        loading: "Saving new province...",
+        loading: "Editing province...",
         success: (data) => {
           return data.message;
         },
@@ -26,6 +31,18 @@ const ProvinceCreate = () => {
       });
     },
   });
+
+  const getData = async () => {
+    const fetching = await GETProvinceById({
+      id: id,
+    });
+
+    setFieldValue("provinceName", fetching.data.name);
+  };
+
+  useMemo(() => {
+    getData();
+  }, []);
   return (
     <div className="bg-white rounded-lg px-4 py-4">
       <form
@@ -50,4 +67,4 @@ const ProvinceCreate = () => {
   );
 };
 
-export default ProvinceCreate;
+export default ProvinceEditPage;

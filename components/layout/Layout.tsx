@@ -61,7 +61,7 @@ const Sidebar = ({ role }: { role: string }) => {
         sidebarOpen
           ? "translate-x-0 w-60 md:absolute md:left-0 md:z-50"
           : "md:w-0 tab_port:w-0 md:opacity-0 tab_port:opacity-0 w-14"
-      } transition-all duration-300 ease-in-out rounded-tr-sm backdrop-blur-sm bg-gradient-to-tr from-blue-950 to-blue-800 min-h-screen`}
+      } transition-all duration-300 ease-in-out  backdrop-blur-sm bg-gradient-to-tr from-blue-950 to-blue-800 min-h-screen`}
     >
       <TooltipProvider>
         {sidebarOpen ? (
@@ -91,9 +91,26 @@ const Sidebar = ({ role }: { role: string }) => {
                   <ChevronLeftIcon />
                 </Button>
               </div>
-              <div className="flex-1 w-full">
+              <div className="flex-1 w-full max-h-[80vh] overflow-y-auto scroll-aside">
                 {menuData.map((item, index) => {
-                  if (item.children.length < 1) {
+                  if (item.route === "/") {
+                    return (
+                      <Button
+                        key={`${index}-${item.name}`}
+                        className={`flex gap-2 w-full justify-start items-center bg-transparent shadow-none mb-2 ${
+                          pathname === "/"
+                            ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60 hover:bg-reddish hover:brightness-125 transition-all"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          router.push(item.route);
+                        }}
+                      >
+                        {item.icon}
+                        <span className="">{item.name}</span>
+                      </Button>
+                    );
+                  } else if (item.children.length < 1) {
                     return (
                       <Button
                         key={`${index}-${item.name}`}
@@ -140,7 +157,8 @@ const Sidebar = ({ role }: { role: string }) => {
                                   <li
                                     key={ind + 3}
                                     className={`cursor-pointer hover:bg-reddish w-full flex items-center justify-start pl-3 py-2 rounded-md ${
-                                      i.route.includes(pathname)
+                                      pathname !== "/" &&
+                                      pathname.includes(i.route)
                                         ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
                                         : ""
                                     } mb-1`}
@@ -175,56 +193,70 @@ const Sidebar = ({ role }: { role: string }) => {
                   className="h-11 rounded-full object-cover"
                 />
               </div>
-              {menuData.map((item, index) => {
-                if (item.children.length < 1) {
-                  return (
-                    <Button
-                      className={`bg-transparent shadow-none ${
-                        pathname.includes(item.route)
-                          ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
-                          : ""
-                      }`}
-                      onClick={() => router.push(item.route)}
-                      key={index + 4}
-                    >
-                      {item.icon}
-                    </Button>
-                  );
-                } else {
-                  return (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          className={`shadow-none ${
-                            pathname
-                              .replaceAll("/", "")
-                              .includes(item.route.replaceAll("/", ""))
-                              ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
-                              : ""
-                          }`}
-                          onClick={() => router.push(item.children[0].route)}
-                        >
-                          {item.icon}
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" className="z-50">
-                        {item.children.map((i, ind) => {
-                          return (
-                            <Button
-                              className="bg-white opacity-100 z-50 text-slate-800 hover:text-white"
-                              key={ind + 6}
-                              onClick={() => router.push(i.route)}
-                            >
-                              {" "}
-                              {i.name}
-                            </Button>
-                          );
-                        })}
-                      </TooltipContent>
-                    </Tooltip>
-                  );
-                }
-              })}
+              <div className="max-h-screen overflow-y-auto flex-1 justify-center flex flex-col items-center scroll-aside">
+                {menuData.map((item, index) => {
+                  if (item.route === "/") {
+                    return (
+                      <Button
+                        className={`bg-transparent shadow-none ${
+                          pathname === "/"
+                            ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
+                            : ""
+                        }`}
+                        onClick={() => router.push(item.route)}
+                        key={index + 4}
+                      >
+                        {item.icon}
+                      </Button>
+                    );
+                  } else if (item.children.length < 1) {
+                    return (
+                      <Button
+                        className={`bg-transparent shadow-none ${
+                          pathname.includes(item.route)
+                            ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
+                            : ""
+                        }`}
+                        onClick={() => router.push(item.route)}
+                        key={index + 4}
+                      >
+                        {item.icon}
+                      </Button>
+                    );
+                  } else {
+                    return (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            className={`shadow-none ${
+                              pathname.includes(item.route)
+                                ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
+                                : "bg-transparent"
+                            }`}
+                            onClick={() => router.push(item.children[0].route)}
+                          >
+                            {item.icon}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" className="z-50">
+                          {item.children.map((i, ind) => {
+                            return (
+                              <Button
+                                className="bg-white opacity-100 z-50 text-slate-800 hover:text-white"
+                                key={ind + 6}
+                                onClick={() => router.push(i.route)}
+                              >
+                                {" "}
+                                {i.name}
+                              </Button>
+                            );
+                          })}
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  }
+                })}
+              </div>
             </div>
           </div>
         )}

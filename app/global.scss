@@ -131,8 +131,9 @@ body{
   background-color: rgba(236, 236, 236, 0.646);
   /* Chrome, Edge and Safari */
   *::-webkit-scrollbar {
-    height: 5px;
-    width: 5px;
+    height: 2px;
+    width: 2px;
+    margin-left: 1rem;
   }
   *::-webkit-scrollbar-track {
     border-radius: 1px;
@@ -148,7 +149,7 @@ body{
   }
   
   *::-webkit-scrollbar-thumb {
-    border-radius: 5px;
+    border-radius: 2px;
     background-color: #CCCCCC;
   }
   
@@ -159,4 +160,17 @@ body{
   *::-webkit-scrollbar-thumb:active {
     background-color: #8D8D8D;
   }
+}
+
+.scroll-aside{
+  &::-webkit-scrollbar {
+    height: 0px;
+    width: 0px;
+    margin-left: 1rem;
+  }
+}
+
+.protected-pages{
+  background-image: url("../assets/images/website-bg.jpg");
+  background-size: contain;
 }

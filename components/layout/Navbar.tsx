@@ -64,7 +64,7 @@ const Navbar = () => {
 
   return (
     <header
-      className={`h-7 flex items-center justify-between bg-white px-3 py-7 md:px-3 transition-all duration-300 ease-in-out`}
+      className={`h-7 flex text-white items-center justify-between px-3 py-7 md:px-3 transition-all duration-300 ease-in-out bg-gradient-to-l from-blue-950 to-blue-800`}
       style={
         {
           // marginLeft: `${sidebarWidth}px`,
@@ -75,15 +75,15 @@ const Navbar = () => {
       <div className="flex flex-row gap-2 items-center">
         <Button
           size={"icon"}
-          className="bg-transparent hover:bg-transparent"
+          className="bg-transparent hover:bg-transparent shadow-none"
           onClick={() => {
             setSidebarOpen();
           }}
         >
           {sidebarOpen ? (
-            <HiDotsVertical className="text-slate-950" />
+            <HiDotsVertical className="text-slate-200" />
           ) : (
-            <MdMenu className="text-slate-950" />
+            <MdMenu className="text-slate-200" />
           )}
         </Button>
       </div>
@@ -113,7 +113,7 @@ const Navbar = () => {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Button className="bg-transparent hover:bg-transparent shadow-none">
-              <IoIosArrowDown className="text-black" />
+              <IoIosArrowDown className="text-slate-200" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
