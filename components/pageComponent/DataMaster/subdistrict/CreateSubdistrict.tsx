@@ -53,7 +53,7 @@ const SubdistrictCreate = () => {
     getData();
   }, []);
   return (
-    <div className="bg-white rounded-lg px-4 py-4">
+    <div className="bg-white p-4 drop-shadow-lg rounded-xl">
       <form
         onSubmit={(e) => {
           e.preventDefault();

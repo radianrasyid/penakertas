@@ -189,7 +189,7 @@ const ProvinceMasterPage = () => {
   const [totalData, setTotalData] = useState<number>(data.length);
   const [pageSize, setPageSize] = useState<number>(5);
   return (
-    <div className="bg-white px-5 py-3 rounded-lg">
+    <div className="bg-white p-4 drop-shadow-lg rounded-xl">
       <div className="flex justify-between">
         <span className="text-lg font-semibold">Data Pegawai</span>
         <Button

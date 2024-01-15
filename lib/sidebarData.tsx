@@ -440,12 +440,6 @@ export const sidebarDataUser: RouteData[] = [
     name: "Beranda",
   },
   {
-    route: "/employee",
-    children: [],
-    icon: <MdGroup />,
-    name: "Pegawai",
-  },
-  {
     route: "/biodata",
     children: [],
     icon: <MdPerson2 />,

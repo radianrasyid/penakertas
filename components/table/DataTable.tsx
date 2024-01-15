@@ -89,7 +89,7 @@ export function DataTableServerside<TData, TValue>({
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-center md:flex-col md:gap-y-2 md:items-start justify-between py-4">
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild hidden={!!onPageSizeChange == false}>
             <Button variant="outline" className="">
@@ -110,7 +110,7 @@ export function DataTableServerside<TData, TValue>({
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap md:justify-between">
           <Input
             placeholder="Filter emails..."
             // value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -234,7 +234,7 @@ export function DataTableServerside<TData, TValue>({
           </Button>
         </div>
       </div> */}
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end md:flex-col md:gap-y-2 space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.

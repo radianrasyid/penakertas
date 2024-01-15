@@ -58,7 +58,7 @@ const CustomPagination = ({
               <Button
                 size={"icon"}
                 disabled
-                className="bg-transparent text-black h-10 w-10"
+                className="bg-transparent text-black shadow-none h-7 w-7"
                 key={index}
               >
                 ...

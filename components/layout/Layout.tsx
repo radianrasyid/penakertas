@@ -59,9 +59,9 @@ const Sidebar = ({ role }: { role: string }) => {
       }}
       className={`${
         sidebarOpen
-          ? "translate-x-0 w-60 md:absolute md:left-0 md:z-50"
+          ? "translate-x-0 w-60 md:absolute md:left-0 md:z-50 md:m-2 md:drop-shadow-2xl"
           : "md:w-0 tab_port:w-0 md:opacity-0 tab_port:opacity-0 w-14"
-      } transition-all duration-300 ease-in-out  backdrop-blur-sm bg-gradient-to-tr from-blue-950 to-blue-800 min-h-screen`}
+      } transition-all duration-300 ease-in-out backdrop-blur-sm bg-gradient-to-tr from-blue-950 to-blue-800 rounded-xl mt-2 ml-2 mb-2 md:m-0`}
     >
       <TooltipProvider>
         {sidebarOpen ? (
@@ -78,7 +78,7 @@ const Sidebar = ({ role }: { role: string }) => {
                     className="h-12 rounded-full object-cover"
                   />
                 </div>
-                <span className="text-sm text-slate-200 text-center flex-1 font-bold">
+                <span className="text-sm text-slate-100 text-center flex-1 font-bold">
                   Pena Kertas
                 </span>
               </div>
@@ -97,10 +97,10 @@ const Sidebar = ({ role }: { role: string }) => {
                     return (
                       <Button
                         key={`${index}-${item.name}`}
-                        className={`flex gap-2 w-full justify-start items-center bg-transparent shadow-none mb-2 ${
+                        className={`flex gap-2 w-full text-slate-400 justify-start items-center bg-transparent shadow-none mb-2 ${
                           pathname === "/"
-                            ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60 hover:bg-reddish hover:brightness-125 transition-all"
-                            : ""
+                            ? "transition-all text-white bg-primary/50 hover:text-[1rem]"
+                            : "hover:text-white hover:bg-primary/50 hover:text-[1rem]"
                         }`}
                         onClick={() => {
                           router.push(item.route);
@@ -114,10 +114,10 @@ const Sidebar = ({ role }: { role: string }) => {
                     return (
                       <Button
                         key={`${index}-${item.name}`}
-                        className={`flex gap-2 w-full justify-start items-center bg-transparent shadow-none mb-2 ${
+                        className={`flex gap-2 w-full text-slate-400 justify-start items-center bg-transparent shadow-none mb-2 ${
                           pathname.includes(item.route)
-                            ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60 hover:bg-reddish hover:brightness-125 transition-all"
-                            : ""
+                            ? "transition-all text-white bg-primary/50 hover:text-[1rem]"
+                            : "hover:text-white hover:bg-primary/50 hover:text-[1rem]"
                         }`}
                         onClick={() => {
                           router.push(item.route);
@@ -137,10 +137,10 @@ const Sidebar = ({ role }: { role: string }) => {
                       >
                         <AccordionItem value="item-1" className="border-none">
                           <AccordionTrigger
-                            className={`w-full mb-2 hover:bg-reddish rounded-md flex justify-start items-center gap-2 p-0 px-4 py-2 hover:no-underline ${
+                            className={`w-full mb-2 hover:bg-primary/90 text-slate-400 rounded-md flex justify-start items-center gap-2 p-0 px-4 py-2 hover:no-underline ${
                               pathname.includes(item.route)
-                                ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
-                                : ""
+                                ? "transition-all text-white bg-primary/50 hover:text-[1rem]"
+                                : "hover:text-white hover:bg-primary/50 hover:text-[1rem]"
                             }`}
                           >
                             <div className="flex gap-2 flex-1 items-center">
@@ -151,16 +151,16 @@ const Sidebar = ({ role }: { role: string }) => {
                             </div>
                           </AccordionTrigger>
                           <AccordionContent className="pl-4 mt-1 w-full max-h-screen overflow-y-auto">
-                            <ul className="text-white font-sm font-semibold pl-3">
+                            <ul className="text-slate-400 font-sm font-semibold pl-3">
                               {item.children.map((i, ind) => {
                                 return (
                                   <li
                                     key={ind + 3}
-                                    className={`cursor-pointer hover:bg-reddish w-full flex items-center justify-start pl-3 py-2 rounded-md ${
+                                    className={`cursor-pointer hover:bg-primary/90 w-full flex items-center justify-start pl-3 py-2 rounded-md transition-all ${
                                       pathname !== "/" &&
                                       pathname.includes(i.route)
-                                        ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
-                                        : ""
+                                        ? "transition-all text-white bg-primary/50 hover:text-[1rem]"
+                                        : "hover:text-white hover:bg-primary/50 hover:text-[0.9rem]"
                                     } mb-1`}
                                     onClick={() => {
                                       router.push(i.route);
@@ -198,10 +198,10 @@ const Sidebar = ({ role }: { role: string }) => {
                   if (item.route === "/") {
                     return (
                       <Button
-                        className={`bg-transparent shadow-none ${
+                        className={`bg-transparent shadow-none text-slate-400 mb-1 ${
                           pathname === "/"
-                            ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
-                            : ""
+                            ? "transition-all text-white bg-primary/50 mb-1 hover:text-[1rem]"
+                            : "hover:text-white hover:bg-primary/50 hover:text-[1rem]"
                         }`}
                         onClick={() => router.push(item.route)}
                         key={index + 4}
@@ -212,10 +212,10 @@ const Sidebar = ({ role }: { role: string }) => {
                   } else if (item.children.length < 1) {
                     return (
                       <Button
-                        className={`bg-transparent shadow-none ${
+                        className={`bg-transparent shadow-none text-slate-400 mb-1 ${
                           pathname.includes(item.route)
-                            ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
-                            : ""
+                            ? "text-white bg-primary/50 mb-1"
+                            : "hover:text-white hover:bg-primary/50 hover:text-[1rem]"
                         }`}
                         onClick={() => router.push(item.route)}
                         key={index + 4}
@@ -230,19 +230,26 @@ const Sidebar = ({ role }: { role: string }) => {
                           <Button
                             className={`shadow-none ${
                               pathname.includes(item.route)
-                                ? "backdrop-filter backdrop-blur-lg bg-white bg-opacity-60"
-                                : "bg-transparent"
+                                ? "transition-all text-white bg-primary/50 mb-1 hover:text-[1rem]"
+                                : "bg-transparent text-slate-400 hover:text-white hover:bg-primary/50 hover:text-[1rem]"
                             }`}
                             onClick={() => router.push(item.children[0].route)}
                           >
                             {item.icon}
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent side="right" className="z-50">
+                        <TooltipContent
+                          side="right"
+                          className="z-[99999] flex-col flex max-h-44 bg-primary/50 overflow-y-auto"
+                        >
                           {item.children.map((i, ind) => {
                             return (
                               <Button
-                                className="bg-white opacity-100 z-50 text-slate-800 hover:text-white"
+                                className={`bg-white opacity-100 z-[99999] text-slate-800 hover:text-white mb-1 ${
+                                  pathname !== "/" && pathname.includes(i.route)
+                                    ? "bg-primary text-white"
+                                    : ""
+                                }`}
                                 key={ind + 6}
                                 onClick={() => router.push(i.route)}
                               >

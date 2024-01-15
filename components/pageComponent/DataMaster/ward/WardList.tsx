@@ -74,7 +74,7 @@ const columns: ColumnDef<Payment>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("ward")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("ward")}</div>,
   },
   {
     id: "actions",
@@ -148,7 +148,7 @@ const WardMasterPage = () => {
   }, [currentPage, pageSize, searchQuery]);
 
   return (
-    <div className="">
+    <div className="bg-white p-4 drop-shadow-lg rounded-xl">
       <div className="flex justify-between">
         <span className="text-lg font-medium">Data Kelurahan</span>
 

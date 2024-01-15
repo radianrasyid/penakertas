@@ -146,7 +146,7 @@ const SubdistrictMasterPage = () => {
     getData();
   }, [currentPage, pageSize, searchQuery]);
   return (
-    <div className="">
+    <div className="bg-white p-4 drop-shadow-lg rounded-xl">
       <div className="flex justify-between">
         <span className="text-lg font-medium">Data Kecamatan</span>
 

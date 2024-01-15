@@ -27,32 +27,23 @@ const Page = async () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-3">
-        <span className="text-xl font-semibold">Beranda</span>
+      <div className="bg-white p-4 drop-shadow-lg rounded-xl mb-2">
+        <div className="flex justify-between items-center mb-3">
+          <span className="text-xl font-semibold">Beranda</span>
+        </div>
+        <div className="w-full rounded-lg px-4 py-4 drop-shadow-xl mb-2 text-slate-200 flex bg-blue-800">
+          <span>
+            Hello,{" "}
+            <span className="font-bold text-white">{data?.user?.name} 🚀</span>
+          </span>
+        </div>
       </div>
 
       {role.data === "ADMIN" || role.data === "SUPER_ADMIN" ? (
         <>
-          <div className="w-full rounded-lg px-4 py-4 drop-shadow-xl mb-2 text-slate-200 flex bg-blue-800">
-            <span>
-              Hello,{" "}
-              <span className="font-bold text-white">
-                {data?.user?.name} 🚀
-              </span>
-            </span>
-            {/* <div>
-              <Image
-                src={adminDashboardImage.src}
-                width={adminDashboardImage.width}
-                height={adminDashboardImage.height}
-                alt="Admin Dashboard Welcome Image"
-                className="w-72 object-cover"
-              />
-            </div> */}
-          </div>
           <div className="flex flex-wrap gap-2">
             {/* TOTAL PEGAWAI */}
-            <div className="flex-1 rounded-lg bg-slate-50 px-4 py-4 drop-shadow-xl">
+            <div className="flex-1 md:basis-full rounded-lg bg-white px-4 py-4 drop-shadow-xl">
               <div className="flex gap-2 items-center text-slate-800 text-sm font-semibold">
                 <Button size={"icon"}>
                   <FaPeopleGroup />
@@ -65,7 +56,7 @@ const Page = async () => {
             </div>
 
             {/* ASN */}
-            <div className="flex-1 rounded-lg bg-slate-50 px-4 py-4 drop-shadow-xl">
+            <div className="flex-1 md:basis-full rounded-lg bg-white px-4 py-4 drop-shadow-xl">
               <div className="flex gap-2 items-center text-slate-800 text-sm font-semibold">
                 <Button size={"icon"}>
                   <RiGovernmentFill />
@@ -79,7 +70,7 @@ const Page = async () => {
             </div>
 
             {/* PTT */}
-            <div className="flex-1 rounded-lg bg-slate-50 px-4 py-4 drop-shadow-xl">
+            <div className="flex-1 md:basis-full rounded-lg bg-white px-4 py-4 drop-shadow-xl">
               <div className="flex gap-2 items-center text-slate-800 text-sm font-semibold">
                 <Button size={"icon"}>
                   <GoPersonFill />
@@ -92,7 +83,7 @@ const Page = async () => {
             </div>
 
             {/* THL */}
-            <div className="flex-1 rounded-lg bg-slate-50 px-4 py-4 drop-shadow-xl">
+            <div className="flex-1 md:basis-full rounded-lg bg-white px-4 py-4 drop-shadow-xl">
               <div className="flex gap-2 items-center text-slate-800 text-sm font-semibold">
                 <Button size={"icon"}>
                   <GoPersonFill />
@@ -105,11 +96,7 @@ const Page = async () => {
             </div>
           </div>
         </>
-      ) : (
-        <div>
-          <span>{data?.user?.name}</span>
-        </div>
-      )}
+      ) : null}
     </div>
   );
 };
