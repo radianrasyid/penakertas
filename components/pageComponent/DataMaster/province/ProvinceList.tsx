@@ -167,7 +167,7 @@ const ProvinceMasterPage = () => {
   }, [pageSize, currentPage, searchQuery, pageTick]);
 
   return (
-    <div className="bg-white p-4 drop-shadow-lg rounded-xl">
+    <div className="bg-white p-4 drop-shadow-2xl rounded-xl">
       <div className="flex justify-between">
         <span className="text-lg font-medium">Data Provinsi</span>
 

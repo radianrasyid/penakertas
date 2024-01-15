@@ -64,7 +64,7 @@ const Navbar = () => {
 
   return (
     <header
-      className={`h-7 flex text-slate-100 items-center justify-between px-3 py-7 md:px-3 transition-all duration-300 ease-in-out bg-transparent md:bg-white md:rounded-xl md:drop-shadow-xl md:m-2 backdrop-blur-sm bg-gradient-to-l from-blue-950 to-blue-800 mt-2 rounded-xl ml-3`}
+      className={`h-7 flex text-slate-100 items-center justify-between px-3 py-7 md:px-3 transition-all duration-300 ease-in-out bg-transparent md:bg-white md:rounded-xl md:drop-shadow-2xl md:m-2 backdrop-blur-sm bg-gradient-to-l from-blue-950 to-blue-800 mt-2 mr-2 rounded-xl ml-3`}
       style={
         {
           // marginLeft: `${sidebarWidth}px`,

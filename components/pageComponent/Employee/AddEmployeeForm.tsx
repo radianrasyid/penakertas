@@ -166,7 +166,7 @@ const AddEmployeeForm = ({
           <span className="text-lg font-semibold">Tambah Pegawai</span>
         </div>
 
-        <div className="bg-white drop-shadow-lg rounded-xl mb-2">
+        <div className="bg-white drop-shadow-2xl rounded-xl mb-2">
           <div className="flex justify-between w-full bg-cyan-600 px-4 py-2 rounded-tl-lg rounded-tr-lg">
             <span className="text-base font-semibold text-white">
               Data Diri
@@ -344,7 +344,7 @@ const AddEmployeeForm = ({
           </div>
         </div>
 
-        <div className="bg-white drop-shadow-lg rounded-xl mb-2">
+        <div className="bg-white drop-shadow-2xl rounded-xl mb-2">
           <div className="flex justify-between w-full bg-cyan-600 px-4 py-2 rounded-tl-lg rounded-tr-lg">
             <span className="text-base font-semibold text-white">
               Data Lengkap
@@ -867,7 +867,7 @@ const AddEmployeeForm = ({
           </div>
         </div>
 
-        <div className="bg-white p-4 drop-shadow-lg rounded-xl mb-2">
+        <div className="bg-white p-4 drop-shadow-2xl rounded-xl mb-2">
           <div className="flex justify-between w-full bg-cyan-600 px-4 py-2 rounded-tl-lg rounded-tr-lg">
             <span className="text-base font-semibold text-white">
               Data Dokumen
