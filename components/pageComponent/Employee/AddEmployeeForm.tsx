@@ -12,6 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
+import { createPegawaiSubmition } from "@/lib/submitFunctions";
 import {
   GETDistrictList,
   GETSubdistrictList,
@@ -28,20 +29,27 @@ import { toast } from "sonner";
 
 const AddEmployeeForm = ({
   provinceList = [],
+  educationLevelList = [],
+  genderList = [],
+  maritalStatusList = [],
+  religionList = [],
+  workGroupList = [],
+  workPartList = [],
+  workUnitList = [],
 }: {
-  provinceList: {
-    id: string;
-    name: string;
-    value: string;
-  }[];
+  provinceList: OptionsType[];
+  workGroupList: OptionsType[];
+  workUnitList: OptionsType[];
+  workPartList: OptionsType[];
+  religionList: OptionsType[];
+  genderList: OptionsType[];
+  educationLevelList: OptionsType[];
+  maritalStatusList: OptionsType[];
 }) => {
   const [provinceOptions, setProvinceOptions] =
     useState<{ id: string; name: string; value: string }[]>(provinceList);
   const [districtList, setDistrictList] = useState<
     { id: string; name: string; value: string }[]
-  >([]);
-  const [workGroupList, setWorkGroupList] = useState<
-    { name: string; value: string }[]
   >([]);
   const [subdistrictList, setSubdistrictList] = useState<OptionsType[]>([]);
   const [wardList, setWardList] = useState<OptionsType[]>([]);
@@ -49,48 +57,51 @@ const AddEmployeeForm = ({
 
   const { setFieldValue, values, handleSubmit, handleChange } = useFormik({
     initialValues: {
-      nrpt: "",
-      firstName: "",
-      lastName: "",
-      prefixDegree: "",
-      suffixDegree: "",
-      workGroup: "",
-      workUnit: "",
-      workPart: "",
-      religion: null,
+      address: null,
+      backTitle: "",
+      birthPlace: null,
+      bpjsOfEmployment: null,
+      bpjsOfEmploymentFile: null,
+      bpjsOfHealth: null,
+      bpjsOfHealthFile: null,
+      dateOfBirth: null,
+      decisionLetterFile: null,
+      decisionLetterNumber: null,
+      district: null,
+      email: null,
+      familyCertificateFile: null,
+      familyCertificateNumber: null,
+      firstname: null,
+      frontTitle: "",
       gender: null,
+      identityFile: null,
+      identityNumber: null,
+      lastname: null,
       latestEducation: null,
       maritalStatus: null,
-      workDescription: "",
-      placement: "",
-      startYear: new Date(),
-      skNumber: "",
-      neighborhood: "",
-      neighborhoodHead: "",
+      neighborhood: null,
+      neighborhoodHead: null,
+      npwpFile: null,
+      npwpNumber: null,
+      nrpt: null,
+      phoneNumber: null,
+      photographFile: null,
+      placement: null,
       province: null,
-      district: null,
-      homeAddress: "",
+      religion: null,
+      startYear: null,
       subdistrict: null,
+      telephone: null,
       ward: null,
-      birthPlace: "",
-      dob: "",
-      phoneNumber: "",
-      telephoneNumber: "",
-      email: "",
-      familyCertificateNumber: "",
-      identitiyNumber: "",
-      npwp: "",
-      bpjsEmployee: "",
-      bpjsHealth: "",
-      photograph: "",
-      identityPhoto: "",
-      familyCertificatePhoto: "",
-      npwpPhoto: "",
-      bpjsEmployeePhoto: "",
-      bpjsHealthPhoto: "",
-      skPhoto: "",
+      workDescription: null,
+      workGroup: null,
+      workPart: null,
+      workUnit: null,
     } as AddEmployeeType,
-    onSubmit: (values) => {},
+    validateOnChange: false,
+    onSubmit: async (values) => {
+      console.log(createPegawaiSubmition(values));
+    },
   });
 
   const getDistrict = async () => {
@@ -161,7 +172,12 @@ const AddEmployeeForm = ({
 
   return (
     <div>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         <div className="flex justify-between mb-5">
           <span className="text-lg font-semibold">Tambah Pegawai</span>
         </div>
@@ -178,31 +194,56 @@ const AddEmployeeForm = ({
               {/* NRPT */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">NRPT/PIN</Label>
-                <Input id="nrpt-pin-textfield" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  name="nrpt"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* NAMA DEPAN */}
               <div className="flex flex-col gap-2 flex-1 md:basis-1/2">
                 <Label htmlFor="nama-lengkap-textfield">Nama Depan</Label>
-                <Input id="nama-lengkap-textfield" className="" />
+                <Input
+                  id="nama-lengkap-textfield"
+                  name="firstname"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* NAMA BELAKANG */}
               <div className="flex flex-col gap-2 flex-1 md:basis-1/2">
                 <Label htmlFor="nama-lengkap-textfield">Nama Belakang</Label>
-                <Input id="nama-lengkap-textfield" className="" />
+                <Input
+                  id="nama-lengkap-textfield"
+                  name="lastname"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* GELAR DEPAN */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">Gelar Depan</Label>
-                <Input id="gelar-depan-textfield" className="" />
+                <Input
+                  id="gelar-depan-textfield"
+                  name="frontTitle"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* GELAR BELAKANG */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-belakang-textfield">Gelar Belakang</Label>
-                <Input id="gelar-belakang-textfield" className="" />
+                <Input
+                  id="gelar-belakang-textfield"
+                  name="backTitle"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
             </div>
 
@@ -244,6 +285,9 @@ const AddEmployeeForm = ({
                     },
                   }}
                   fullWidth
+                  onChange={(e, v) => {
+                    setFieldValue("workGroup", v);
+                  }}
                   renderInput={(params) => (
                     <CustomTextfield
                       {...params}
@@ -260,7 +304,7 @@ const AddEmployeeForm = ({
                 </Label>
                 <Autocomplete
                   size="small"
-                  options={workGroupList}
+                  options={workUnitList}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -289,6 +333,9 @@ const AddEmployeeForm = ({
                     },
                   }}
                   fullWidth
+                  onChange={(e, v) => {
+                    setFieldValue("workUnit", v);
+                  }}
                   renderInput={(params) => (
                     <CustomTextfield
                       {...params}
@@ -303,7 +350,7 @@ const AddEmployeeForm = ({
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">Bagian</Label>
                 <Autocomplete
                   size="small"
-                  options={workGroupList}
+                  options={workPartList}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -332,6 +379,9 @@ const AddEmployeeForm = ({
                     },
                   }}
                   fullWidth
+                  onChange={(e, v) => {
+                    setFieldValue("workPart", v);
+                  }}
                   renderInput={(params) => (
                     <CustomTextfield
                       {...params}
@@ -358,7 +408,7 @@ const AddEmployeeForm = ({
                 <Label htmlFor="kelompok-pekerjaan-autocomplete">Agama</Label>
                 <Autocomplete
                   size="small"
-                  options={workGroupList}
+                  options={religionList}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -387,6 +437,9 @@ const AddEmployeeForm = ({
                     },
                   }}
                   fullWidth
+                  onChange={(e, v) => {
+                    setFieldValue("religion", v);
+                  }}
                   renderInput={(params) => (
                     <CustomTextfield
                       {...params}
@@ -403,7 +456,7 @@ const AddEmployeeForm = ({
                 </Label>
                 <Autocomplete
                   size="small"
-                  options={workGroupList}
+                  options={genderList}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -432,6 +485,9 @@ const AddEmployeeForm = ({
                     },
                   }}
                   fullWidth
+                  onChange={(e, v) => {
+                    setFieldValue("gender", v);
+                  }}
                   renderInput={(params) => (
                     <CustomTextfield
                       {...params}
@@ -448,7 +504,7 @@ const AddEmployeeForm = ({
                 </Label>
                 <Autocomplete
                   size="small"
-                  options={workGroupList}
+                  options={educationLevelList}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -477,6 +533,9 @@ const AddEmployeeForm = ({
                     },
                   }}
                   fullWidth
+                  onChange={(e, v) => {
+                    setFieldValue("latestEducation", v);
+                  }}
                   renderInput={(params) => (
                     <CustomTextfield
                       {...params}
@@ -493,7 +552,7 @@ const AddEmployeeForm = ({
                 </Label>
                 <Autocomplete
                   size="small"
-                  options={workGroupList}
+                  options={maritalStatusList}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -522,6 +581,9 @@ const AddEmployeeForm = ({
                     },
                   }}
                   fullWidth
+                  onChange={(e, v) => {
+                    setFieldValue("maritalStatus", v);
+                  }}
                   renderInput={(params) => (
                     <CustomTextfield
                       {...params}
@@ -537,25 +599,45 @@ const AddEmployeeForm = ({
               {/* URAIAN KERJA */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">Uraian Kerja</Label>
-                <Input id="nrpt-pin-textfield" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  name="workDescription"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* PENEMPATAN */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nama-lengkap-textfield">Penempatan</Label>
-                <Input id="nama-lengkap-textfield" className="" />
+                <Input
+                  id="nama-lengkap-textfield"
+                  name="placement"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* TAHUN MASUK */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">Tahun Masuk</Label>
-                <Input id="gelar-depan-textfield" className="" />
+                <Input
+                  id="gelar-depan-textfield"
+                  name="startYear"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* NOMOR SK */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">Nomor SK</Label>
-                <Input id="nrpt-pin-textfield" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  name="decisionLetterNumber"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
             </div>
 
@@ -564,13 +646,23 @@ const AddEmployeeForm = ({
               {/* RT */}
               <div className="flex flex-col gap-2 flex-1 md:basis-1/2">
                 <Label htmlFor="nama-lengkap-textfield">RT</Label>
-                <Input id="nama-lengkap-textfield" className="" />
+                <Input
+                  id="nama-lengkap-textfield"
+                  name="neighborhood"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* RW */}
               <div className="flex flex-col gap-2 flex-1 md:basis-1/2">
                 <Label htmlFor="nama-lengkap-textfield">RW</Label>
-                <Input id="nama-lengkap-textfield" className="" />
+                <Input
+                  id="nama-lengkap-textfield"
+                  name="neighborhoodHead"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* PROVINSI */}
@@ -765,7 +857,13 @@ const AddEmployeeForm = ({
               {/* ALAMAT RUMAH */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nama-lengkap-textfield">Alamat Rumah</Label>
-                <Textarea rows={2} id="nama-lengkap-textfield" className="" />
+                <Textarea
+                  rows={2}
+                  id="nama-lengkap-textfield"
+                  name="address"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
             </div>
 
@@ -774,7 +872,12 @@ const AddEmployeeForm = ({
               {/* TEMPAT LAHIR */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">Tempat Lahir</Label>
-                <Input id="nrpt-pin-textfield" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  name="birthPlace"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* TANGGAL LAHIR */}
@@ -803,7 +906,21 @@ const AddEmployeeForm = ({
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-max">
-                        <Calendar className="rounded-lg" mode="single" />
+                        <Calendar
+                          fromYear={1900}
+                          toYear={new Date().getFullYear()}
+                          captionLayout="dropdown"
+                          className="rounded-lg"
+                          mode="single"
+                          selected={
+                            values.dateOfBirth !== null
+                              ? values.dateOfBirth
+                              : new Date()
+                          }
+                          onSelect={(e, d) => {
+                            setFieldValue("dateOfBirth", d);
+                          }}
+                        />
                       </PopoverContent>
                     </Popover>
                   }
@@ -816,19 +933,34 @@ const AddEmployeeForm = ({
               {/* NOMOR HP */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">Nomor Hp</Label>
-                <Input id="nrpt-pin-textfield" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  name="phoneNumber"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* NOMOR TELEPON */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nama-lengkap-textfield">Nomor Telp</Label>
-                <Input id="nama-lengkap-textfield" className="" />
+                <Input
+                  id="nama-lengkap-textfield"
+                  name="telephone"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* EMAIL */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">Email</Label>
-                <Input id="gelar-depan-textfield" className="" />
+                <Input
+                  id="gelar-depan-textfield"
+                  name="email"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
             </div>
 
@@ -837,31 +969,56 @@ const AddEmployeeForm = ({
               {/* NOMOR KK */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nrpt-pin-textfield">Nomor KK</Label>
-                <Input id="nrpt-pin-textfield" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  name="familyCertificateNumber"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* NOMOR IDENTITAS */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="nama-lengkap-textfield">Nomor Identitas</Label>
-                <Input id="nama-lengkap-textfield" className="" />
+                <Input
+                  id="nama-lengkap-textfield"
+                  name="identityNumber"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* NPWP */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">NPWP</Label>
-                <Input id="gelar-depan-textfield" className="" />
+                <Input
+                  id="gelar-depan-textfield"
+                  name="npwpNumber"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* BPJS TENAGA KERJA */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">BPJS Tenaga Kerja</Label>
-                <Input id="gelar-depan-textfield" className="" />
+                <Input
+                  id="gelar-depan-textfield"
+                  name="bpjsOfEmployment"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
 
               {/* BPJS KESEHATAN */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
                 <Label htmlFor="gelar-depan-textfield">BPJS KESEHATAN</Label>
-                <Input id="gelar-depan-textfield" className="" />
+                <Input
+                  id="gelar-depan-textfield"
+                  name="bpjsOfHealth"
+                  onChange={handleChange}
+                  className=""
+                />
               </div>
             </div>
           </div>
@@ -878,25 +1035,64 @@ const AddEmployeeForm = ({
               {/* PAS FOTO */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Pas Foto</Label>
-                <Input id="nrpt-pin-textfield" type="file" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={(e) => {
+                    !!e.target.files
+                      ? setFieldValue("photographFile", e.target.files[0])
+                      : null;
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN KTP */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan KTP</Label>
-                <Input id="nrpt-pin-textfield" type="file" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={(e) => {
+                    !!e.target.files
+                      ? setFieldValue("identityFile", e.target.files[0])
+                      : null;
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN KK */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan KK</Label>
-                <Input id="nrpt-pin-textfield" type="file" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={(e) => {
+                    !!e.target.files
+                      ? setFieldValue(
+                          "familyCertificateFile",
+                          e.target.files[0]
+                        )
+                      : null;
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN NPWP */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan NPWP</Label>
-                <Input id="nrpt-pin-textfield" type="file" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={(e) => {
+                    !!e.target.files
+                      ? setFieldValue("npwpFile", e.target.files[0])
+                      : null;
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN BPJS TENAGA KERJA */}
@@ -904,7 +1100,16 @@ const AddEmployeeForm = ({
                 <Label htmlFor="nrpt-pin-textfield">
                   Foto/Scan BPJS Tenaga Kerja
                 </Label>
-                <Input id="nrpt-pin-textfield" type="file" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={(e) => {
+                    !!e.target.files
+                      ? setFieldValue("bpjsOfEmploymentFile", e.target.files[0])
+                      : null;
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN BPJS KESEHATAN */}
@@ -912,13 +1117,31 @@ const AddEmployeeForm = ({
                 <Label htmlFor="nrpt-pin-textfield">
                   Foto/Scan BPJS Kesehatan
                 </Label>
-                <Input id="nrpt-pin-textfield" type="file" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={(e) => {
+                    !!e.target.files
+                      ? setFieldValue("bpjsOfHealthFile", e.target.files[0])
+                      : null;
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN SK */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan SK</Label>
-                <Input id="nrpt-pin-textfield" type="file" className="" />
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={(e) => {
+                    !!e.target.files
+                      ? setFieldValue("decisionLetterFile", e.target.files[0])
+                      : null;
+                  }}
+                  className=""
+                />
               </div>
             </div>
             <div className="flex justify-end md:mt-4">

@@ -52,3 +52,15 @@ export const POSTCheckUserRole = async ({ email }: { email: string }) => {
 
   return res;
 };
+
+export const POSTCreateUser = async ({ formData }: { formData: FormData }) => {
+  const res = await useFetch({
+    url: `/api/user/create`,
+    method: "POST",
+    headers: {},
+    cache: "no-cache",
+    body: formData,
+  });
+
+  return res;
+};

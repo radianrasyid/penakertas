@@ -1,4 +1,13 @@
 import { GETProvinceList } from "@/services/geolocation/api";
+import {
+  GETListEducationLevel,
+  GETListGender,
+  GETListMaritalStatus,
+  GETListReligion,
+  GETListWorkGroup,
+  GETListWorkPart,
+  GETListWorkUnit,
+} from "@/services/userInfo/api";
 import dynamic from "next/dynamic";
 import { VscLoading } from "react-icons/vsc";
 
@@ -17,14 +26,52 @@ const AddEmployeeFormPartial = dynamic(
 );
 
 const getData = async () => {
-  const ProvinceData = await GETProvinceList({});
-  console.log(ProvinceData);
-  return ProvinceData.data;
+  const provinceData = await GETProvinceList({});
+  const workGroupData = await GETListWorkGroup();
+  const workUnitData = await GETListWorkUnit();
+  const workPartData = await GETListWorkPart();
+  const religionData = await GETListReligion();
+  const genderData = await GETListGender();
+  const educationLevelData = await GETListEducationLevel();
+  const maritalStatusData = await GETListMaritalStatus();
+
+  console.log("INI DATA SEBELUM CREATE EMPLOYE", {
+    province: provinceData.data,
+    workGroup: workGroupData.data,
+    workUnit: workUnitData.data,
+    workPart: workPartData.data,
+    religion: religionData.data,
+    gender: genderData.data,
+    educationLevel: educationLevelData.data,
+    maritalStatus: maritalStatusData.data,
+  });
+
+  return {
+    province: provinceData.data,
+    workGroup: workGroupData.data,
+    workUnit: workUnitData.data,
+    workPart: workPartData.data,
+    religion: religionData.data,
+    gender: genderData.data,
+    educationLevel: educationLevelData.data,
+    maritalStatus: maritalStatusData.data,
+  };
 };
 
 const AddEmployee = async () => {
   const data = await getData();
-  return <AddEmployeeFormPartial provinceList={data} />;
+  return (
+    <AddEmployeeFormPartial
+      provinceList={data.province}
+      educationLevelList={data.educationLevel}
+      genderList={data.gender}
+      maritalStatusList={data.maritalStatus}
+      religionList={data.religion}
+      workGroupList={data.workGroup}
+      workPartList={data.workPart}
+      workUnitList={data.workUnit}
+    />
+  );
 };
 
 export default AddEmployee;

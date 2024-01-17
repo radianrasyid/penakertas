@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
-import { DayPicker } from "react-day-picker"
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import * as React from "react";
+import { DayPicker } from "react-day-picker";
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 function Calendar({
   className,
@@ -18,12 +18,14 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3", className)}
+      className={cn("", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center",
-        caption_label: "text-sm font-medium",
+        caption: "flex justify-between pt-1 relative items-center",
+        caption_dropdowns: "flex flex-1 justify-between",
+        caption_label:
+          "text-sm font-medium flex gap-2 items-center bg-slate-100 py-1 px-2 rounded-lg",
         nav: "space-x-1 flex items-center",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
@@ -57,6 +59,8 @@ function Calendar({
         day_range_middle:
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
+        // dropdown: "flex bg-slate-100 rounded-lg",
+        // dropdown_icon: "text-red-500",
         ...classNames,
       }}
       components={{
@@ -65,8 +69,8 @@ function Calendar({
       }}
       {...props}
     />
-  )
+  );
 }
-Calendar.displayName = "Calendar"
+Calendar.displayName = "Calendar";
 
-export { Calendar }
+export { Calendar };

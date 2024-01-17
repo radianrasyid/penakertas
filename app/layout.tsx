@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import "react-day-picker/dist/style.css";
 import { Toaster } from "sonner";
 import "./global.scss";
 
