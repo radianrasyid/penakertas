@@ -137,7 +137,7 @@ const DistrictMasterPage = () => {
     getData();
   }, [currentPage, pageSize, searchQuery]);
   return (
-    <div className="bg-white p-4 drop-shadow-lg rounded-xl">
+    <div className="bg-white p-4 drop-shadow-2xl rounded-xl">
       <div className="flex justify-between">
         <span className="text-lg font-medium">Data Kabupaten/Kota</span>
 

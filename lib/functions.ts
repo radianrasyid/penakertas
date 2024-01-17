@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 export const nameInitials = (name: string) => {
   let res = name?.split(" ");
 
@@ -6,4 +8,11 @@ export const nameInitials = (name: string) => {
   });
 
   return initial?.join("");
+};
+
+export const createChecksum = (data: string) => {
+  const hash = crypto.createHash("sha256");
+  hash.update(data);
+
+  return hash.digest("hex");
 };
