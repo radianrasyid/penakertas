@@ -64,3 +64,22 @@ export const POSTCreateUser = async ({ formData }: { formData: FormData }) => {
 
   return res;
 };
+
+export const GETEmployeePaginated = async ({
+  pageNumber = 1,
+  pageSize = 5,
+  searchQuery = "",
+}: {
+  pageSize: number;
+  pageNumber: number;
+  searchQuery: string;
+}) => {
+  const res = await useFetch({
+    url: `/api/user/employee?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    method: "GET",
+    headers: {},
+    cache: "no-cache",
+  });
+
+  return res;
+};

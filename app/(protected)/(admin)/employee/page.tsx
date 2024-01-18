@@ -13,8 +13,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GETEmployeePaginated } from "@/services/user/api";
+import { UserListPaginatedResponseType } from "@/types/general";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 
 const data: Payment[] = [...Array(10)].map((item, index) => {
@@ -187,7 +189,41 @@ const ProvinceMasterPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [totalData, setTotalData] = useState<number>(data.length);
+  const [rows, setRows] = useState<Payment[]>([]);
   const [pageSize, setPageSize] = useState<number>(5);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [loadingTable, setLoadingTable] = useState<boolean>(false);
+  const getData = async () => {
+    setLoadingTable(true);
+    try {
+      const fetching = (await GETEmployeePaginated({
+        pageNumber: currentPage,
+        pageSize: pageSize,
+        searchQuery: searchQuery,
+      })) as UserListPaginatedResponseType;
+
+      const process = fetching.data.map((e, index) => {
+        return {
+          id: `${e.id}`,
+          no: index + 1,
+          nrpt: e.employmentId,
+          address: e.homeAddress,
+          email: e.email,
+          fullname: `${e.firstName} ${e.lastName}`,
+          phoneNumber: e.phoneNumber,
+        };
+      });
+
+      setRows(process);
+    } catch (error) {
+    } finally {
+      setLoadingTable(false);
+    }
+  };
+
+  useMemo(() => {
+    getData();
+  }, []);
   return (
     <div className="bg-white p-4 drop-shadow-2xl rounded-xl">
       <div className="flex justify-between">
@@ -203,7 +239,7 @@ const ProvinceMasterPage = () => {
       <DataTableServerside
         key={pageSize + currentPage}
         columns={columns}
-        data={data}
+        data={rows}
         currentPage={currentPage}
         pageSize={pageSize}
         totalData={totalData}

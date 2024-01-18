@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { AddEmployeeType } from "@/types/forms";
 import { Data } from "@/types/general";
 
@@ -22,8 +23,6 @@ export const createPegawaiSubmition = (data: AddEmployeeType) => {
 
   Object.keys(preprocessData).map((i) => {
     tobeDeployedData[i] = preprocessData[i];
-    if (!!preprocessData[i].lastModified) {
-    }
   });
 
   return tobeDeployedData;
