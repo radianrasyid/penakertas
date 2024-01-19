@@ -14,7 +14,7 @@ export async function useFetch<T>({
   method: "POST" | "GET" | "PUT" | "PATCH" | "POST" | "DELETE";
 }) {
   let data: T | any;
-  return await fetch(`http://localhost:52000${url}`, {
+  return await fetch(`https://relaxed-caiman-strongly.ngrok-free.app${url}`, {
     method,
     headers: {
       ...headers,

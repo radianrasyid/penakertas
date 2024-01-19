@@ -24,7 +24,7 @@ const Page = async () => {
   const statistic = await getStatisticData();
   const role = await getRoleData();
   const data = await GetSessionData();
-
+  console.log("ini data user", data);
   return (
     <div>
       <div className="bg-white p-4 drop-shadow-2xl rounded-xl mb-2">

@@ -3,6 +3,7 @@ import { GetSessionData, SigningOut } from "@/lib/actions";
 import { nameInitials } from "@/lib/functions";
 import { UI, useUiStore } from "@/zustand/UI/ui";
 // import { deleteCookie, getCookie, getCookies } from "cookies-next";
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import { IoIosArrowDown } from "react-icons/io";
@@ -104,10 +105,25 @@ const Navbar = () => {
       {/* PROFILE */}
       <div className="flex gap-1 justify-between items-center md:hidden">
         <Button size={"icon"} className="bg-black bg-opacity-50">
-          {nameInitials(currentUser.user.name)}
+          {!!currentUser.user.image ? (
+            <Image
+              src={currentUser.user.image}
+              width={20}
+              height={20}
+              alt="user image"
+              className="object-cover"
+            />
+          ) : (
+            nameInitials(currentUser.user.name)
+          )}
         </Button>
         <div className="flex flex-col">
-          <span className="text-xs font-semibold">{currentUser.user.name}</span>
+          <span
+            className="text-xs font-semibold"
+            onClick={() => console.log(currentUser)}
+          >
+            {currentUser.user.name}
+          </span>
           <span className="text-xs font-light">Company</span>
         </div>
         <DropdownMenu>
@@ -140,7 +156,17 @@ const Navbar = () => {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Button size={"icon"} className="bg-black bg-opacity-50">
-              {nameInitials(currentUser.user.name)}
+              {!!currentUser.user.image ? (
+                <Image
+                  src={currentUser.user.image}
+                  width={20}
+                  height={20}
+                  alt="user image"
+                  className="object-cover"
+                />
+              ) : (
+                nameInitials(currentUser.user.name)
+              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>

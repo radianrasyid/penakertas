@@ -107,7 +107,14 @@ const AddEmployeeForm = ({
         formData.append(i, createPegawaiSubmition(values)[i]);
       });
       console.log("ini form data", formData);
-      await POSTCreateUser({ formData: formData });
+      const fetching = POSTCreateUser({ formData: formData });
+      toast.promise(fetching, {
+        loading: "Submitting data",
+        success: (data) => {
+          return "Data submitted successfully";
+        },
+        error: "Something went wrong",
+      });
     },
   });
 
