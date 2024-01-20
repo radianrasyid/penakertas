@@ -14,6 +14,11 @@ const FileViewerBioPage = ({ docs }: { docs: IDocument[] }) => {
         }}
         documents={docs}
         pluginRenderers={DocViewerRenderers}
+        config={{
+          noRenderer: {
+            overrideComponent: () => <div>NO RENDERS</div>,
+          },
+        }}
       />
     </div>
   );

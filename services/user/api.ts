@@ -92,3 +92,16 @@ export const GETWhoAmI = async () => {
 
   return res;
 };
+
+export const GETEmployeeDetail = async (id: string) => {
+  const res = await useFetch({
+    url: `/api/user/${id}`,
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-cache",
+  });
+
+  return res;
+};
