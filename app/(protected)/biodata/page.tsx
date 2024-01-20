@@ -1,21 +1,37 @@
-import FileViewerBioPage from "@/components/pageComponent/Biodata/FileViewer/FileViewerBioPage";
 import { Separator } from "@/components/ui/separator";
 import { GETWhoAmI } from "@/services/user/api";
 import { Data, WhoAmIResponseType } from "@/types/general";
 import { IDocument } from "@cyntler/react-doc-viewer";
 import dayjs from "dayjs";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { BsFillPhoneVibrateFill } from "react-icons/bs";
 import { FaPhone } from "react-icons/fa6";
 
 import { HiLocationMarker } from "react-icons/hi";
 import { MdAddPhotoAlternate, MdEmail } from "react-icons/md";
+import { VscLoading } from "react-icons/vsc";
 
 const getData = async () => {
   const fetching = await GETWhoAmI();
   console.log("ini hasil whoami", fetching.data);
   return fetching.data as WhoAmIResponseType;
 };
+
+const FileViewerPartial = dynamic(
+  () =>
+    import("@/components/pageComponent/Biodata/FileViewer/FileViewerBioPage"),
+  {
+    loading: () => (
+      <div className="w-full h-24 rounded-lg bg-slate-300 animate-pulse flex gap-2 flex-wrap items-center justify-center">
+        <VscLoading className={"animate-spin"} />
+        <span className="text-sm font-semibold text-slate-900 bg-clip-text animate-pulse">
+          Loading Viewer
+        </span>
+      </div>
+    ),
+  }
+);
 
 const BiodataPage = async () => {
   const data: Data = await getData();
@@ -188,7 +204,7 @@ const BiodataPage = async () => {
         </div>
       </div>
       <div className="bg-white rounded-lg p-4">
-        <FileViewerBioPage docs={processFile} />
+        <FileViewerPartial docs={processFile} />
       </div>
     </>
   );
