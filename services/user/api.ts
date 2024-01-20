@@ -83,3 +83,12 @@ export const GETEmployeePaginated = async ({
 
   return res;
 };
+
+export const GETWhoAmI = async () => {
+  const res = await useFetch({
+    url: `/api/user/whoami`,
+    method: "GET",
+  });
+
+  return res;
+};

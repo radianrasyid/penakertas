@@ -55,7 +55,6 @@ const AddEmployeeForm = ({
   >([]);
   const [subdistrictList, setSubdistrictList] = useState<OptionsType[]>([]);
   const [wardList, setWardList] = useState<OptionsType[]>([]);
-  const [pickedDate, setPickedDate] = useState<Date>(new Date());
 
   const { setFieldValue, values, handleSubmit, handleChange } = useFormik({
     initialValues: {
@@ -111,7 +110,14 @@ const AddEmployeeForm = ({
       toast.promise(fetching, {
         loading: "Submitting data",
         success: (data) => {
-          return "Data submitted successfully";
+          console.log("ini data", data);
+          return (
+            <div className="flex flex-col">
+              <span className="text-md font-semibold">User Created!</span>
+              <span>Username: {data.data.username}</span>
+              <span>Password: 12345678</span>
+            </div>
+          );
         },
         error: "Something went wrong",
       });

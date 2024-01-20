@@ -4,7 +4,7 @@ import { nameInitials } from "@/lib/functions";
 import { UI, useUiStore } from "@/zustand/UI/ui";
 // import { deleteCookie, getCookie, getCookies } from "cookies-next";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdMenu } from "react-icons/md";
@@ -50,7 +50,7 @@ const Navbar = () => {
     });
   }
 
-  useMemo(() => {
+  useEffect(() => {
     getUserData();
   }, []);
 
@@ -104,14 +104,16 @@ const Navbar = () => {
 
       {/* PROFILE */}
       <div className="flex gap-1 justify-between items-center md:hidden">
-        <Button size={"icon"} className="bg-black bg-opacity-50">
+        <Button
+          size={"icon"}
+          className="bg-black bg-opacity-50 object-cover relative"
+        >
           {!!currentUser.user.image ? (
             <Image
               src={currentUser.user.image}
-              width={20}
-              height={20}
               alt="user image"
-              className="object-cover"
+              fill
+              className="object-cover h-9 w-9 rounded-lg"
             />
           ) : (
             nameInitials(currentUser.user.name)

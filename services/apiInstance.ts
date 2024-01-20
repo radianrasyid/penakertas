@@ -1,3 +1,7 @@
+"use server";
+
+import { GetSessionData } from "@/lib/actions";
+
 export async function useFetch<T>({
   url,
   headers,
@@ -9,17 +13,25 @@ export async function useFetch<T>({
   url: string;
   body?: BodyInit;
   authorization?: string;
-  headers: HeadersInit;
+  headers?: HeadersInit;
   cache?: RequestCache;
   method: "POST" | "GET" | "PUT" | "PATCH" | "POST" | "DELETE";
 }) {
   let data: T | any;
+  const authData = await GetSessionData();
+  console.log("afakah benar", authData?.user?.jwt);
   return await fetch(`https://relaxed-caiman-strongly.ngrok-free.app${url}`, {
     method,
-    headers: {
-      ...headers,
-      "ngrok-skip-browser-warning": "9901",
-    },
+    headers: !!authData?.user?.jwt
+      ? {
+          ...headers,
+          "ngrok-skip-browser-warning": "9901",
+          Authorization: `Bearer ${authData.user.jwt}`,
+        }
+      : {
+          ...headers,
+          "ngrok-skip-browser-warning": "9901",
+        },
     cache: cache,
     body: body,
   })

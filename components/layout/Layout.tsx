@@ -1,5 +1,6 @@
 "use client";
 import MainLogo from "@/assets/images/kepri-logo.png";
+import { GetSessionData } from "@/lib/actions";
 import {
   sidebarData,
   sidebarDataAdmin,
@@ -78,7 +79,12 @@ const Sidebar = ({ role }: { role: string }) => {
                     className="h-12 rounded-full object-cover"
                   />
                 </div>
-                <span className="text-sm text-slate-100 text-center flex-1 font-bold">
+                <span
+                  className="text-sm text-slate-100 text-center flex-1 font-bold"
+                  onClick={async () => {
+                    console.log(await GetSessionData());
+                  }}
+                >
                   Pena Kertas
                 </span>
               </div>
