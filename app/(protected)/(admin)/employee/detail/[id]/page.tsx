@@ -30,6 +30,7 @@ const FileViewerPartial = dynamic(
         </span>
       </div>
     ),
+    ssr: false,
   }
 );
 
@@ -43,7 +44,7 @@ const EmployeeDetailPage = async ({
   const data: Data = await getData(params.id);
   const processFile = Object.keys(data)
     .map((i) => {
-      if (!!data[i].mimetype) {
+      if (!!data[i]?.mimetype) {
         return {
           data: data[i],
         };
@@ -60,9 +61,9 @@ const EmployeeDetailPage = async ({
   return (
     <>
       <div className="bg-white rounded-lg p-4">
-        <div className="flex flex-wrap gap-x-3">
-          <div className="basis-2/12">
-            <div className="relative min-h-52">
+        <div className="grid grid-cols-12 gap-x-3 md:grid-cols-1 sm:grid-cols-1">
+          <div className="col-span-2 md:col-span-full md:flex-1">
+            <div className="relative min-h-52 md:flex md:justify-center md:max-w-full md:max-h-52">
               {!!data.photograph ? (
                 <>
                   <Image
@@ -83,8 +84,8 @@ const EmployeeDetailPage = async ({
               )}
             </div>
           </div>
-          <div className="grow">
-            <div className="flex gap-x-3 items-center">
+          <div className="col-span-10 md:justify-center md:flex md:flex-col md:items-center">
+            <div className="flex gap-x-3 items-center md:justify-between">
               <span className="text-md font-semibold">{`${data.frontTitle} ${data.firstName} ${data.lastName}, ${data.backTitle}`}</span>
               {!!data?.placementLocation ? (
                 <div className="flex gap-x-[0.2rem] items-center text-sm text-slate-500">
@@ -93,13 +94,22 @@ const EmployeeDetailPage = async ({
                 </div>
               ) : null}
             </div>
-            <div className="bg-slate-300 p-2 rounded-lg max-w-fit items-center flex">
-              <span className="text-xs text-primary">
+            <div className="bg-slate-300 p-2 rounded-lg max-w-fit items-center flex md:flex-col mb-1">
+              <span className="text-xs text-primary md:hidden">
                 <span className="font-bold">{data.workGroup} </span>
                 {`- ${data.workUnit} - ${data.workPart}`}
               </span>
+              <span className="xl:hidden lg:hidden 2xl:hidden text-xs text-primary">
+                {data.workGroup}
+              </span>
+              <span className="xl:hidden lg:hidden 2xl:hidden text-xs text-primary">
+                {data.workUnit}
+              </span>
+              <span className="xl:hidden lg:hidden 2xl:hidden text-xs text-primary">
+                {data.workPart}
+              </span>
             </div>
-            <div className="mb-4 flex gap-x-3 items-center">
+            <div className="mb-4 flex gap-x-3 items-center flex-wrap md:justify-center">
               <div className="flex flex-wrap text-[11px] items-center gap-x-1">
                 <MdEmail className="text-primary" />
                 <span className="font-semibold">{data.email}</span>
@@ -107,7 +117,7 @@ const EmployeeDetailPage = async ({
               <Separator
                 orientation="vertical"
                 decorative
-                className="text-black w-[2px] min-h-[1rem] bg-slate-400"
+                className="text-black w-[2px] min-h-[1rem] bg-slate-400 md:hidden"
               />
               <div className="flex flex-wrap text-[11px] items-center gap-x-1">
                 <BsFillPhoneVibrateFill className="text-primary" />
@@ -116,15 +126,15 @@ const EmployeeDetailPage = async ({
               <Separator
                 orientation="vertical"
                 decorative
-                className="text-black w-[2px] min-h-[1rem] bg-slate-400"
+                className="text-black w-[2px] min-h-[1rem] bg-slate-400 md:hidden"
               />
               <div className="flex flex-wrap text-[11px] items-center gap-x-1">
                 <FaPhone className="text-primary" />
                 <span className="font-semibold">{data.telephone}</span>
               </div>
             </div>
-            <div className="grid grid-cols-2 text-xs">
-              <div className="flex flex-col gap-y-1">
+            <div className="grid grid-cols-2 md:grid-cols-1 text-xs">
+              <div className="">
                 <div className="flex flex-wrap">
                   <span className="flex-1">Agama :</span>
                   <span className="flex-1">{data.religion}</span>
@@ -170,7 +180,7 @@ const EmployeeDetailPage = async ({
                   <span className="flex-1">{data.bpjsOfHealth}</span>
                 </div>
               </div>
-              <div className="flex flex-col gap-y-1">
+              <div className="">
                 <div className="flex flex-wrap">
                   <span className="flex-1">Alamat Rumah :</span>
                   <span className="flex-1">{data.homeAddress}</span>

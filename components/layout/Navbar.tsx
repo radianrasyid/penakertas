@@ -135,7 +135,10 @@ const Navbar = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel className="text-sm font-semibold text-gray-500">
+            <DropdownMenuLabel
+              className="text-sm font-semibold text-gray-500"
+              onClick={() => console.log(currentUser)}
+            >
               My Account
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -172,7 +175,10 @@ const Navbar = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel className="text-sm font-semibold text-gray-500">
+            <DropdownMenuLabel
+              className="text-sm font-semibold text-gray-500"
+              onClick={() => console.log(currentUser)}
+            >
               My Account
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

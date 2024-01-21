@@ -257,6 +257,9 @@ export const PUTEditSubdistrict = async ({
     body: JSON.stringify({
       name,
     }),
+    headers: {
+      "Content-Type": "application/json",
+    },
     cache: "no-cache",
   });
 
@@ -311,6 +314,9 @@ export const PUTEditWard = async ({
     body: JSON.stringify({
       name,
     }),
+    headers: {
+      "Content-Type": "application/json",
+    },
     cache: "no-cache",
   });
 

@@ -1,9 +1,8 @@
-"use client";
 import dynamic from "next/dynamic";
 import { VscLoading } from "react-icons/vsc";
 
 const ProvinceEditPagePartial = dynamic(
-  () => import("@/components/pageComponent/DataMaster/district/DistrictUpdate"),
+  () => import("@/components/pageComponent/DataMaster/ward/WardUpdate"),
   {
     loading: () => (
       <div className="w-full h-24 rounded-lg bg-slate-300 animate-pulse flex gap-2 flex-wrap items-center justify-center">
@@ -16,7 +15,7 @@ const ProvinceEditPagePartial = dynamic(
   }
 );
 
-const EditProvince = ({
+const EditProvince = async ({
   params,
 }: {
   params: {

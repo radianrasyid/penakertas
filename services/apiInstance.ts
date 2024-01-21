@@ -19,7 +19,7 @@ export async function useFetch<T>({
 }) {
   let data: T | any;
   const authData = await GetSessionData();
-  return await fetch(`http://localhost:52000${url}`, {
+  return await fetch(`https://relaxed-caiman-strongly.ngrok-free.app${url}`, {
     method,
     headers: !!authData?.user?.jwt
       ? {
