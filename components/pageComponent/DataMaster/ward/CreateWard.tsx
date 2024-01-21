@@ -43,7 +43,6 @@ const WardCreate = () => {
   >([]);
   const getData = async () => {
     const res = await GETSubdistrictList({ district: "" });
-    console.log("ini response", res);
     return setProvinceList(res.data);
   };
   useMemo(() => {

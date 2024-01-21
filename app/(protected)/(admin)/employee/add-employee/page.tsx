@@ -34,18 +34,6 @@ const getData = async () => {
   const genderData = await GETListGender();
   const educationLevelData = await GETListEducationLevel();
   const maritalStatusData = await GETListMaritalStatus();
-
-  console.log("INI DATA SEBELUM CREATE EMPLOYE", {
-    province: provinceData.data,
-    workGroup: workGroupData.data,
-    workUnit: workUnitData.data,
-    workPart: workPartData.data,
-    religion: religionData.data,
-    gender: genderData.data,
-    educationLevel: educationLevelData.data,
-    maritalStatus: maritalStatusData.data,
-  });
-
   return {
     province: provinceData.data,
     workGroup: workGroupData.data,

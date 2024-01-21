@@ -46,7 +46,6 @@ const SubdistrictCreate = () => {
   >([]);
   const getData = async () => {
     const res = await GETDistrictList({ province: "" });
-    console.log("ini response", res);
     return setProvinceList(res.data);
   };
   useMemo(() => {

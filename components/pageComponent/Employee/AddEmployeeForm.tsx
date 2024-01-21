@@ -105,12 +105,10 @@ const AddEmployeeForm = ({
       Object.keys(createPegawaiSubmition(values) as Data).map((i) => {
         formData.append(i, createPegawaiSubmition(values)[i]);
       });
-      console.log("ini form data", formData);
       const fetching = POSTCreateUser({ formData: formData });
       toast.promise(fetching, {
         loading: "Submitting data",
         success: (data) => {
-          console.log("ini data", data);
           return (
             <div className="flex flex-col">
               <span className="text-md font-semibold">User Created!</span>

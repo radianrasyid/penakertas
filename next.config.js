@@ -3,9 +3,9 @@ const nextConfig = {
     images: {
         remotePatterns: [
             {
-                protocol: "https",
-                hostname: "relaxed-caiman-strongly.ngrok-free.app",
-                port: "",
+                protocol: "http",
+                hostname: "localhost",
+                port: "52000",
                 pathname: "**"
             }
         ]

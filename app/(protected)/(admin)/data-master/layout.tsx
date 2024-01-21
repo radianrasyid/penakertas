@@ -9,7 +9,6 @@ const isAdmin = async () => {
   const res = await POSTCheckUserRole({
     email: data?.user?.email as string,
   });
-  console.log("ini response", res.data);
   if (res.data === "ADMIN" || res.data === "SUPER_ADMIN") return true;
   else return false;
 };

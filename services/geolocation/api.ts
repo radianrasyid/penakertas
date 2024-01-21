@@ -168,6 +168,47 @@ export const GETDistrictList = async ({
   return res;
 };
 
+export const GETDistrictById = async ({ id }: { id: string }) => {
+  const res = await useFetch({
+    url: `/api/geolocation/district/get-by-id?id=${id}`,
+    method: "GET",
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const DELETEDistrict = async ({ id }: { id: string }) => {
+  const res = await useFetch({
+    url: `/api/geolocation/district/delete?id=${id}`,
+    method: "DELETE",
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const PUTEditDistrict = async ({
+  id,
+  name,
+}: {
+  id: string;
+  name: string;
+}) => {
+  const res = await useFetch({
+    url: `/api/geolocation/district/edit?id=${id}`,
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: name,
+    }),
+  });
+
+  return res;
+};
+
 export const GETSubdistrictList = async ({
   district = "",
 }: {
@@ -183,6 +224,45 @@ export const GETSubdistrictList = async ({
   return res;
 };
 
+export const GETSubdistrictById = async ({ id }: { id: string }) => {
+  const res = await useFetch({
+    url: `/api/geolocation/subdistrict/get-by-id?id=${id}`,
+    method: "GET",
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const DELETESubdistrict = async ({ id }: { id: string }) => {
+  const res = await useFetch({
+    url: `/api/geolocation/subdistrict/delete?id=${id}`,
+    method: "DELETE",
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const PUTEditSubdistrict = async ({
+  id,
+  name,
+}: {
+  id: string;
+  name: string;
+}) => {
+  const res = await useFetch({
+    url: `/api/geolocation/subdistrict/edit?id=${id}`,
+    method: "PUT",
+    body: JSON.stringify({
+      name,
+    }),
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
 export const GETWardList = async ({
   subdistrict = "",
 }: {
@@ -192,6 +272,45 @@ export const GETWardList = async ({
     url: `/api/geolocation/ward/get-all?subdistrict=${subdistrict}`,
     headers: {},
     method: "GET",
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const GETWardById = async ({ id }: { id: string }) => {
+  const res = await useFetch({
+    url: `/api/geolocation/ward/get-by-id?id=${id}`,
+    method: "GET",
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const DELETEWard = async ({ id }: { id: string }) => {
+  const res = await useFetch({
+    url: `/api/geolocation/ward/delete?id=${id}`,
+    method: "DELETE",
+    cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const PUTEditWard = async ({
+  id,
+  name,
+}: {
+  id: string;
+  name: string;
+}) => {
+  const res = await useFetch({
+    url: `/api/geolocation/ward/edit?id=${id}`,
+    method: "PUT",
+    body: JSON.stringify({
+      name,
+    }),
     cache: "no-cache",
   });
 

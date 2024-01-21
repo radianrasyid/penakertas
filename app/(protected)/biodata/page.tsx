@@ -14,7 +14,6 @@ import { VscLoading } from "react-icons/vsc";
 
 const getData = async () => {
   const fetching = await GETWhoAmI();
-  console.log("ini hasil whoami", fetching.data);
   return fetching.data as WhoAmIResponseType;
 };
 
@@ -59,7 +58,6 @@ const BiodataPage = async () => {
             // fileType: b?.data.mimetype,
           }
     ) as IDocument[];
-  console.log("testing", processFile);
   return (
     <>
       <div className="bg-white rounded-lg p-4">

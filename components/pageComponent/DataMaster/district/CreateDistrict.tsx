@@ -46,7 +46,6 @@ const DistrictCreateForm = () => {
   >([]);
   const getData = async () => {
     const res = await GETProvinceList({});
-    console.log("ini response", res);
     return setProvinceList(res.data);
   };
   useMemo(() => {

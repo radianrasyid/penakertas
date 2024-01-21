@@ -15,7 +15,6 @@ import { VscLoading } from "react-icons/vsc";
 
 const getData = async (id: string) => {
   const fetching = await GETEmployeeDetail(id);
-  console.log("ini hasil whoami", fetching.data);
   return fetching.data as WhoAmIResponseType;
 };
 
@@ -58,7 +57,6 @@ const EmployeeDetailPage = async ({
         fileData: b?.data.link,
       };
     }) as IDocument[];
-  console.log("testing", processFile);
   return (
     <>
       <div className="bg-white rounded-lg p-4">

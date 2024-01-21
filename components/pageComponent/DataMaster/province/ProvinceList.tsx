@@ -109,7 +109,6 @@ const ProvinceMasterPage = () => {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
                 onClick={() => {
-                  console.log("testing routing");
                   router.push(`/data-master/province/edit/${payment.id}`);
                 }}
               >

@@ -9,9 +9,7 @@ export const POSTBulkInsertUser = async () => {
     });
 
     return res;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const POSTLoginUser = async ({
