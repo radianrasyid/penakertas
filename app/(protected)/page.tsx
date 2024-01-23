@@ -38,7 +38,7 @@ const Page = async () => {
         </div>
       </div>
 
-      {role.data === "ADMIN" || role.data === "SUPER_ADMIN" ? (
+      {role.data === "ADMIN" || role.data === "ROOT" ? (
         <>
           <div className="flex flex-wrap gap-2">
             {/* TOTAL PEGAWAI */}

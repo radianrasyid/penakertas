@@ -1,11 +1,8 @@
 "use client";
 import MainLogo from "@/assets/images/kepri-logo.png";
 import { GetSessionData } from "@/lib/actions";
-import {
-  sidebarData,
-  sidebarDataAdmin,
-  sidebarDataUser,
-} from "@/lib/sidebarData";
+import { reprocessSidebar } from "@/lib/functions";
+import { sidebarData } from "@/lib/sidebarData";
 import { UI, useUiStore } from "@/zustand/UI/ui";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
@@ -33,15 +30,10 @@ const Sidebar = ({ role }: { role: string }) => {
   const router = useRouter();
   const [menuData, setMenuData] = useState(sidebarData);
   const sidebarRef = useRef<HTMLElement | null>(null);
-  const processRole = () => {
-    switch (role) {
-      case "ADMIN":
-        return setMenuData(sidebarDataAdmin);
-      case "SUPER_ADMIN":
-        return setMenuData(sidebarData);
-      case "USER":
-        return setMenuData(sidebarDataUser);
-    }
+  const processRole = async () => {
+    const menuData = await reprocessSidebar({ sidebarData: sidebarData });
+    console.log("ini menu data", menuData);
+    setMenuData(menuData);
   };
 
   useEffect(() => {

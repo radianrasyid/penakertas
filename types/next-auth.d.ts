@@ -8,7 +8,7 @@ declare module "next-auth" {
     name?: string | null;
     jwt: string;
     username?: string | null;
-    role?: "ADMIN" | "SUPER_ADMIN" | "USER";
+    role?: "ADMIN" | "ROOT" | "PEGAWAI";
   }
 
   interface Session extends DefaultSession {

@@ -1,4 +1,8 @@
+import { JwtDecodedType, MenuItem } from "@/types/general";
+import { RouteData } from "@/types/sidebar";
 import crypto from "crypto";
+import { jwtDecode } from "jwt-decode";
+import { GetSessionData } from "./actions";
 
 export const nameInitials = (name: string) => {
   let res = name?.split(" ");
@@ -77,3 +81,48 @@ export const getMsOfficeExtension = (mimetype: string): string | undefined => {
 
   return mimeToExtension[mimetype];
 };
+
+export async function reprocessSidebar({
+  sidebarData,
+}: {
+  sidebarData: RouteData[];
+}) {
+  const authData = await GetSessionData();
+  const decodedJwt = jwtDecode(authData?.user?.jwt as string) as JwtDecodedType;
+  console.log("ini decoded jwt di function baru", decodedJwt);
+  const currentAccessData = decodedJwt.access.data.access.menu;
+
+  return filterSidebarData(currentAccessData, sidebarData);
+}
+
+export function filterSidebarData(
+  accessData: MenuItem[],
+  sidebarData: RouteData[]
+) {
+  return sidebarData
+    .map((menuItem) => {
+      const filteredItem = { ...menuItem };
+
+      // Check if there is corresponding access data
+      const accessInfo = accessData.find(
+        (accessItem) => accessItem.name === menuItem.name
+      );
+
+      // If access data exists, check read permission
+      if (accessInfo) {
+        filteredItem.isHidden = !accessInfo.access.read;
+      } else {
+        filteredItem.isHidden = true;
+      }
+
+      // Recursively filter children
+      if (filteredItem.children && filteredItem.children.length > 0) {
+        filteredItem.children = accessData
+          .find((e) => e.name === filteredItem.name)
+          ?.children.filter((i) => i.access.read == true) as any[];
+      }
+
+      return filteredItem;
+    })
+    .filter((item) => !item.isHidden);
+}

@@ -106,4 +106,40 @@ export interface WhoAmIResponseType {
   decisionLetter?: string;
   bpjsOfEmployment?: string;
   bpjsOfHealth?: string;
+  access?: AccessData;
 }
+
+type Access = {
+  read: boolean;
+  add: boolean;
+  update: boolean;
+  delete: boolean;
+  detail: boolean;
+};
+
+export type MenuItem = {
+  access: Access;
+  name: string;
+  _id: string;
+  children: MenuItem[];
+};
+
+type AccessData = {
+  access: {
+    menu: MenuItem[];
+  };
+  title: string;
+};
+
+export type JwtDecodedType = {
+  username: string;
+  fullname: string;
+  id: string;
+  email: string;
+  image: null | string;
+  role: string;
+  access: {
+    data: AccessData;
+  };
+  iat: number;
+};

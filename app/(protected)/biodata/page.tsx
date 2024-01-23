@@ -1,4 +1,5 @@
 import { Separator } from "@/components/ui/separator";
+import { getMsOfficeExtension } from "@/lib/functions";
 import { GETWhoAmI } from "@/services/user/api";
 import { Data, WhoAmIResponseType } from "@/types/general";
 import { IDocument } from "@cyntler/react-doc-viewer";
@@ -39,29 +40,25 @@ const BiodataPage = async () => {
     .map((i) => {
       if (!!data[i]?.mimetype) {
         return {
-          data: data[i],
+          data: {
+            ...data[i],
+            filename: i,
+          },
         };
       }
     })
     .filter((e) => !!e?.data)
-    .map((b) =>
-      b?.data.mimetype.includes("officedocument")
-        ? {
-            uri: `${b.data.link}`,
-            fileType:
-              b.data.mimetype.includes("openxml") &&
-              b.data.mimetype.includes("sheet")
-                ? "xlsx"
-                : "docx",
-          }
-        : {
-            uri: b?.data.link,
-            // fileType: b?.data.mimetype,
-          }
-    ) as IDocument[];
+    .map((b) => {
+      return {
+        uri: b?.data.link,
+        fileType: getMsOfficeExtension(b?.data.mimetype),
+        fileData: b?.data.link,
+        fileName: b?.data.filename,
+      };
+    }) as IDocument[];
   return (
     <>
-      <div className="bg-white rounded-lg p-4">
+      <div className="bg-white rounded-lg p-4 mb-2">
         <div className="grid grid-cols-12 gap-x-3 md:grid-cols-1 sm:grid-cols-1">
           <div className="col-span-2 md:col-span-full md:flex-1">
             <div className="relative min-h-52 md:flex md:justify-center md:max-w-full md:max-h-52">

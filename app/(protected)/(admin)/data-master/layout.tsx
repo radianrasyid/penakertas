@@ -9,7 +9,7 @@ const isAdmin = async () => {
   const res = await POSTCheckUserRole({
     email: data?.user?.email as string,
   });
-  if (res.data === "ADMIN" || res.data === "SUPER_ADMIN") return true;
+  if (res.data === "ADMIN" || res.data === "ROOT") return true;
   else return false;
 };
 
