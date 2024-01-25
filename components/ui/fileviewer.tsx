@@ -1,5 +1,6 @@
 import { IHeaderOverride } from "@cyntler/react-doc-viewer";
 import { BsChevronLeft, BsChevronRight, BsDownload } from "react-icons/bs";
+import { toast } from "sonner";
 import { Button } from "./button";
 
 export const MyHeader: IHeaderOverride = (
@@ -17,7 +18,28 @@ export const MyHeader: IHeaderOverride = (
         <span className="text-lg font-semibold uppercase">
           {state.currentDocument.fileName}
         </span>
-        <Button size={"icon"} variant={"secondary"} className="rounded-full">
+        <Button
+          size={"icon"}
+          variant={"secondary"}
+          className="rounded-full"
+          onClick={async () => {
+            const currentId = state.currentDocument?.uri as string;
+            console.log(currentId);
+            const fetching = fetch(currentId, {
+              method: "GET",
+            });
+            const a = document.createElement("a");
+            a.href = currentId;
+            a.download = currentId;
+            a.target = "_blank";
+            a.click();
+            toast.promise(fetching, {
+              loading: "Downloading your file...",
+              success: "Your file has been downloaded",
+              error: "Something went wrong when downloading your file",
+            });
+          }}
+        >
           <BsDownload />
         </Button>
       </div>

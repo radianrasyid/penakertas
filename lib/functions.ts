@@ -105,7 +105,8 @@ export function filterSidebarData(
 
       // Check if there is corresponding access data
       const accessInfo = accessData.find(
-        (accessItem) => accessItem.name === menuItem.name
+        (accessItem) =>
+          accessItem.name.toLowerCase() === menuItem.name.toLowerCase()
       );
 
       // If access data exists, check read permission
@@ -117,9 +118,11 @@ export function filterSidebarData(
 
       // Recursively filter children
       if (filteredItem.children && filteredItem.children.length > 0) {
-        filteredItem.children = accessData
-          .find((e) => e.name === filteredItem.name)
-          ?.children.filter((i) => i.access.read == true) as any[];
+        console.log("ini masuk ke child", accessInfo?.children);
+        filteredItem.children = filterSidebarData(
+          accessInfo?.children as MenuItem[],
+          menuItem.children
+        );
       }
 
       return filteredItem;

@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getMsOfficeExtension } from "@/lib/functions";
 import { GETWhoAmI } from "@/services/user/api";
@@ -6,6 +7,7 @@ import { IDocument } from "@cyntler/react-doc-viewer";
 import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Link from "next/link";
 import { BsFillPhoneVibrateFill } from "react-icons/bs";
 import { FaPhone } from "react-icons/fa6";
 
@@ -30,7 +32,7 @@ const FileViewerPartial = dynamic(
         </span>
       </div>
     ),
-    ssr: false,
+    ssr: true,
   }
 );
 
@@ -83,14 +85,21 @@ const BiodataPage = async () => {
             </div>
           </div>
           <div className="col-span-10 md:justify-center md:flex md:flex-col md:items-center">
-            <div className="flex gap-x-3 items-center md:justify-between">
-              <span className="text-md font-semibold">{`${data.frontTitle} ${data.firstName} ${data.lastName}, ${data.backTitle}`}</span>
-              {!!data?.placementLocation ? (
-                <div className="flex gap-x-[0.2rem] items-center text-sm text-slate-500">
-                  <HiLocationMarker />
-                  <span>{data?.placementLocation}</span>
-                </div>
-              ) : null}
+            <div className="flex gap-x-3 items-center justify-between">
+              <div className="flex gap-x-3 items-center md:justify-center">
+                <span className="text-md font-semibold">{`${data.frontTitle} ${data.firstName} ${data.lastName}, ${data.backTitle}`}</span>
+                {!!data?.placementLocation ? (
+                  <div className="flex gap-x-[0.2rem] items-center text-sm text-slate-500">
+                    <HiLocationMarker />
+                    <span>{data?.placementLocation}</span>
+                  </div>
+                ) : null}
+              </div>
+              <Link href={"/biodata/edit"}>
+                <Button size={"sm"} variant={"outline"}>
+                  Edit data
+                </Button>
+              </Link>
             </div>
             <div className="bg-slate-300 p-2 rounded-lg max-w-fit items-center flex md:flex-col mb-1">
               <span className="text-xs text-primary md:hidden">

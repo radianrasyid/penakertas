@@ -16,6 +16,9 @@ const nextConfig = {
             loader: "file-loader"
         })
 
+        config.resolve.alias.canvas = false;
+        config.resolve.alias.encoding = false;
+
         return config;
     }
 }

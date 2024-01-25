@@ -109,7 +109,7 @@ export interface WhoAmIResponseType {
   access?: AccessData;
 }
 
-type Access = {
+export type Access = {
   read: boolean;
   add: boolean;
   update: boolean;
@@ -124,11 +124,16 @@ export type MenuItem = {
   children: MenuItem[];
 };
 
-type AccessData = {
+export type AccessData = {
   access: {
     menu: MenuItem[];
   };
   title: string;
+};
+
+export type AccessDataResponseType = {
+  _id: string;
+  data: AccessData;
 };
 
 export type JwtDecodedType = {

@@ -94,3 +94,105 @@ export const GETListMaritalStatus = async () => {
 
   return res;
 };
+
+export const GETReligionPaginate = async ({
+  pageNumber,
+  pageSize,
+  searchQuery,
+}: {
+  pageNumber: number;
+  pageSize: number;
+  searchQuery: string;
+}) => {
+  const res = await useFetch({
+    url: `/api/identity/religion-paginate?pageNumber=${pageNumber}&pageSize=${pageSize}&searchQuery=${searchQuery}`,
+    method: "GET",
+  });
+
+  return res;
+};
+
+export const GETWorkGroupPaginate = async ({
+  pageNumber,
+  pageSize,
+  searchQuery,
+}: {
+  pageSize: number;
+  pageNumber: number;
+  searchQuery: string;
+}) => {
+  const res = await useFetch({
+    url: `/api/work/group-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    method: "GET",
+  });
+
+  return res;
+};
+
+export const GETWorkUnitPaginate = async ({
+  pageNumber,
+  pageSize,
+  searchQuery,
+}: {
+  pageSize: number;
+  pageNumber: number;
+  searchQuery: string;
+}) => {
+  const res = await useFetch({
+    url: `/api/work/unit-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    method: "GET",
+  });
+
+  return res;
+};
+
+export const GETWorkPartPaginate = async ({
+  pageNumber,
+  pageSize,
+  searchQuery,
+}: {
+  pageSize: number;
+  pageNumber: number;
+  searchQuery: string;
+}) => {
+  const res = await useFetch({
+    url: `/api/work/part-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    method: "GET",
+  });
+
+  return res;
+};
+
+export const GETEducationLevelPaginate = async ({
+  pageNumber,
+  pageSize,
+  searchQuery,
+}: {
+  pageSize: number;
+  pageNumber: number;
+  searchQuery: string;
+}) => {
+  const res = await useFetch({
+    url: `/api/identity/education-level-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    method: "GET",
+  });
+
+  return res;
+};
+
+export const GETMaritalStatusPaginate = async ({
+  pageNumber,
+  pageSize,
+  searchQuery,
+}: {
+  pageSize: number;
+  pageNumber: number;
+  searchQuery: string;
+}) => {
+  const res = await useFetch({
+    url: `/api/identity/marital-status-paginate?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${searchQuery}`,
+    method: "GET",
+  });
+
+  return res;
+};
