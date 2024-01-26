@@ -148,3 +148,89 @@ export type JwtDecodedType = {
   };
   iat: number;
 };
+export interface UserDetailResponseType {
+  status: string;
+  message: string;
+  data: User;
+}
+
+interface User {
+  id: string;
+  email: string;
+  username: string;
+  employmentId: string;
+  firstName: string;
+  lastName: string;
+  frontTitle: string;
+  backTitle: string;
+  workGroup: string;
+  workUnit: string;
+  workPart: string;
+  gender: string;
+  createdAt: string;
+  updatedAt: string;
+  leaves: any[]; // Adjust type if necessary
+  childs: any[]; // Adjust type if necessary
+  relationships: any[]; // Adjust type if necessary
+  identity?: {
+    mimetype: string;
+    link: string;
+  }; // Adjust type if necessary
+  photograph?: {
+    mimetype: string;
+    link: string;
+  };
+  familyCertificate?: {
+    mimetype: string;
+    link: string;
+  }; // Adjust type if necessary
+  bpjsOfEmploymentFile?: {
+    mimetype: string;
+    link: string;
+  }; // Adjust type if necessary
+  bpjsOfHealthFile?: {
+    mimetype: string;
+    link: string;
+  }; // Adjust type if necessary
+  npwp?: {
+    mimetype: string;
+    link: string;
+  };
+  latestEducationLevel: string;
+  maritalStatus: string;
+  religion: string;
+  identityNumber: string;
+  npwpNumber: string;
+  familyCertificateNumber: string;
+  jobDescription: string;
+  placementLocation: string;
+  startingYear: string;
+  decisionLetterNumber: string;
+  homeAddress: string;
+  neighborhood: string;
+  neighborhoodHead: string;
+  Province: string;
+  cityDistrict: string; // Adjust type if necessary
+  subdistrict: string; // Adjust type if necessary
+  ward: string; // Adjust type if necessary
+  birthPlace: string;
+  dateOfBirth: string;
+  phoneNumber: string;
+  telephone: string;
+  decisionLetter?: {
+    mimetype: string;
+    link: string;
+  }; // Adjust type if necessary
+  bpjsOfEmployment: string;
+  bpjsOfHealth: string;
+}
+
+export type PromiseAllResponseType = {
+  status: "rejected" | "fulfilled";
+  value: any;
+};
+
+export type FileResponseType = {
+  mimetype: string;
+  link: string;
+};

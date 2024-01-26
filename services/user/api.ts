@@ -1,3 +1,4 @@
+import { GetSessionData } from "@/lib/actions";
 import { useFetch } from "../apiInstance";
 export const POSTBulkInsertUser = async () => {
   try {
@@ -101,5 +102,15 @@ export const GETEmployeeDetail = async (id: string) => {
     cache: "no-cache",
   });
 
+  return res;
+};
+
+export const GETRefresh = async () => {
+  const authData = await GetSessionData();
+  const res = await useFetch({
+    url: `/api/user/refresh`,
+    method: "GET",
+    cache: "no-cache",
+  });
   return res;
 };

@@ -1,3 +1,5 @@
+import { FileResponseType } from "./general";
+
 export interface OptionsType {
   id: string;
   name: string;
@@ -45,4 +47,51 @@ export interface AddEmployeeType {
   identityFile: File | null;
   npwpFile: File | null;
   bpjsOfHealthFile: File | null;
+}
+
+export interface EditEmployeeType {
+  employmentId?: string;
+  backTitle?: string;
+  birthPlace?: string;
+  bpjsOfEmployment?: string;
+  bpjsOfHealth?: string;
+  childs?: string;
+  cityDistrict?: OptionsType;
+  createdAt?: string;
+  dateOfBirth?: string;
+  decisionLetterNumber?: string;
+  email?: string;
+  familyCertificateNumber?: string;
+  firstName?: string;
+  frontTitle?: string;
+  gender?: OptionsType;
+  homeAddress?: string;
+  identityNumber?: string;
+  jobDescription?: string;
+  lastName?: string;
+  latestEducationLevel?: OptionsType;
+  leaves?: string;
+  maritalStatus?: OptionsType;
+  neighborhood?: string;
+  neighborhoodHead?: string;
+  npwpNumber?: string;
+  phoneNumber?: string;
+  placementLocation?: string;
+  Province?: OptionsType;
+  relationships?: string;
+  religion?: OptionsType;
+  startingYear?: string;
+  subdistrict?: OptionsType;
+  telephone?: string;
+  ward?: OptionsType;
+  workGroup?: OptionsType;
+  workPart?: OptionsType;
+  workUnit?: OptionsType;
+  bpjsOfEmploymentFile?: FileResponseType;
+  bpjsOfHealthFile?: FileResponseType;
+  npwp?: FileResponseType;
+  identity?: FileResponseType;
+  decisionLetter?: FileResponseType;
+  photograph?: FileResponseType;
+  familyCertificate?: FileResponseType;
 }

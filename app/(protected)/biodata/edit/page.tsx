@@ -10,6 +10,7 @@ import {
   GETListWorkPart,
   GETListWorkUnit,
 } from "@/services/userInfo/api";
+import { PromiseAllResponseType } from "@/types/general";
 import dynamic from "next/dynamic";
 import { VscLoading } from "react-icons/vsc";
 
@@ -30,25 +31,36 @@ const EditEmployeeFormPartial = dynamic(
 const getData = async () => {
   const authData = await GetSessionData();
   console.log("ini auth data", authData);
-  const provinceData = await GETProvinceList({});
-  const workGroupData = await GETListWorkGroup();
-  const workUnitData = await GETListWorkUnit();
-  const workPartData = await GETListWorkPart();
-  const religionData = await GETListReligion();
-  const genderData = await GETListGender();
-  const educationLevelData = await GETListEducationLevel();
-  const maritalStatusData = await GETListMaritalStatus();
-  const userData = await GETEmployeeDetail(authData?.user?.email as string);
-  return {
-    province: provinceData.data,
-    workGroup: workGroupData.data,
-    workUnit: workUnitData.data,
-    workPart: workPartData.data,
-    religion: religionData.data,
-    gender: genderData.data,
-    educationLevel: educationLevelData.data,
-    maritalStatus: maritalStatusData.data,
+  const provinceData = GETProvinceList({});
+  const workGroupData = GETListWorkGroup();
+  const workUnitData = GETListWorkUnit();
+  const workPartData = GETListWorkPart();
+  const religionData = GETListReligion();
+  const genderData = GETListGender();
+  const educationLevelData = GETListEducationLevel();
+  const maritalStatusData = GETListMaritalStatus();
+  const userData = GETEmployeeDetail(authData?.user?.email as string);
+  const test = (await Promise.allSettled([
+    provinceData,
+    workGroupData,
+    workUnitData,
+    workPartData,
+    religionData,
+    genderData,
+    educationLevelData,
+    maritalStatusData,
     userData,
+  ])) as PromiseAllResponseType[];
+  return {
+    province: test[0].value.data,
+    workGroup: test[1].value.data,
+    workUnit: test[2].value.data,
+    workPart: test[3].value.data,
+    religion: test[4].value.data,
+    gender: test[5].value.data,
+    educationLevel: test[6].value.data,
+    maritalStatus: test[7].value.data,
+    userData: test[8].value,
   };
 };
 

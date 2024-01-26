@@ -12,20 +12,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { createPegawaiSubmition } from "@/lib/submitFunctions";
 import {
   GETDistrictList,
   GETSubdistrictList,
   GETWardList,
 } from "@/services/geolocation/api";
-import { POSTCreateUser } from "@/services/user/api";
-import { AddEmployeeType, OptionsType } from "@/types/forms";
-import { Data } from "@/types/general";
+import { EditEmployeeType, OptionsType } from "@/types/forms";
+import { Data, UserDetailResponseType } from "@/types/general";
 import { Autocomplete, Checkbox } from "@mui/material";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { CalendarIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { toast } from "sonner";
 
@@ -48,7 +46,7 @@ const EditEmployeeForm = ({
   genderList: OptionsType[];
   educationLevelList: OptionsType[];
   maritalStatusList: OptionsType[];
-  userData: any;
+  userData: UserDetailResponseType;
 }) => {
   const [provinceOptions, setProvinceOptions] =
     useState<{ id: string; name: string; value: string }[]>(provinceList);
@@ -60,75 +58,63 @@ const EditEmployeeForm = ({
 
   const { setFieldValue, values, handleSubmit, handleChange } = useFormik({
     initialValues: {
-      address: null,
-      backTitle: "",
-      birthPlace: null,
-      bpjsOfEmployment: null,
-      bpjsOfEmploymentFile: null,
-      bpjsOfHealth: null,
-      bpjsOfHealthFile: null,
-      dateOfBirth: null,
-      decisionLetterFile: null,
-      decisionLetterNumber: null,
-      district: null,
-      email: null,
-      familyCertificateFile: null,
-      familyCertificateNumber: null,
-      firstname: null,
-      frontTitle: "",
-      gender: null,
-      identityFile: null,
-      identityNumber: null,
-      lastname: null,
-      latestEducation: null,
-      maritalStatus: null,
-      neighborhood: null,
-      neighborhoodHead: null,
-      npwpFile: null,
-      npwpNumber: null,
-      nrpt: null,
-      phoneNumber: null,
-      photographFile: null,
-      placement: null,
-      province: null,
-      religion: null,
-      startYear: null,
-      subdistrict: null,
-      telephone: null,
-      ward: null,
-      workDescription: null,
-      workGroup: null,
-      workPart: null,
-      workUnit: null,
-    } as AddEmployeeType,
+      backTitle: undefined,
+      birthPlace: undefined,
+      bpjsOfEmployment: undefined,
+      bpjsOfHealth: undefined,
+      childs: undefined,
+      cityDistrict: undefined,
+      createdAt: undefined,
+      dateOfBirth: undefined,
+      decisionLetterNumber: undefined,
+      email: undefined,
+      employmentId: undefined,
+      familyCertificateNumber: undefined,
+      firstName: undefined,
+      frontTitle: undefined,
+      gender: undefined,
+      homeAddress: undefined,
+      identityNumber: undefined,
+      jobDescription: undefined,
+      lastName: undefined,
+      latestEducationLevel: undefined,
+      leaves: undefined,
+      maritalStatus: undefined,
+      neighborhood: undefined,
+      neighborhoodHead: undefined,
+      npwpNumber: undefined,
+      phoneNumber: undefined,
+      placementLocation: undefined,
+      Province: undefined,
+      relationships: undefined,
+      religion: undefined,
+      startingYear: undefined,
+      subdistrict: undefined,
+      telephone: undefined,
+      ward: undefined,
+      workGroup: undefined,
+      workPart: undefined,
+      workUnit: undefined,
+      bpjsOfEmploymentFile: undefined,
+      bpjsOfHealthFile: undefined,
+      decisionLetter: undefined,
+      familyCertificate: undefined,
+      identity: undefined,
+      npwp: undefined,
+      photograph: undefined,
+    } as EditEmployeeType,
     validateOnChange: false,
-    onSubmit: async (values) => {
-      let formData = new FormData();
-      Object.keys(createPegawaiSubmition(values) as Data).map((i) => {
-        formData.append(i, createPegawaiSubmition(values)[i]);
-      });
-      const fetching = POSTCreateUser({ formData: formData });
-      toast.promise(fetching, {
-        loading: "Submitting data",
-        success: (data) => {
-          return (
-            <div className="flex flex-col">
-              <span className="text-md font-semibold">User Created!</span>
-              <span>Username: {data.data.username}</span>
-              <span>Password: 12345678</span>
-            </div>
-          );
-        },
-        error: "Something went wrong",
-      });
-    },
+    onSubmit: async (values) => {},
   });
 
   const getDistrict = async () => {
-    if (values.province === null) return null;
+    if (values.Province === undefined) return null;
 
     const fetching = GETDistrictList({
-      province: values.province.id,
+      province: !!values.Province?.id
+        ? (provinceList.find((e) => e.name === values.Province?.name)
+            ?.id as string)
+        : "",
     });
     toast.promise(fetching, {
       loading: "Memuat kabupaten/kota...",
@@ -143,10 +129,13 @@ const EditEmployeeForm = ({
   };
 
   const getSubdistrict = async () => {
-    if (values.district === null) return null;
+    if (values.cityDistrict === undefined) return null;
 
     const fetching = GETSubdistrictList({
-      district: values.district.id,
+      district: !!values.cityDistrict?.id
+        ? (districtList.find((e) => e.name === values.cityDistrict?.name)
+            ?.id as string)
+        : "",
     });
     toast.promise(fetching, {
       loading: "Memuat kecamatan...",
@@ -161,10 +150,13 @@ const EditEmployeeForm = ({
   };
 
   const getWard = async () => {
-    if (values.subdistrict === null) return null;
+    if (values.subdistrict === undefined) return null;
 
     const fetching = GETWardList({
-      subdistrict: values.subdistrict.id,
+      subdistrict: !!values.subdistrict?.id
+        ? (subdistrictList.find((e) => e.name === values.subdistrict?.name)
+            ?.id as string)
+        : "",
     });
     toast.promise(fetching, {
       loading: "Memuat kelurahan...",
@@ -178,17 +170,54 @@ const EditEmployeeForm = ({
     });
   };
 
+  const preprocessData = () => {
+    const currentData = userData.data;
+    Object.keys(currentData).map((i) => {
+      let nowData = (currentData as Data)[i];
+      if (nowData !== null) {
+        console.log("ini i", i);
+        switch (true) {
+          case [
+            "Province",
+            "cityDistrict",
+            "subdistrict",
+            "ward",
+            "religion",
+            "gender",
+            "workGroup",
+            "workPart",
+            "workUnit",
+            "latestEducationLevel",
+            "maritalStatus",
+          ].some((e) => e === i):
+            setFieldValue(i, {
+              name: (currentData as Data)[i],
+              value: ((currentData as Data)[i] as string).toUpperCase(),
+            });
+            break;
+          default:
+            setFieldValue(i, (currentData as Data)[i]);
+            break;
+        }
+      }
+    });
+  };
+
   useMemo(() => {
     getDistrict();
-  }, [values.province]);
+  }, [values.Province]);
 
   useMemo(() => {
     getSubdistrict();
-  }, [values.district]);
+  }, [values.cityDistrict]);
 
   useMemo(() => {
     getWard();
   }, [values.subdistrict]);
+
+  useEffect(() => {
+    preprocessData();
+  }, []);
 
   return (
     <div>
@@ -199,14 +228,19 @@ const EditEmployeeForm = ({
         }}
       >
         <div className="flex justify-between mb-5">
-          <span className="text-lg font-semibold">Tambah Pegawai</span>
+          <span className="text-lg font-semibold">Edit Pegawai</span>
         </div>
 
         <div className="bg-white drop-shadow-lg rounded-xl mb-2">
           <div className="flex justify-between w-full bg-cyan-600 px-4 py-2 rounded-tl-lg rounded-tr-lg">
             <span
               className="text-base font-semibold text-white"
-              onClick={() => console.log(userData)}
+              onClick={() =>
+                console.log({
+                  userData,
+                  currentState: values,
+                })
+              }
             >
               Data Diri
             </span>
@@ -222,6 +256,7 @@ const EditEmployeeForm = ({
                   name="nrpt"
                   onChange={handleChange}
                   className=""
+                  value={values.employmentId || ""}
                 />
               </div>
 
@@ -233,6 +268,7 @@ const EditEmployeeForm = ({
                   name="firstname"
                   onChange={handleChange}
                   className=""
+                  value={values.firstName || ""}
                 />
               </div>
 
@@ -244,6 +280,7 @@ const EditEmployeeForm = ({
                   name="lastname"
                   onChange={handleChange}
                   className=""
+                  value={values.lastName || ""}
                 />
               </div>
 
@@ -255,6 +292,7 @@ const EditEmployeeForm = ({
                   name="frontTitle"
                   onChange={handleChange}
                   className=""
+                  value={values.frontTitle || ""}
                 />
               </div>
 
@@ -266,6 +304,7 @@ const EditEmployeeForm = ({
                   name="backTitle"
                   onChange={handleChange}
                   className=""
+                  value={values.backTitle || ""}
                 />
               </div>
             </div>
@@ -280,6 +319,8 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={workGroupList}
+                  value={values.workGroup || null}
+                  defaultValue={values.workGroup}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -328,6 +369,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={workUnitList}
+                  value={values?.workUnit || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -374,6 +416,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={workPartList}
+                  value={values?.workPart || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -432,6 +475,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={religionList}
+                  value={values?.religion || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -480,6 +524,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={genderList}
+                  value={values?.gender || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -528,6 +573,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={educationLevelList}
+                  value={values?.latestEducationLevel || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -576,6 +622,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={maritalStatusList}
+                  value={values?.maritalStatus || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -627,6 +674,7 @@ const EditEmployeeForm = ({
                   name="workDescription"
                   onChange={handleChange}
                   className=""
+                  value={values?.jobDescription || ""}
                 />
               </div>
 
@@ -638,6 +686,7 @@ const EditEmployeeForm = ({
                   name="placement"
                   onChange={handleChange}
                   className=""
+                  value={values?.placementLocation || ""}
                 />
               </div>
 
@@ -649,6 +698,7 @@ const EditEmployeeForm = ({
                   name="startYear"
                   onChange={handleChange}
                   className=""
+                  value={values?.startingYear || ""}
                 />
               </div>
 
@@ -660,6 +710,7 @@ const EditEmployeeForm = ({
                   name="decisionLetterNumber"
                   onChange={handleChange}
                   className=""
+                  value={values?.decisionLetterNumber || ""}
                 />
               </div>
             </div>
@@ -674,6 +725,7 @@ const EditEmployeeForm = ({
                   name="neighborhood"
                   onChange={handleChange}
                   className=""
+                  value={values?.neighborhood || ""}
                 />
               </div>
 
@@ -685,6 +737,7 @@ const EditEmployeeForm = ({
                   name="neighborhoodHead"
                   onChange={handleChange}
                   className=""
+                  value={values?.neighborhoodHead || ""}
                 />
               </div>
 
@@ -696,6 +749,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={provinceOptions}
+                  value={values?.Province || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -724,7 +778,7 @@ const EditEmployeeForm = ({
                     },
                   }}
                   onChange={(e, v) => {
-                    setFieldValue("province", v);
+                    setFieldValue("Province", v);
                   }}
                   fullWidth
                   renderInput={(params) => (
@@ -744,6 +798,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={districtList}
+                  value={values?.cityDistrict || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -771,7 +826,7 @@ const EditEmployeeForm = ({
                       },
                     },
                   }}
-                  onChange={(e, v) => setFieldValue("district", v)}
+                  onChange={(e, v) => setFieldValue("cityDistrict", v)}
                   fullWidth
                   renderInput={(params) => (
                     <CustomTextfield
@@ -790,6 +845,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={subdistrictList}
+                  value={values?.subdistrict || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -836,6 +892,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={wardList}
+                  value={values?.ward || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -886,6 +943,7 @@ const EditEmployeeForm = ({
                   name="address"
                   onChange={handleChange}
                   className=""
+                  value={values?.homeAddress || ""}
                 />
               </div>
             </div>
@@ -900,6 +958,7 @@ const EditEmployeeForm = ({
                   name="birthPlace"
                   onChange={handleChange}
                   className=""
+                  value={values?.birthPlace || ""}
                 />
               </div>
 
@@ -910,7 +969,11 @@ const EditEmployeeForm = ({
                   className="w-full"
                   inputClassname="w-full text-center"
                   id="period-search-textfield"
-                  value={dayjs(new Date()).format("DD MMMM YYYY")}
+                  value={dayjs(
+                    values.dateOfBirth == null
+                      ? new Date()
+                      : new Date(values.dateOfBirth)
+                  ).format("DD MMMM YYYY")}
                   name="periode"
                   onClick={() =>
                     document.getElementById("period-search-trigger")?.click()
@@ -934,10 +997,15 @@ const EditEmployeeForm = ({
                           toYear={new Date().getFullYear()}
                           captionLayout="dropdown"
                           className="rounded-lg"
+                          defaultMonth={
+                            values.dateOfBirth == null
+                              ? new Date()
+                              : new Date(values.dateOfBirth)
+                          }
                           mode="single"
                           selected={
-                            values.dateOfBirth !== null
-                              ? values.dateOfBirth
+                            values.dateOfBirth !== undefined
+                              ? new Date(values.dateOfBirth)
                               : new Date()
                           }
                           onSelect={(e, d) => {
@@ -961,6 +1029,7 @@ const EditEmployeeForm = ({
                   name="phoneNumber"
                   onChange={handleChange}
                   className=""
+                  value={values?.phoneNumber || ""}
                 />
               </div>
 
@@ -972,6 +1041,7 @@ const EditEmployeeForm = ({
                   name="telephone"
                   onChange={handleChange}
                   className=""
+                  value={values?.telephone || ""}
                 />
               </div>
 
@@ -983,6 +1053,7 @@ const EditEmployeeForm = ({
                   name="email"
                   onChange={handleChange}
                   className=""
+                  value={values?.email || ""}
                 />
               </div>
             </div>
@@ -997,6 +1068,7 @@ const EditEmployeeForm = ({
                   name="familyCertificateNumber"
                   onChange={handleChange}
                   className=""
+                  value={values?.familyCertificateNumber || ""}
                 />
               </div>
 
@@ -1008,6 +1080,7 @@ const EditEmployeeForm = ({
                   name="identityNumber"
                   onChange={handleChange}
                   className=""
+                  value={values?.identityNumber || ""}
                 />
               </div>
 
@@ -1019,6 +1092,7 @@ const EditEmployeeForm = ({
                   name="npwpNumber"
                   onChange={handleChange}
                   className=""
+                  value={values?.npwpNumber || ""}
                 />
               </div>
 
@@ -1030,17 +1104,19 @@ const EditEmployeeForm = ({
                   name="bpjsOfEmployment"
                   onChange={handleChange}
                   className=""
+                  value={values?.bpjsOfEmployment || ""}
                 />
               </div>
 
               {/* BPJS KESEHATAN */}
               <div className="flex flex-col gap-2 flex-1 md:basis-full">
-                <Label htmlFor="gelar-depan-textfield">BPJS KESEHATAN</Label>
+                <Label htmlFor="gelar-depan-textfield">BPJS Kesehatan</Label>
                 <Input
                   id="gelar-depan-textfield"
                   name="bpjsOfHealth"
                   onChange={handleChange}
                   className=""
+                  value={values?.bpjsOfHealth || ""}
                 />
               </div>
             </div>
@@ -1058,16 +1134,24 @@ const EditEmployeeForm = ({
               {/* PAS FOTO */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Pas Foto</Label>
-                <Input
-                  id="nrpt-pin-textfield"
-                  type="file"
-                  onChange={(e) => {
-                    !!e.target.files
-                      ? setFieldValue("photographFile", e.target.files[0])
-                      : null;
-                  }}
-                  className=""
-                />
+                {values.photograph !== undefined ? (
+                  <iframe
+                    src={(values.photograph as any)?.link}
+                    className="object-cover"
+                    seamless
+                  />
+                ) : (
+                  <Input
+                    id="nrpt-pin-textfield"
+                    type="file"
+                    onChange={(e) => {
+                      !!e.target.files
+                        ? setFieldValue("photographFile", e.target.files[0])
+                        : null;
+                    }}
+                    className=""
+                  />
+                )}
               </div>
 
               {/* FOTO/SCAN KTP */}
@@ -1088,34 +1172,46 @@ const EditEmployeeForm = ({
               {/* FOTO/SCAN KK */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan KK</Label>
-                <Input
-                  id="nrpt-pin-textfield"
-                  type="file"
-                  onChange={(e) => {
-                    !!e.target.files
-                      ? setFieldValue(
-                          "familyCertificateFile",
-                          e.target.files[0]
-                        )
-                      : null;
-                  }}
-                  className=""
-                />
+                {values.familyCertificate !== undefined ? (
+                  <iframe
+                    src={(values.familyCertificate as any)?.link}
+                    className="object-cover"
+                    seamless
+                  />
+                ) : (
+                  <Input
+                    id="nrpt-pin-textfield"
+                    type="file"
+                    onChange={(e) => {
+                      !!e.target.files
+                        ? setFieldValue(
+                            "familyCertificateFile",
+                            e.target.files[0]
+                          )
+                        : null;
+                    }}
+                    className=""
+                  />
+                )}
               </div>
 
               {/* FOTO/SCAN NPWP */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan NPWP</Label>
-                <Input
-                  id="nrpt-pin-textfield"
-                  type="file"
-                  onChange={(e) => {
-                    !!e.target.files
-                      ? setFieldValue("npwpFile", e.target.files[0])
-                      : null;
-                  }}
-                  className=""
-                />
+                {values.npwp !== undefined ? (
+                  <iframe src={(values.npwp as any)?.link} />
+                ) : (
+                  <Input
+                    id="nrpt-pin-textfield"
+                    type="file"
+                    onChange={(e) => {
+                      !!e.target.files
+                        ? setFieldValue("npwpFile", e.target.files[0])
+                        : null;
+                    }}
+                    className=""
+                  />
+                )}
               </div>
 
               {/* FOTO/SCAN BPJS TENAGA KERJA */}
@@ -1123,16 +1219,23 @@ const EditEmployeeForm = ({
                 <Label htmlFor="nrpt-pin-textfield">
                   Foto/Scan BPJS Tenaga Kerja
                 </Label>
-                <Input
-                  id="nrpt-pin-textfield"
-                  type="file"
-                  onChange={(e) => {
-                    !!e.target.files
-                      ? setFieldValue("bpjsOfEmploymentFile", e.target.files[0])
-                      : null;
-                  }}
-                  className=""
-                />
+                {values.bpjsOfEmploymentFile !== undefined ? (
+                  <iframe src={(values.bpjsOfEmploymentFile as any)?.link} />
+                ) : (
+                  <Input
+                    id="nrpt-pin-textfield"
+                    type="file"
+                    onChange={(e) => {
+                      !!e.target.files
+                        ? setFieldValue(
+                            "bpjsOfEmploymentFile",
+                            e.target.files[0]
+                          )
+                        : null;
+                    }}
+                    className=""
+                  />
+                )}
               </div>
 
               {/* FOTO/SCAN BPJS KESEHATAN */}
@@ -1140,31 +1243,39 @@ const EditEmployeeForm = ({
                 <Label htmlFor="nrpt-pin-textfield">
                   Foto/Scan BPJS Kesehatan
                 </Label>
-                <Input
-                  id="nrpt-pin-textfield"
-                  type="file"
-                  onChange={(e) => {
-                    !!e.target.files
-                      ? setFieldValue("bpjsOfHealthFile", e.target.files[0])
-                      : null;
-                  }}
-                  className=""
-                />
+                {values.bpjsOfHealthFile !== undefined ? (
+                  <iframe src={(values.bpjsOfHealthFile as any)?.link} />
+                ) : (
+                  <Input
+                    id="nrpt-pin-textfield"
+                    type="file"
+                    onChange={(e) => {
+                      !!e.target.files
+                        ? setFieldValue("bpjsOfHealthFile", e.target.files[0])
+                        : null;
+                    }}
+                    className=""
+                  />
+                )}
               </div>
 
               {/* FOTO/SCAN SK */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan SK</Label>
-                <Input
-                  id="nrpt-pin-textfield"
-                  type="file"
-                  onChange={(e) => {
-                    !!e.target.files
-                      ? setFieldValue("decisionLetterFile", e.target.files[0])
-                      : null;
-                  }}
-                  className=""
-                />
+                {values.decisionLetter !== undefined ? (
+                  <iframe src={(values.decisionLetter as any)?.link} />
+                ) : (
+                  <Input
+                    id="nrpt-pin-textfield"
+                    type="file"
+                    onChange={(e) => {
+                      !!e.target.files
+                        ? setFieldValue("decisionLetterFile", e.target.files[0])
+                        : null;
+                    }}
+                    className=""
+                  />
+                )}
               </div>
             </div>
             <div className="flex justify-end md:mt-4">

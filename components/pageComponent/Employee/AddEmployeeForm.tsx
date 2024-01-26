@@ -905,7 +905,11 @@ const AddEmployeeForm = ({
                   className="w-full"
                   inputClassname="w-full text-center"
                   id="period-search-textfield"
-                  value={dayjs(new Date()).format("DD MMMM YYYY")}
+                  value={dayjs(
+                    values.dateOfBirth == null
+                      ? new Date()
+                      : new Date(values.dateOfBirth)
+                  ).format("DD MMMM YYYY")}
                   name="periode"
                   onClick={() =>
                     document.getElementById("period-search-trigger")?.click()
@@ -936,6 +940,7 @@ const AddEmployeeForm = ({
                               : new Date()
                           }
                           onSelect={(e, d) => {
+                            console.log(d);
                             setFieldValue("dateOfBirth", d);
                           }}
                         />

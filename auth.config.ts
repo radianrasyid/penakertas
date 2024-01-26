@@ -4,6 +4,7 @@ export const authConfig: NextAuthConfig = {
   pages: {
     signIn: "/sign-in",
   },
+  useSecureCookies: process.env.NODE_ENV === "production" ? true : false,
   trustHost: true,
   callbacks: {
     authorized: ({ auth, request: { nextUrl } }) => {
@@ -31,9 +32,18 @@ export const authConfig: NextAuthConfig = {
       }
       return true;
     },
-    jwt: ({ token, user }) => {
+    jwt: ({ token, user, trigger, session }) => {
       if (!!user) {
         token.jwtToken = user.jwt;
+
+        if (trigger === "update" && session) {
+          console.log("refresh");
+          token = {
+            ...token,
+            jwtToken: user.jwt,
+            user: session,
+          };
+        }
       }
 
       return token;
