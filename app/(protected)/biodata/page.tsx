@@ -80,7 +80,14 @@ const BiodataPage = async () => {
                   </div>
                 </>
               ) : (
-                <div></div>
+                <div className="w-full h-full bg-slate-400 rounded-lg">
+                  <div className="absolute hover:cursor-pointer h-full w-full bg-gray-700/30 backdrop-blur-lg backdrop-filter rounded-lg transition-all ease-in-out flex items-center justify-center flex-col">
+                    <MdAddPhotoAlternate className="size-24 text-slate-50" />
+                    <span className="text-xs font-semibold text-slate-50">
+                      Add or change photo
+                    </span>
+                  </div>
+                </div>
               )}
             </div>
           </div>

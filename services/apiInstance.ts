@@ -31,7 +31,7 @@ export async function useFetch<T>({
           ...headers,
           "ngrok-skip-browser-warning": "9901",
         },
-    cache: cache,
+    cache: "no-cache",
     body: body,
   })
     .then(async (res) => await res.json())

@@ -234,3 +234,37 @@ export type FileResponseType = {
   mimetype: string;
   link: string;
 };
+
+type AccessPermissionJwtDecode = {
+  read: boolean;
+  add: boolean;
+  update: boolean;
+  delete: boolean;
+  detail: boolean;
+};
+
+type MenuItemJwtDecode = {
+  access: AccessPermissionJwtDecode;
+  name: string;
+  children: MenuItem[];
+  _id: string;
+};
+
+type AccessDataJwtDecode = {
+  access: {
+    menu: MenuItem[];
+  };
+  title: string;
+};
+
+export type UserDataJwtDecode = {
+  username: string;
+  fullname: string;
+  id: string;
+  email: string;
+  image: null | string;
+  role: string;
+  expire: number;
+  access: AccessData;
+  iat: number;
+};

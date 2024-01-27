@@ -12,18 +12,25 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
+import { GetSessionData } from "@/lib/actions";
+import { POSTUploadPerFile } from "@/services/fileStorage/fileStorageApi";
 import {
   GETDistrictList,
   GETSubdistrictList,
   GETWardList,
 } from "@/services/geolocation/api";
 import { EditEmployeeType, OptionsType } from "@/types/forms";
-import { Data, UserDetailResponseType } from "@/types/general";
+import {
+  Data,
+  UserDataJwtDecode,
+  UserDetailResponseType,
+} from "@/types/general";
 import { Autocomplete, Checkbox } from "@mui/material";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
+import { jwtDecode } from "jwt-decode";
 import { CalendarIcon } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { toast } from "sonner";
 
@@ -50,11 +57,14 @@ const EditEmployeeForm = ({
 }) => {
   const [provinceOptions, setProvinceOptions] =
     useState<{ id: string; name: string; value: string }[]>(provinceList);
+  const [userDataDecoded, setUserDataDecoded] =
+    useState<UserDataJwtDecode | null>(null);
   const [districtList, setDistrictList] = useState<
     { id: string; name: string; value: string }[]
   >([]);
   const [subdistrictList, setSubdistrictList] = useState<OptionsType[]>([]);
   const [wardList, setWardList] = useState<OptionsType[]>([]);
+  const decisionLetterRef = useRef<any>(null);
 
   const { setFieldValue, values, handleSubmit, handleChange } = useFormik({
     initialValues: {
@@ -104,7 +114,41 @@ const EditEmployeeForm = ({
       photograph: undefined,
     } as EditEmployeeType,
     validateOnChange: false,
-    onSubmit: async (values) => {},
+    onSubmit: async (values) => {
+      let currentData: Data = {
+        ...values,
+      };
+
+      Object.keys(currentData).map((i) => {
+        const nowData = currentData[i];
+        if (nowData !== null) {
+          switch (true) {
+            case [
+              "Province",
+              "cityDistrict",
+              "subdistrict",
+              "ward",
+              "religion",
+              "gender",
+              "workGroup",
+              "workPart",
+              "workUnit",
+              "latestEducationLevel",
+              "maritalStatus",
+            ].some((e) => e === i):
+              if (nowData.id) {
+                currentData[i] = nowData;
+              }
+              break;
+            default:
+              currentData[i] = nowData;
+              break;
+          }
+        }
+      });
+
+      console.log("ini data submit", currentData);
+    },
   });
 
   const getDistrict = async () => {
@@ -170,7 +214,12 @@ const EditEmployeeForm = ({
     });
   };
 
-  const preprocessData = () => {
+  const preprocessData = async () => {
+    const currentJwt = await GetSessionData();
+    const decodedJwt = jwtDecode(
+      currentJwt?.user?.jwt as string
+    ) as UserDataJwtDecode;
+    setUserDataDecoded(decodedJwt);
     const currentData = userData.data;
     Object.keys(currentData).map((i) => {
       let nowData = (currentData as Data)[i];
@@ -1137,17 +1186,31 @@ const EditEmployeeForm = ({
                 {values.photograph !== undefined ? (
                   <iframe
                     src={(values.photograph as any)?.link}
-                    className="object-cover"
-                    seamless
+                    className="p-4 bg-slate-700 rounded-lg"
                   />
                 ) : (
                   <Input
                     id="nrpt-pin-textfield"
                     type="file"
-                    onChange={(e) => {
-                      !!e.target.files
-                        ? setFieldValue("photographFile", e.target.files[0])
-                        : null;
+                    onChange={async (e) => {
+                      if (e.target.files) {
+                        const formData = new FormData();
+                        formData.append("file", e.target.files[0]);
+                        formData.append("fieldToUpdate", "photograph");
+                        const fetching = POSTUploadPerFile({
+                          id: userDataDecoded?.id as string,
+                          data: formData,
+                        });
+                        toast.promise(fetching, {
+                          loading: "Uploading photograph",
+                          success: (data) => {
+                            setFieldValue("photograph", data.data);
+                            return "Photograph has been uploaded!";
+                          },
+                          error:
+                            "Something went wrong when uploading photograph.",
+                        });
+                      }
                     }}
                     className=""
                   />
@@ -1157,16 +1220,38 @@ const EditEmployeeForm = ({
               {/* FOTO/SCAN KTP */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan KTP</Label>
-                <Input
-                  id="nrpt-pin-textfield"
-                  type="file"
-                  onChange={(e) => {
-                    !!e.target.files
-                      ? setFieldValue("identityFile", e.target.files[0])
-                      : null;
-                  }}
-                  className=""
-                />
+                {values.identity !== undefined ? (
+                  <iframe
+                    src={(values.identity as any)?.link}
+                    className="p-4 bg-slate-700 rounded-lg"
+                  />
+                ) : (
+                  <Input
+                    id="nrpt-pin-textfield"
+                    type="file"
+                    onChange={async (e) => {
+                      if (e.target.files) {
+                        const formData = new FormData();
+                        formData.append("file", e.target.files[0]);
+                        formData.append("fieldToUpdate", "identity");
+                        const fetching = POSTUploadPerFile({
+                          id: userDataDecoded?.id as string,
+                          data: formData,
+                        });
+                        toast.promise(fetching, {
+                          loading: "Uploading photograph",
+                          success: (data) => {
+                            setFieldValue("identity", data.data);
+                            return "Identity has been uploaded!";
+                          },
+                          error:
+                            "Something went wrong when uploading identity.",
+                        });
+                      }
+                    }}
+                    className=""
+                  />
+                )}
               </div>
 
               {/* FOTO/SCAN KK */}
@@ -1175,20 +1260,31 @@ const EditEmployeeForm = ({
                 {values.familyCertificate !== undefined ? (
                   <iframe
                     src={(values.familyCertificate as any)?.link}
-                    className="object-cover"
-                    seamless
+                    className="p-4 bg-slate-700 rounded-lg"
                   />
                 ) : (
                   <Input
                     id="nrpt-pin-textfield"
                     type="file"
-                    onChange={(e) => {
-                      !!e.target.files
-                        ? setFieldValue(
-                            "familyCertificateFile",
-                            e.target.files[0]
-                          )
-                        : null;
+                    onChange={async (e) => {
+                      if (e.target.files) {
+                        const formData = new FormData();
+                        formData.append("file", e.target.files[0]);
+                        formData.append("fieldToUpdate", "familyCertificate");
+                        const fetching = POSTUploadPerFile({
+                          id: userDataDecoded?.id as string,
+                          data: formData,
+                        });
+                        toast.promise(fetching, {
+                          loading: "Uploading family certificate",
+                          success: (data) => {
+                            setFieldValue("familyCertificate", data.data);
+                            return "Family certificate has been uploaded!";
+                          },
+                          error:
+                            "Something went wrong when uploading family certificate.",
+                        });
+                      }
                     }}
                     className=""
                   />
@@ -1199,15 +1295,32 @@ const EditEmployeeForm = ({
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan NPWP</Label>
                 {values.npwp !== undefined ? (
-                  <iframe src={(values.npwp as any)?.link} />
+                  <iframe
+                    src={(values.npwp as any)?.link}
+                    className="p-4 bg-slate-700 rounded-lg"
+                  />
                 ) : (
                   <Input
                     id="nrpt-pin-textfield"
                     type="file"
-                    onChange={(e) => {
-                      !!e.target.files
-                        ? setFieldValue("npwpFile", e.target.files[0])
-                        : null;
+                    onChange={async (e) => {
+                      if (e.target.files) {
+                        const formData = new FormData();
+                        formData.append("file", e.target.files[0]);
+                        formData.append("fieldToUpdate", "npwp");
+                        const fetching = POSTUploadPerFile({
+                          id: userDataDecoded?.id as string,
+                          data: formData,
+                        });
+                        toast.promise(fetching, {
+                          loading: "Uploading npwp",
+                          success: (data) => {
+                            setFieldValue("npwp", data.data);
+                            return "Npwp has been uploaded!";
+                          },
+                          error: "Something went wrong when uploading npwp.",
+                        });
+                      }
                     }}
                     className=""
                   />
@@ -1220,18 +1333,36 @@ const EditEmployeeForm = ({
                   Foto/Scan BPJS Tenaga Kerja
                 </Label>
                 {values.bpjsOfEmploymentFile !== undefined ? (
-                  <iframe src={(values.bpjsOfEmploymentFile as any)?.link} />
+                  <iframe
+                    src={(values.bpjsOfEmploymentFile as any)?.link}
+                    className="p-4 bg-slate-700 rounded-lg"
+                  />
                 ) : (
                   <Input
                     id="nrpt-pin-textfield"
                     type="file"
-                    onChange={(e) => {
-                      !!e.target.files
-                        ? setFieldValue(
-                            "bpjsOfEmploymentFile",
-                            e.target.files[0]
-                          )
-                        : null;
+                    onChange={async (e) => {
+                      if (e.target.files) {
+                        const formData = new FormData();
+                        formData.append("file", e.target.files[0]);
+                        formData.append(
+                          "fieldToUpdate",
+                          "bpjsOfEmploymentFile"
+                        );
+                        const fetching = POSTUploadPerFile({
+                          id: userDataDecoded?.id as string,
+                          data: formData,
+                        });
+                        toast.promise(fetching, {
+                          loading: "Uploading bpjs ketenagakerjaan",
+                          success: (data) => {
+                            setFieldValue("bpjsOfEmploymentFile", data.data);
+                            return "Bpjs ketenagakerjaan has been uploaded!";
+                          },
+                          error:
+                            "Something went wrong when uploading bpjs ketenagakerjaan.",
+                        });
+                      }
                     }}
                     className=""
                   />
@@ -1244,15 +1375,33 @@ const EditEmployeeForm = ({
                   Foto/Scan BPJS Kesehatan
                 </Label>
                 {values.bpjsOfHealthFile !== undefined ? (
-                  <iframe src={(values.bpjsOfHealthFile as any)?.link} />
+                  <iframe
+                    src={(values.bpjsOfHealthFile as any)?.link}
+                    className="p-4 bg-slate-700 rounded-lg"
+                  />
                 ) : (
                   <Input
                     id="nrpt-pin-textfield"
                     type="file"
-                    onChange={(e) => {
-                      !!e.target.files
-                        ? setFieldValue("bpjsOfHealthFile", e.target.files[0])
-                        : null;
+                    onChange={async (e) => {
+                      if (e.target.files) {
+                        const formData = new FormData();
+                        formData.append("file", e.target.files[0]);
+                        formData.append("fieldToUpdate", "bpjsOfHealthFile");
+                        const fetching = POSTUploadPerFile({
+                          id: userDataDecoded?.id as string,
+                          data: formData,
+                        });
+                        toast.promise(fetching, {
+                          loading: "Uploading bpjs kesehatan",
+                          success: (data) => {
+                            setFieldValue("bpjsOfHealthFile", data.data);
+                            return "Bpjs kesehatan has been uploaded!";
+                          },
+                          error:
+                            "Something went wrong when uploading bpjs kesehatan.",
+                        });
+                      }
                     }}
                     className=""
                   />
@@ -1263,15 +1412,38 @@ const EditEmployeeForm = ({
               <div className="flex flex-col gap-2">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan SK</Label>
                 {values.decisionLetter !== undefined ? (
-                  <iframe src={(values.decisionLetter as any)?.link} />
+                  <iframe
+                    src={(values.decisionLetter as any)?.link}
+                    onClick={() => {
+                      decisionLetterRef.current.click();
+                      console.log("clicked");
+                    }}
+                    className="p-4 bg-slate-700 rounded-lg"
+                  />
                 ) : (
                   <Input
                     id="nrpt-pin-textfield"
+                    ref={decisionLetterRef}
                     type="file"
-                    onChange={(e) => {
-                      !!e.target.files
-                        ? setFieldValue("decisionLetterFile", e.target.files[0])
-                        : null;
+                    onChange={async (e) => {
+                      if (e.target.files) {
+                        const formData = new FormData();
+                        formData.append("file", e.target.files[0]);
+                        formData.append("fieldToUpdate", "decisionLetter");
+                        const fetching = POSTUploadPerFile({
+                          id: userDataDecoded?.id as string,
+                          data: formData,
+                        });
+                        toast.promise(fetching, {
+                          loading: "Uploading surat keputusan",
+                          success: (data) => {
+                            setFieldValue("decisionLetter", data.data);
+                            return "Surat keputusan has been uploaded!";
+                          },
+                          error:
+                            "Something went wrong when uploading surat keputusan.",
+                        });
+                      }
                     }}
                     className=""
                   />
