@@ -124,6 +124,9 @@ export const PATCHUpdateUserInfo = async ({
     url: `/api/user/${id}`,
     method: "PATCH",
     body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+    },
     cache: "no-cache",
   });
 

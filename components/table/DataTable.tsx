@@ -1,3 +1,5 @@
+import { useSkipper } from "@/hooks/useSkipper";
+import { Data } from "@/types/general";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,7 +13,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ChevronDown, ChevronDownIcon } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -41,8 +43,10 @@ export function DataTableServerside<TData, TValue>({
   loading,
   columnVisible,
   isServerSearch = false,
+  dataSetter,
   onSearchChange,
-
+  editedRows,
+  setEditedRows,
   onPageSizeChange,
 }: {
   columns: ColumnDef<TData, TValue>[];
@@ -57,11 +61,15 @@ export function DataTableServerside<TData, TValue>({
   columnVisible?: VisibilityState;
   onPageSizeChange?: (e: number) => void;
   onSearchChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  dataSetter?: Dispatch<SetStateAction<TData[]>>;
+  editedRows?: Data;
+  setEditedRows?: Dispatch<SetStateAction<Data>>;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
 
   const table = useReactTable({
     data,
@@ -74,6 +82,7 @@ export function DataTableServerside<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    enableRowSelection: true,
     state: {
       sorting,
       columnFilters,
@@ -85,6 +94,38 @@ export function DataTableServerside<TData, TValue>({
         pageSize: pageSize,
       },
     },
+    meta: {
+      updateData: (rowIndex, columnId, value) => {
+        skipAutoResetPageIndex();
+        if (!!dataSetter) {
+          dataSetter((old) =>
+            old.map((row, index) => {
+              if (index === rowIndex) {
+                return {
+                  ...old[rowIndex]!,
+                  [columnId]: value,
+                };
+              }
+              return row;
+            })
+          );
+        }
+      },
+      addRow: (dataToAdd) => {
+        if (!!dataSetter) {
+          dataSetter((old) => [...old, dataToAdd]);
+        }
+      },
+      removeRow: (rowIndex) => {
+        if (!!dataSetter) {
+          const process = data.filter((_row, index) => index !== rowIndex);
+          dataSetter(process);
+        }
+      },
+      editedRow: editedRows,
+      setEditedRow: setEditedRows,
+    },
+    debugTable: true,
   });
 
   return (

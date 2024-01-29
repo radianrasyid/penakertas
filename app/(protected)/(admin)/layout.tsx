@@ -2,7 +2,6 @@ import { GetSessionData } from "@/lib/actions";
 import { POSTCheckUserRole } from "@/services/user/api";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import { Toaster } from "sonner";
 
 const isAdmin = async () => {
   const data = await GetSessionData();
@@ -15,13 +14,7 @@ const isAdmin = async () => {
 
 const DataMasterLayout = async ({ children }: { children: ReactNode }) => {
   const isAdminCheck = await isAdmin();
-  if (isAdminCheck)
-    return (
-      <>
-        {children}
-        <Toaster />
-      </>
-    );
+  if (isAdminCheck) return <>{children}</>;
   return redirect("/");
 };
 

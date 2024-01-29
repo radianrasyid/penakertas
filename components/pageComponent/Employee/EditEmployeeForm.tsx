@@ -19,6 +19,7 @@ import {
   GETSubdistrictList,
   GETWardList,
 } from "@/services/geolocation/api";
+import { PATCHUpdateUserInfo } from "@/services/user/api";
 import { EditEmployeeType, OptionsType } from "@/types/forms";
 import {
   Data,
@@ -119,8 +120,10 @@ const EditEmployeeForm = ({
         ...values,
       };
 
-      Object.keys(currentData).map((i) => {
+      await Object.keys(currentData).map((i) => {
         const nowData = currentData[i];
+        nowData == null || nowData == undefined ? delete currentData[i] : null;
+        i === "id" || i === "username" ? delete currentData[i] : null;
         if (nowData !== null) {
           switch (true) {
             case [
@@ -136,18 +139,54 @@ const EditEmployeeForm = ({
               "latestEducationLevel",
               "maritalStatus",
             ].some((e) => e === i):
-              if (nowData.id) {
-                currentData[i] = nowData;
+              if (!!nowData?.id) {
+                currentData[i] = currentData[i].name;
+              } else {
+                delete currentData[i];
               }
+              break;
+            case [
+              "bpjsOfEmploymentFile",
+              "bpjsOfHealthFile",
+              "decisionLetter",
+              "familyCertificate",
+              "npwp",
+              "photograph",
+              "identity",
+            ].some((e) => e === i):
+              if (!!nowData?.id) {
+                currentData[i] = nowData.id;
+              }
+              break;
+            case Array.isArray(nowData):
+              nowData.length < 1 ? delete currentData[i] : null;
+              break;
+            case !nowData:
+              delete currentData[i];
+              break;
+            case ["createdAt", "updatedAt"].some((e) => e === i):
+              delete currentData[i];
               break;
             default:
               currentData[i] = nowData;
               break;
           }
         }
+        i === "id" || i === "username" ? delete currentData[i] : null;
       });
 
-      console.log("ini data submit", currentData);
+      console.log("ini datanya njerng", currentData);
+
+      const fetching = PATCHUpdateUserInfo({
+        id: values.employmentId as string,
+        data: currentData,
+      });
+
+      toast.promise(fetching, {
+        loading: "Updating your data...",
+        success: "SUCCESS",
+        error: "ERROR",
+      });
     },
   });
 
@@ -288,6 +327,7 @@ const EditEmployeeForm = ({
                 console.log({
                   userData,
                   currentState: values,
+                  userDataDecoded,
                 })
               }
             >
@@ -305,6 +345,7 @@ const EditEmployeeForm = ({
                   name="nrpt"
                   onChange={handleChange}
                   className=""
+                  disabled
                   value={values.employmentId || ""}
                 />
               </div>
@@ -369,6 +410,7 @@ const EditEmployeeForm = ({
                   size="small"
                   options={workGroupList}
                   value={values.workGroup || null}
+                  isOptionEqualToValue={(e, v) => e.name === v.name}
                   defaultValue={values.workGroup}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
@@ -419,6 +461,7 @@ const EditEmployeeForm = ({
                   size="small"
                   options={workUnitList}
                   value={values?.workUnit || null}
+                  isOptionEqualToValue={(e, v) => e.name === v.name}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -466,6 +509,7 @@ const EditEmployeeForm = ({
                   size="small"
                   options={workPartList}
                   value={values?.workPart || null}
+                  isOptionEqualToValue={(e, v) => e.name === v.name}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -525,6 +569,7 @@ const EditEmployeeForm = ({
                   size="small"
                   options={religionList}
                   value={values?.religion || null}
+                  isOptionEqualToValue={(e, v) => e.name === v.name}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -574,6 +619,7 @@ const EditEmployeeForm = ({
                   size="small"
                   options={genderList}
                   value={values?.gender || null}
+                  isOptionEqualToValue={(e, v) => e.name === v.name}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -622,6 +668,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={educationLevelList}
+                  isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.latestEducationLevel || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
@@ -671,6 +718,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={maritalStatusList}
+                  isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.maritalStatus || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
@@ -798,6 +846,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={provinceOptions}
+                  isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.Province || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
@@ -847,6 +896,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={districtList}
+                  isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.cityDistrict || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
@@ -894,6 +944,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={subdistrictList}
+                  isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.subdistrict || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
@@ -941,6 +992,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={wardList}
+                  isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.ward || null}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
@@ -1181,154 +1233,162 @@ const EditEmployeeForm = ({
           <div className="w-full bg-white px-4 py-4 rounded-bl-lg rounded-br-lg">
             <div className="flex flex-wrap gap-x-3 gap-y-5 flex-auto">
               {/* PAS FOTO */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 flex-grow">
                 <Label htmlFor="nrpt-pin-textfield">Pas Foto</Label>
                 {values.photograph !== undefined ? (
                   <iframe
                     src={(values.photograph as any)?.link}
                     className="p-4 bg-slate-700 rounded-lg"
                   />
-                ) : (
-                  <Input
-                    id="nrpt-pin-textfield"
-                    type="file"
-                    onChange={async (e) => {
-                      if (e.target.files) {
-                        const formData = new FormData();
-                        formData.append("file", e.target.files[0]);
-                        formData.append("fieldToUpdate", "photograph");
-                        const fetching = POSTUploadPerFile({
-                          id: userDataDecoded?.id as string,
-                          data: formData,
-                        });
-                        toast.promise(fetching, {
-                          loading: "Uploading photograph",
-                          success: (data) => {
-                            setFieldValue("photograph", data.data);
-                            return "Photograph has been uploaded!";
-                          },
-                          error:
-                            "Something went wrong when uploading photograph.",
-                        });
-                      }
-                    }}
-                    className=""
-                  />
-                )}
+                ) : null}
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={async (e) => {
+                    if (e.target.files) {
+                      const formData = new FormData();
+                      formData.append("file", e.target.files[0]);
+                      formData.append("fieldToUpdate", "photograph");
+                      const fetching = POSTUploadPerFile({
+                        id: userDataDecoded?.id as string,
+                        data: formData,
+                      });
+                      toast.promise(fetching, {
+                        loading: "Uploading photograph",
+                        success: (data) => {
+                          setFieldValue("photograph", data.data);
+                          return "Photograph has been uploaded!";
+                        },
+                        error:
+                          "Something went wrong when uploading photograph.",
+                      });
+                    }
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN KTP */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 flex-grow">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan KTP</Label>
                 {values.identity !== undefined ? (
                   <iframe
                     src={(values.identity as any)?.link}
                     className="p-4 bg-slate-700 rounded-lg"
                   />
-                ) : (
-                  <Input
-                    id="nrpt-pin-textfield"
-                    type="file"
-                    onChange={async (e) => {
-                      if (e.target.files) {
-                        const formData = new FormData();
-                        formData.append("file", e.target.files[0]);
-                        formData.append("fieldToUpdate", "identity");
-                        const fetching = POSTUploadPerFile({
-                          id: userDataDecoded?.id as string,
-                          data: formData,
-                        });
-                        toast.promise(fetching, {
-                          loading: "Uploading photograph",
-                          success: (data) => {
-                            setFieldValue("identity", data.data);
-                            return "Identity has been uploaded!";
-                          },
-                          error:
-                            "Something went wrong when uploading identity.",
-                        });
-                      }
-                    }}
-                    className=""
-                  />
-                )}
+                ) : null}
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={async (e) => {
+                    if (e.target.files) {
+                      const formData = new FormData();
+                      formData.append("file", e.target.files[0]);
+                      formData.append("fieldToUpdate", "identity");
+                      const fetching = POSTUploadPerFile({
+                        id: userDataDecoded?.id as string,
+                        data: formData,
+                      });
+                      toast.promise(fetching, {
+                        loading: "Uploading photograph",
+                        success: (data) => {
+                          setFieldValue("identity", data.data);
+                          return "Identity has been uploaded!";
+                        },
+                        error: "Something went wrong when uploading identity.",
+                      });
+                    }
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN KK */}
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="nrpt-pin-textfield">Foto/Scan KK</Label>
+              <div className="flex flex-col gap-2 flex-grow">
+                <Label
+                  htmlFor="nrpt-pin-textfield"
+                  onClick={() => console.log("lnk", values.familyCertificate)}
+                >
+                  Foto/Scan KK
+                </Label>
                 {values.familyCertificate !== undefined ? (
                   <iframe
-                    src={(values.familyCertificate as any)?.link}
+                    src={
+                      values.familyCertificate?.mimetype.includes(
+                        "officedocument"
+                      )
+                        ? `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
+                            (values.familyCertificate as any)?.link
+                          )}`
+                        : (values.familyCertificate as any)?.link
+                    }
                     className="p-4 bg-slate-700 rounded-lg"
                   />
-                ) : (
-                  <Input
-                    id="nrpt-pin-textfield"
-                    type="file"
-                    onChange={async (e) => {
-                      if (e.target.files) {
-                        const formData = new FormData();
-                        formData.append("file", e.target.files[0]);
-                        formData.append("fieldToUpdate", "familyCertificate");
-                        const fetching = POSTUploadPerFile({
-                          id: userDataDecoded?.id as string,
-                          data: formData,
-                        });
-                        toast.promise(fetching, {
-                          loading: "Uploading family certificate",
-                          success: (data) => {
-                            setFieldValue("familyCertificate", data.data);
-                            return "Family certificate has been uploaded!";
-                          },
-                          error:
-                            "Something went wrong when uploading family certificate.",
-                        });
-                      }
-                    }}
-                    className=""
-                  />
-                )}
+                ) : null}{" "}
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={async (e) => {
+                    if (e.target.files) {
+                      const formData = new FormData();
+                      formData.append("file", e.target.files[0]);
+                      formData.append("fieldToUpdate", "familyCertificate");
+                      const fetching = POSTUploadPerFile({
+                        id: userDataDecoded?.id as string,
+                        data: formData,
+                      });
+                      toast.promise(fetching, {
+                        loading: "Uploading family certificate",
+                        success: (data) => {
+                          setFieldValue("familyCertificate", data.data);
+                          return "Family certificate has been uploaded!";
+                        },
+                        error:
+                          "Something went wrong when uploading family certificate.",
+                      });
+                    }
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN NPWP */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 flex-grow">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan NPWP</Label>
                 {values.npwp !== undefined ? (
                   <iframe
                     src={(values.npwp as any)?.link}
                     className="p-4 bg-slate-700 rounded-lg"
                   />
-                ) : (
-                  <Input
-                    id="nrpt-pin-textfield"
-                    type="file"
-                    onChange={async (e) => {
-                      if (e.target.files) {
-                        const formData = new FormData();
-                        formData.append("file", e.target.files[0]);
-                        formData.append("fieldToUpdate", "npwp");
-                        const fetching = POSTUploadPerFile({
-                          id: userDataDecoded?.id as string,
-                          data: formData,
-                        });
-                        toast.promise(fetching, {
-                          loading: "Uploading npwp",
-                          success: (data) => {
-                            setFieldValue("npwp", data.data);
-                            return "Npwp has been uploaded!";
-                          },
-                          error: "Something went wrong when uploading npwp.",
-                        });
-                      }
-                    }}
-                    className=""
-                  />
-                )}
+                ) : null}
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={async (e) => {
+                    if (e.target.files) {
+                      const formData = new FormData();
+                      formData.append("file", e.target.files[0]);
+                      formData.append("fieldToUpdate", "npwp");
+                      const fetching = POSTUploadPerFile({
+                        id: userDataDecoded?.id as string,
+                        data: formData,
+                      });
+                      toast.promise(fetching, {
+                        loading: "Uploading npwp",
+                        success: (data) => {
+                          setFieldValue("npwp", data.data);
+                          return "Npwp has been uploaded!";
+                        },
+                        error: "Something went wrong when uploading npwp.",
+                      });
+                    }
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN BPJS TENAGA KERJA */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 flex-grow">
                 <Label htmlFor="nrpt-pin-textfield">
                   Foto/Scan BPJS Tenaga Kerja
                 </Label>
@@ -1337,40 +1397,36 @@ const EditEmployeeForm = ({
                     src={(values.bpjsOfEmploymentFile as any)?.link}
                     className="p-4 bg-slate-700 rounded-lg"
                   />
-                ) : (
-                  <Input
-                    id="nrpt-pin-textfield"
-                    type="file"
-                    onChange={async (e) => {
-                      if (e.target.files) {
-                        const formData = new FormData();
-                        formData.append("file", e.target.files[0]);
-                        formData.append(
-                          "fieldToUpdate",
-                          "bpjsOfEmploymentFile"
-                        );
-                        const fetching = POSTUploadPerFile({
-                          id: userDataDecoded?.id as string,
-                          data: formData,
-                        });
-                        toast.promise(fetching, {
-                          loading: "Uploading bpjs ketenagakerjaan",
-                          success: (data) => {
-                            setFieldValue("bpjsOfEmploymentFile", data.data);
-                            return "Bpjs ketenagakerjaan has been uploaded!";
-                          },
-                          error:
-                            "Something went wrong when uploading bpjs ketenagakerjaan.",
-                        });
-                      }
-                    }}
-                    className=""
-                  />
-                )}
+                ) : null}
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={async (e) => {
+                    if (e.target.files) {
+                      const formData = new FormData();
+                      formData.append("file", e.target.files[0]);
+                      formData.append("fieldToUpdate", "bpjsOfEmploymentFile");
+                      const fetching = POSTUploadPerFile({
+                        id: userDataDecoded?.id as string,
+                        data: formData,
+                      });
+                      toast.promise(fetching, {
+                        loading: "Uploading bpjs ketenagakerjaan",
+                        success: (data) => {
+                          setFieldValue("bpjsOfEmploymentFile", data.data);
+                          return "Bpjs ketenagakerjaan has been uploaded!";
+                        },
+                        error:
+                          "Something went wrong when uploading bpjs ketenagakerjaan.",
+                      });
+                    }
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN BPJS KESEHATAN */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 flex-grow">
                 <Label htmlFor="nrpt-pin-textfield">
                   Foto/Scan BPJS Kesehatan
                 </Label>
@@ -1379,37 +1435,36 @@ const EditEmployeeForm = ({
                     src={(values.bpjsOfHealthFile as any)?.link}
                     className="p-4 bg-slate-700 rounded-lg"
                   />
-                ) : (
-                  <Input
-                    id="nrpt-pin-textfield"
-                    type="file"
-                    onChange={async (e) => {
-                      if (e.target.files) {
-                        const formData = new FormData();
-                        formData.append("file", e.target.files[0]);
-                        formData.append("fieldToUpdate", "bpjsOfHealthFile");
-                        const fetching = POSTUploadPerFile({
-                          id: userDataDecoded?.id as string,
-                          data: formData,
-                        });
-                        toast.promise(fetching, {
-                          loading: "Uploading bpjs kesehatan",
-                          success: (data) => {
-                            setFieldValue("bpjsOfHealthFile", data.data);
-                            return "Bpjs kesehatan has been uploaded!";
-                          },
-                          error:
-                            "Something went wrong when uploading bpjs kesehatan.",
-                        });
-                      }
-                    }}
-                    className=""
-                  />
-                )}
+                ) : null}
+                <Input
+                  id="nrpt-pin-textfield"
+                  type="file"
+                  onChange={async (e) => {
+                    if (e.target.files) {
+                      const formData = new FormData();
+                      formData.append("file", e.target.files[0]);
+                      formData.append("fieldToUpdate", "bpjsOfHealthFile");
+                      const fetching = POSTUploadPerFile({
+                        id: userDataDecoded?.id as string,
+                        data: formData,
+                      });
+                      toast.promise(fetching, {
+                        loading: "Uploading bpjs kesehatan",
+                        success: (data) => {
+                          setFieldValue("bpjsOfHealthFile", data.data);
+                          return "Bpjs kesehatan has been uploaded!";
+                        },
+                        error:
+                          "Something went wrong when uploading bpjs kesehatan.",
+                      });
+                    }
+                  }}
+                  className=""
+                />
               </div>
 
               {/* FOTO/SCAN SK */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 flex-grow">
                 <Label htmlFor="nrpt-pin-textfield">Foto/Scan SK</Label>
                 {values.decisionLetter !== undefined ? (
                   <iframe
@@ -1420,34 +1475,33 @@ const EditEmployeeForm = ({
                     }}
                     className="p-4 bg-slate-700 rounded-lg"
                   />
-                ) : (
-                  <Input
-                    id="nrpt-pin-textfield"
-                    ref={decisionLetterRef}
-                    type="file"
-                    onChange={async (e) => {
-                      if (e.target.files) {
-                        const formData = new FormData();
-                        formData.append("file", e.target.files[0]);
-                        formData.append("fieldToUpdate", "decisionLetter");
-                        const fetching = POSTUploadPerFile({
-                          id: userDataDecoded?.id as string,
-                          data: formData,
-                        });
-                        toast.promise(fetching, {
-                          loading: "Uploading surat keputusan",
-                          success: (data) => {
-                            setFieldValue("decisionLetter", data.data);
-                            return "Surat keputusan has been uploaded!";
-                          },
-                          error:
-                            "Something went wrong when uploading surat keputusan.",
-                        });
-                      }
-                    }}
-                    className=""
-                  />
-                )}
+                ) : null}
+                <Input
+                  id="nrpt-pin-textfield"
+                  ref={decisionLetterRef}
+                  type="file"
+                  onChange={async (e) => {
+                    if (e.target.files) {
+                      const formData = new FormData();
+                      formData.append("file", e.target.files[0]);
+                      formData.append("fieldToUpdate", "decisionLetter");
+                      const fetching = POSTUploadPerFile({
+                        id: userDataDecoded?.id as string,
+                        data: formData,
+                      });
+                      toast.promise(fetching, {
+                        loading: "Uploading surat keputusan",
+                        success: (data) => {
+                          setFieldValue("decisionLetter", data.data);
+                          return "Surat keputusan has been uploaded!";
+                        },
+                        error:
+                          "Something went wrong when uploading surat keputusan.",
+                      });
+                    }
+                  }}
+                  className=""
+                />
               </div>
             </div>
             <div className="flex justify-end md:mt-4">
