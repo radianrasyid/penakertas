@@ -1,15 +1,22 @@
 import { useFetch } from "../apiInstance";
 export const POSTBulkInsertUser = async () => {
   try {
-    const res = await useFetch({
-      url: `/api/user/bulk-insert`,
-      headers: {},
-      method: "POST",
-      cache: "no-cache",
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/bulk-insert`,
+      {
+        method: "POST",
+        cache: "no-cache",
+      }
+    );
 
-    return res;
-  } catch (error) {}
+    if (!res.ok) {
+      throw new Error((await res.json()).message);
+    }
+
+    return await res.json();
+  } catch (error) {
+    throw new Error();
+  }
 };
 
 export const POSTLoginUser = async ({
@@ -99,6 +106,11 @@ export const GETEmployeeDetail = async (id: string) => {
       "Content-Type": "application/json",
     },
     cache: "no-cache",
+    requestInit: {
+      next: {
+        tags: ["employee"],
+      },
+    },
   });
 
   return res;
@@ -128,6 +140,29 @@ export const PATCHUpdateUserInfo = async ({
       "Content-Type": "application/json",
     },
     cache: "no-cache",
+  });
+
+  return res;
+};
+
+export const POSTAddPartner = async ({
+  partnertData,
+}: {
+  partnertData: {
+    fullname: string;
+    status: string;
+    profession: string;
+    phoneNumber: string;
+  }[];
+}) => {
+  const res = await useFetch({
+    url: `/api/relationship`,
+    method: "POST",
+    body: JSON.stringify({ partnerData: partnertData }),
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
   return res;

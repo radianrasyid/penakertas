@@ -2,13 +2,7 @@
 
 import { GetSessionData } from "@/lib/actions";
 
-export async function useFetch<T>({
-  url,
-  headers,
-  body,
-  cache,
-  method,
-}: {
+interface FetchArgs {
   contentType?: "application/json" | "multipart/form-data" | undefined;
   url: string;
   body?: BodyInit;
@@ -16,10 +10,19 @@ export async function useFetch<T>({
   headers?: HeadersInit;
   cache?: RequestCache;
   method: "POST" | "GET" | "PUT" | "PATCH" | "POST" | "DELETE";
-}) {
-  let data: T | any;
+  requestInit?: RequestInit;
+}
+
+export async function useFetch({
+  url,
+  headers,
+  body,
+  cache,
+  method = "GET",
+  requestInit,
+}: FetchArgs) {
   const authData = await GetSessionData();
-  return await fetch(`http://localhost:52000${url}`, {
+  const result = await fetch(`http://localhost:52000${url}`, {
     method,
     headers: !!authData?.user?.jwt
       ? {
@@ -31,12 +34,11 @@ export async function useFetch<T>({
           ...headers,
           "ngrok-skip-browser-warning": "9901",
         },
-    cache: "no-cache",
     body: body,
-  })
-    .then(async (res) => await res.json())
-    .then((result) => {
-      data = result;
-      return data;
-    });
+    ...requestInit,
+  });
+  if (!result.ok) {
+    throw new Error((await result.json())?.message || "Something went wrong");
+  }
+  return await result.json();
 }

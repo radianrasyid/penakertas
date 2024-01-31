@@ -32,7 +32,6 @@ const Sidebar = ({ role }: { role: string }) => {
   const sidebarRef = useRef<HTMLElement | null>(null);
   const processRole = async () => {
     const menuData = await reprocessSidebar({ sidebarData: sidebarData });
-    console.log("ini menu data", menuData);
     setMenuData(menuData);
   };
 
@@ -46,7 +45,6 @@ const Sidebar = ({ role }: { role: string }) => {
   return (
     <aside
       ref={sidebarRef}
-      onMouseEnter={() => console.log(sidebarRef)}
       onChange={() => {
         setSidebarW(sidebarRef.current?.clientWidth as number);
       }}

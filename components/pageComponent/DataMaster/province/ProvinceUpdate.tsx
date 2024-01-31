@@ -51,7 +51,7 @@ const ProvinceEditPage = ({ id }: { id: string }) => {
           handleSubmit();
         }}
       >
-        <Label onClick={() => console.log(values)}>Nama Provinsi</Label>
+        <Label>Nama Provinsi</Label>
         <div className="flex gap-2">
           <Input
             type="text"

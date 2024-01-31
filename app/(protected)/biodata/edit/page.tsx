@@ -30,7 +30,6 @@ const EditEmployeeFormPartial = dynamic(
 
 const getData = async () => {
   const authData = await GetSessionData();
-  console.log("ini auth data", authData);
   const provinceData = GETProvinceList({});
   const workGroupData = GETListWorkGroup();
   const workUnitData = GETListWorkUnit();

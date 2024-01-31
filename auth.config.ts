@@ -37,7 +37,6 @@ export const authConfig: NextAuthConfig = {
         token.jwtToken = user.jwt;
 
         if (trigger === "update" && session) {
-          console.log("refresh");
           token = {
             ...token,
             jwtToken: user.jwt,

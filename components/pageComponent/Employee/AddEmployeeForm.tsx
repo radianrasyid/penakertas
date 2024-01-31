@@ -117,7 +117,10 @@ const AddEmployeeForm = ({
             </div>
           );
         },
-        error: "Something went wrong",
+        error: (data) => {
+          console.log("ini data cok", data);
+          return "Something went wrong";
+        },
       });
     },
   });
@@ -125,55 +128,28 @@ const AddEmployeeForm = ({
   const getDistrict = async () => {
     if (values.province === null) return null;
 
-    const fetching = GETDistrictList({
+    const fetching = await GETDistrictList({
       province: values.province.id,
     });
-    toast.promise(fetching, {
-      loading: "Memuat kabupaten/kota...",
-      success: (data) => {
-        setDistrictList(data.data);
-        return "Memuat kabupaten/kota berhasil";
-      },
-      error: () => {
-        return "Terjadi kesalahan dalam memuat kabupaten/kota";
-      },
-    });
+    setDistrictList(fetching.data);
   };
 
   const getSubdistrict = async () => {
     if (values.district === null) return null;
 
-    const fetching = GETSubdistrictList({
+    const fetching = await GETSubdistrictList({
       district: values.district.id,
     });
-    toast.promise(fetching, {
-      loading: "Memuat kecamatan...",
-      success: (data) => {
-        setSubdistrictList(data.data);
-        return "Memuat kecamatan berhasil";
-      },
-      error: () => {
-        return "Terjadi kesalahan dalam memuat kecamatan";
-      },
-    });
+    setSubdistrictList(fetching.data);
   };
 
   const getWard = async () => {
     if (values.subdistrict === null) return null;
 
-    const fetching = GETWardList({
+    const fetching = await GETWardList({
       subdistrict: values.subdistrict.id,
     });
-    toast.promise(fetching, {
-      loading: "Memuat kelurahan...",
-      success: (data) => {
-        setWardList(data.data);
-        return "Memuat kelurahan berhasil";
-      },
-      error: () => {
-        return "Terjadi kesalahan dalam memuat kelurahan";
-      },
-    });
+    setWardList(fetching.data);
   };
 
   useMemo(() => {
@@ -275,6 +251,7 @@ const AddEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={workGroupList}
+                  disabled={workGroupList.length == 0}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -323,6 +300,7 @@ const AddEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={workUnitList}
+                  disabled={workUnitList.length == 0}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -369,6 +347,7 @@ const AddEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={workPartList}
+                  disabled={workPartList.length == 0}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -427,6 +406,7 @@ const AddEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={religionList}
+                  disabled={religionList.length == 0}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -475,6 +455,7 @@ const AddEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={genderList}
+                  disabled={genderList.length == 0}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -523,6 +504,7 @@ const AddEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={educationLevelList}
+                  disabled={educationLevelList.length == 0}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -571,6 +553,7 @@ const AddEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={maritalStatusList}
+                  disabled={maritalStatusList.length == 0}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -691,6 +674,7 @@ const AddEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={provinceOptions}
+                  disabled={provinceOptions.length == 0}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -739,6 +723,7 @@ const AddEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={districtList}
+                  disabled={districtList.length == 0}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -785,6 +770,7 @@ const AddEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={subdistrictList}
+                  disabled={subdistrictList.length == 0}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -831,6 +817,7 @@ const AddEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={wardList}
+                  disabled={wardList.length == 0}
                   disableCloseOnSelect
                   getOptionLabel={(opt) => opt.name}
                   renderOption={(props, option, { selected }) => {
@@ -940,7 +927,6 @@ const AddEmployeeForm = ({
                               : new Date()
                           }
                           onSelect={(e, d) => {
-                            console.log(d);
                             setFieldValue("dateOfBirth", d);
                           }}
                         />

@@ -5,7 +5,6 @@ import { VscLoading } from "react-icons/vsc";
 
 const getAccessData = async () => {
   const result = await GETAllAccessList();
-  console.log("ini hasil access", result);
   return result;
 };
 

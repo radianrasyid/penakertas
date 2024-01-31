@@ -103,7 +103,6 @@ const AccessMainPage = ({
                                 <label
                                   htmlFor={`${parentIndex}-${dataNew}`}
                                   className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                  onClick={() => console.log(dataNew)}
                                 >
                                   {accessItemParent}
                                 </label>
@@ -151,7 +150,6 @@ const AccessMainPage = ({
                                   <label
                                     htmlFor={`${parentIndex}-${dataNew}`}
                                     className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                    onClick={() => console.log(dataNew)}
                                   >
                                     {accessItemParent}
                                   </label>
@@ -221,9 +219,6 @@ const AccessMainPage = ({
                                             <label
                                               htmlFor={`${parentIndex}-${dataNew}`}
                                               className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                              onClick={() =>
-                                                console.log(dataNew)
-                                              }
                                             >
                                               {accessItemParent}
                                             </label>

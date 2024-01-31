@@ -13,6 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import { GETEmployeePaginated } from "@/services/user/api";
 import { UserListPaginatedResponseType } from "@/types/general";
 import { useRouter } from "next/navigation";
@@ -63,7 +64,7 @@ const ProvinceMasterPage = () => {
           aria-label="Select all"
         />
       ),
-      cell: ({ row }) => (
+      cell: ({ row, table }) => (
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -91,9 +92,23 @@ const ProvinceMasterPage = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("nrpt")}</div>
-      ),
+      cell: ({ row: { index }, column: { id }, getValue, table }) => {
+        const initialValue = getValue();
+        const [value, setValue] = useState(initialValue);
+        const onBlur = () => table.options.meta?.updateData(index, id, value);
+
+        useMemo(() => {
+          setValue(initialValue);
+        }, [initialValue]);
+
+        return (
+          <Input
+            value={value as string}
+            onChange={(e) => setValue(e.target.value)}
+            onBlur={onBlur}
+          />
+        );
+      },
     },
     {
       accessorKey: "fullname",
@@ -245,6 +260,7 @@ const ProvinceMasterPage = () => {
         data={rows}
         currentPage={currentPage}
         pageSize={pageSize}
+        dataSetter={setRows}
         totalData={totalData}
         totalPage={totalPage}
         onPageSizeChange={(e) => setPageSize(e)}

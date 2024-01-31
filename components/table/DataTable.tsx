@@ -26,10 +26,12 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "../ui/table";
+import FooterCell from "./FooterCell";
 import CustomPagination from "./customPagination";
 
 export function DataTableServerside<TData, TValue>({
@@ -48,6 +50,8 @@ export function DataTableServerside<TData, TValue>({
   editedRows,
   setEditedRows,
   onPageSizeChange,
+  canAddData = false,
+  initialData,
 }: {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -64,12 +68,15 @@ export function DataTableServerside<TData, TValue>({
   dataSetter?: Dispatch<SetStateAction<TData[]>>;
   editedRows?: Data;
   setEditedRows?: Dispatch<SetStateAction<Data>>;
+  canAddData?: boolean;
+  initialData?: TData;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+  const [originalData, setOriginalData] = useState<TData[]>([...data]);
 
   const table = useReactTable({
     data,
@@ -83,6 +90,7 @@ export function DataTableServerside<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     enableRowSelection: true,
+
     state: {
       sorting,
       columnFilters,
@@ -111,15 +119,52 @@ export function DataTableServerside<TData, TValue>({
           );
         }
       },
+      revertData: (rowIndex, revert) => {
+        if (revert) {
+          if (dataSetter && originalData) {
+            dataSetter((old) =>
+              old.map((e, index) =>
+                index === rowIndex ? originalData[rowIndex] : e
+              )
+            );
+          }
+          return;
+        } else {
+          setOriginalData((old) =>
+            old.map((e, index) => (index === rowIndex ? data[rowIndex] : e))
+          );
+          if (dataSetter) {
+            dataSetter((old) =>
+              old.map((e, index) => (index === rowIndex ? data[rowIndex] : e))
+            );
+          }
+          return;
+        }
+      },
       addRow: (dataToAdd) => {
         if (!!dataSetter) {
-          dataSetter((old) => [...old, dataToAdd]);
+          if (!!dataToAdd && data.length > 0) {
+            dataSetter((old) => [...old, dataToAdd]);
+            return;
+          } else {
+            dataSetter([initialData as TData]);
+            return;
+          }
         }
       },
       removeRow: (rowIndex) => {
         if (!!dataSetter) {
           const process = data.filter((_row, index) => index !== rowIndex);
           dataSetter(process);
+        }
+      },
+      removeRows: (selectedRows) => {
+        if (dataSetter) {
+          const setFilterFunc = (old: TData[]): TData[] => {
+            return old.filter((row, index) => !selectedRows.includes(index));
+          };
+          dataSetter(setFilterFunc);
+          setOriginalData(setFilterFunc);
         }
       },
       editedRow: editedRows,
@@ -199,7 +244,7 @@ export function DataTableServerside<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="text-center">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -229,7 +274,7 @@ export function DataTableServerside<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-center">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -249,6 +294,18 @@ export function DataTableServerside<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
+          {canAddData && (
+            <TableFooter>
+              <TableRow>
+                <TableHead
+                  colSpan={table.getCenterLeafColumns().length}
+                  align="right"
+                >
+                  <FooterCell key={data.length} table={table} />
+                </TableHead>
+              </TableRow>
+            </TableFooter>
+          )}
         </Table>
       </div>
       {/* <div className="flex items-center justify-end space-x-2 py-4">

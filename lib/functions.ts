@@ -89,7 +89,6 @@ export async function reprocessSidebar({
 }) {
   const authData = await GetSessionData();
   const decodedJwt = jwtDecode(authData?.user?.jwt as string) as JwtDecodedType;
-  console.log("ini decoded jwt di function baru", decodedJwt);
   const currentAccessData = decodedJwt.access.data.access.menu;
 
   return filterSidebarData(currentAccessData, sidebarData);
@@ -118,7 +117,6 @@ export function filterSidebarData(
 
       // Recursively filter children
       if (filteredItem.children && filteredItem.children.length > 0) {
-        console.log("ini masuk ke child", accessInfo?.children);
         filteredItem.children = filterSidebarData(
           accessInfo?.children as MenuItem[],
           menuItem.children

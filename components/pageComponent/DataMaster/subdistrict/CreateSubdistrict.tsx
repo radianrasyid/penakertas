@@ -61,7 +61,7 @@ const SubdistrictCreate = () => {
       >
         <div className="flex gap-2 flex-wrap">
           <div className="flex-1 md:basis-1/2">
-            <Label onClick={() => console.log(values)}>Nama Kelurahan</Label>
+            <Label>Nama Kelurahan</Label>
             <div className="flex gap-2">
               <Input
                 type="text"

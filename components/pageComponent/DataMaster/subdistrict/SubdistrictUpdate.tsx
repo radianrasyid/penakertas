@@ -52,7 +52,7 @@ const SubdistrictUpdate = ({ id }: { id: string }) => {
           handleSubmit();
         }}
       >
-        <Label onClick={() => console.log(values)}>Nama Kabupaten/Kota</Label>
+        <Label>Nama Kabupaten/Kota</Label>
         <div className="flex gap-2">
           <Input
             type="text"

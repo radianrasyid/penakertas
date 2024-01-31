@@ -24,7 +24,6 @@ export const MyHeader: IHeaderOverride = (
           className="rounded-full"
           onClick={async () => {
             const currentId = state.currentDocument?.uri as string;
-            console.log(currentId);
             const fetching = fetch(currentId, {
               method: "GET",
             });

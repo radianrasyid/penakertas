@@ -120,12 +120,7 @@ const Navbar = () => {
           )}
         </Button>
         <div className="flex flex-col">
-          <span
-            className="text-xs font-semibold"
-            onClick={() => console.log(currentUser)}
-          >
-            {currentUser.user.name}
-          </span>
+          <span className="text-xs font-semibold">{currentUser.user.name}</span>
           <span className="text-xs font-light">Company</span>
         </div>
         <DropdownMenu>
@@ -135,10 +130,7 @@ const Navbar = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel
-              className="text-sm font-semibold text-gray-500"
-              onClick={() => console.log(currentUser)}
-            >
+            <DropdownMenuLabel className="text-sm font-semibold text-gray-500">
               My Account
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -175,10 +167,7 @@ const Navbar = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel
-              className="text-sm font-semibold text-gray-500"
-              onClick={() => console.log(currentUser)}
-            >
+            <DropdownMenuLabel className="text-sm font-semibold text-gray-500">
               My Account
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

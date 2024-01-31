@@ -36,6 +36,7 @@ export const {
           id: string;
           fullname: string;
           username: string;
+          nipp: string;
           email: string;
           image: string;
         };
@@ -46,6 +47,7 @@ export const {
           image: response.image,
           name: response.fullname,
           jwt: resLogin.data,
+          nipp: response.nipp,
           username: response.username,
         };
       },

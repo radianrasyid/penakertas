@@ -34,6 +34,7 @@ import { CalendarIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { toast } from "sonner";
+import MarriageHistoryTable from "./Tables/MarriageHistoryTable";
 
 const EditEmployeeForm = ({
   provinceList = [],
@@ -66,6 +67,7 @@ const EditEmployeeForm = ({
   const [subdistrictList, setSubdistrictList] = useState<OptionsType[]>([]);
   const [wardList, setWardList] = useState<OptionsType[]>([]);
   const decisionLetterRef = useRef<any>(null);
+  const [editedRows, setEditedRows] = useState<Data>({});
 
   const { setFieldValue, values, handleSubmit, handleChange } = useFormik({
     initialValues: {
@@ -175,8 +177,6 @@ const EditEmployeeForm = ({
         i === "id" || i === "username" ? delete currentData[i] : null;
       });
 
-      console.log("ini datanya njerng", currentData);
-
       const fetching = PATCHUpdateUserInfo({
         id: values.employmentId as string,
         data: currentData,
@@ -193,64 +193,37 @@ const EditEmployeeForm = ({
   const getDistrict = async () => {
     if (values.Province === undefined) return null;
 
-    const fetching = GETDistrictList({
+    const fetching = await GETDistrictList({
       province: !!values.Province?.id
         ? (provinceList.find((e) => e.name === values.Province?.name)
             ?.id as string)
         : "",
     });
-    toast.promise(fetching, {
-      loading: "Memuat kabupaten/kota...",
-      success: (data) => {
-        setDistrictList(data.data);
-        return "Memuat kabupaten/kota berhasil";
-      },
-      error: () => {
-        return "Terjadi kesalahan dalam memuat kabupaten/kota";
-      },
-    });
+    setDistrictList(fetching.data);
   };
 
   const getSubdistrict = async () => {
     if (values.cityDistrict === undefined) return null;
 
-    const fetching = GETSubdistrictList({
+    const fetching = await GETSubdistrictList({
       district: !!values.cityDistrict?.id
         ? (districtList.find((e) => e.name === values.cityDistrict?.name)
             ?.id as string)
         : "",
     });
-    toast.promise(fetching, {
-      loading: "Memuat kecamatan...",
-      success: (data) => {
-        setSubdistrictList(data.data);
-        return "Memuat kecamatan berhasil";
-      },
-      error: () => {
-        return "Terjadi kesalahan dalam memuat kecamatan";
-      },
-    });
+    setSubdistrictList(fetching.data);
   };
 
   const getWard = async () => {
     if (values.subdistrict === undefined) return null;
 
-    const fetching = GETWardList({
+    const fetching = await GETWardList({
       subdistrict: !!values.subdistrict?.id
         ? (subdistrictList.find((e) => e.name === values.subdistrict?.name)
             ?.id as string)
         : "",
     });
-    toast.promise(fetching, {
-      loading: "Memuat kelurahan...",
-      success: (data) => {
-        setWardList(data.data);
-        return "Memuat kelurahan berhasil";
-      },
-      error: () => {
-        return "Terjadi kesalahan dalam memuat kelurahan";
-      },
-    });
+    setWardList(fetching.data);
   };
 
   const preprocessData = async () => {
@@ -263,7 +236,6 @@ const EditEmployeeForm = ({
     Object.keys(currentData).map((i) => {
       let nowData = (currentData as Data)[i];
       if (nowData !== null) {
-        console.log("ini i", i);
         switch (true) {
           case [
             "Province",
@@ -316,21 +288,17 @@ const EditEmployeeForm = ({
         }}
       >
         <div className="flex justify-between mb-5">
-          <span className="text-lg font-semibold">Edit Pegawai</span>
+          <span
+            className="text-lg font-semibold"
+            onClick={() => console.log(userData)}
+          >
+            Edit Pegawai
+          </span>
         </div>
 
         <div className="bg-white drop-shadow-lg rounded-xl mb-2">
           <div className="flex justify-between w-full bg-cyan-600 px-4 py-2 rounded-tl-lg rounded-tr-lg">
-            <span
-              className="text-base font-semibold text-white"
-              onClick={() =>
-                console.log({
-                  userData,
-                  currentState: values,
-                  userDataDecoded,
-                })
-              }
-            >
+            <span className="text-base font-semibold text-white">
               Data Diri
             </span>
           </div>
@@ -409,6 +377,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={workGroupList}
+                  disabled={workGroupList.length == 0}
                   value={values.workGroup || null}
                   isOptionEqualToValue={(e, v) => e.name === v.name}
                   defaultValue={values.workGroup}
@@ -460,6 +429,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={workUnitList}
+                  disabled={workUnitList.length == 0}
                   value={values?.workUnit || null}
                   isOptionEqualToValue={(e, v) => e.name === v.name}
                   disableCloseOnSelect
@@ -508,6 +478,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={workPartList}
+                  disabled={workPartList.length == 0}
                   value={values?.workPart || null}
                   isOptionEqualToValue={(e, v) => e.name === v.name}
                   disableCloseOnSelect
@@ -568,6 +539,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={religionList}
+                  disabled={religionList.length == 0}
                   value={values?.religion || null}
                   isOptionEqualToValue={(e, v) => e.name === v.name}
                   disableCloseOnSelect
@@ -618,6 +590,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={genderList}
+                  disabled={genderList.length == 0}
                   value={values?.gender || null}
                   isOptionEqualToValue={(e, v) => e.name === v.name}
                   disableCloseOnSelect
@@ -668,6 +641,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={educationLevelList}
+                  disabled={educationLevelList.length == 0}
                   isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.latestEducationLevel || null}
                   disableCloseOnSelect
@@ -718,6 +692,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={maritalStatusList}
+                  disabled={maritalStatusList.length == 0}
                   isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.maritalStatus || null}
                   disableCloseOnSelect
@@ -846,6 +821,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={provinceOptions}
+                  disabled={provinceOptions.length == 0}
                   isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.Province || null}
                   disableCloseOnSelect
@@ -896,6 +872,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={districtList}
+                  disabled={districtList.length == 0}
                   isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.cityDistrict || null}
                   disableCloseOnSelect
@@ -944,6 +921,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={subdistrictList}
+                  disabled={subdistrictList.length == 0}
                   isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.subdistrict || null}
                   disableCloseOnSelect
@@ -992,6 +970,7 @@ const EditEmployeeForm = ({
                 <Autocomplete
                   size="small"
                   options={wardList}
+                  disabled={wardList.length == 0}
                   isOptionEqualToValue={(e, v) => e.name === v.name}
                   value={values?.ward || null}
                   disableCloseOnSelect
@@ -1305,12 +1284,7 @@ const EditEmployeeForm = ({
 
               {/* FOTO/SCAN KK */}
               <div className="flex flex-col gap-2 flex-grow">
-                <Label
-                  htmlFor="nrpt-pin-textfield"
-                  onClick={() => console.log("lnk", values.familyCertificate)}
-                >
-                  Foto/Scan KK
-                </Label>
+                <Label htmlFor="nrpt-pin-textfield">Foto/Scan KK</Label>
                 {values.familyCertificate !== undefined ? (
                   <iframe
                     src={
@@ -1471,7 +1445,6 @@ const EditEmployeeForm = ({
                     src={(values.decisionLetter as any)?.link}
                     onClick={() => {
                       decisionLetterRef.current.click();
-                      console.log("clicked");
                     }}
                     className="p-4 bg-slate-700 rounded-lg"
                   />
@@ -1512,6 +1485,7 @@ const EditEmployeeForm = ({
           </div>
         </div>
       </form>
+      <MarriageHistoryTable maritalStatus={maritalStatusList} />
     </div>
   );
 };

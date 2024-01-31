@@ -53,8 +53,6 @@ const WardMasterPage = () => {
       searchQuery: searchQuery,
     });
 
-    console.log("ini response", fetching);
-
     setRows(
       fetching.data.map((item: any, index: number) => {
         return {
