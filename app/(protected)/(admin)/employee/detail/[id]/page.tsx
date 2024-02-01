@@ -1,3 +1,4 @@
+import LoadingScreen from "@/components/ui/loading-screen";
 import { Separator } from "@/components/ui/separator";
 import { getMsOfficeExtension } from "@/lib/functions";
 import { GETEmployeeDetail } from "@/services/user/api";
@@ -11,7 +12,6 @@ import { FaPhone } from "react-icons/fa6";
 
 import { HiLocationMarker } from "react-icons/hi";
 import { MdAddPhotoAlternate, MdEmail } from "react-icons/md";
-import { VscLoading } from "react-icons/vsc";
 
 const getData = async (id: string) => {
   const fetching = await GETEmployeeDetail(id);
@@ -22,14 +22,7 @@ const FileViewerPartial = dynamic(
   () =>
     import("@/components/pageComponent/Biodata/FileViewer/FileViewerBioPage"),
   {
-    loading: () => (
-      <div className="w-full h-24 rounded-lg bg-slate-300 animate-pulse flex gap-2 flex-wrap items-center justify-center">
-        <VscLoading className={"animate-spin"} />
-        <span className="text-sm font-semibold text-slate-900 bg-clip-text animate-pulse">
-          Loading Viewer
-        </span>
-      </div>
-    ),
+    loading: () => <LoadingScreen />,
     ssr: false,
   }
 );

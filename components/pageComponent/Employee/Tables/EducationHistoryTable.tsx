@@ -2,7 +2,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
-import action from "@/app/action";
 import { DataTableServerside } from "@/components/table/DataTable";
 import { EditCell } from "@/components/table/EditCell";
 import { Button } from "@/components/ui/button";
@@ -17,8 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { DELETEProvince } from "@/services/geolocation/api";
-import { DELETEPartner, POSTAddPartner } from "@/services/user/api";
-import { OptionsType } from "@/types/forms";
 import { Data } from "@/types/general";
 import { Autocomplete, Checkbox } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -26,65 +23,43 @@ import { useEffect, useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { toast } from "sonner";
 
-export type MarriageHistoryTable = {
+export type EducationHistoryTable = {
   id: string;
   no: number;
-  fullname: string;
-  status: string;
-  profession: string;
-  phoneNumber: string;
+  educationPlace: string;
+  educationLevel: string;
+  address: string;
+  major: string;
+  graduationYear: string;
   aksi: null | string;
 };
 
-const MarriageHistoryTable = ({
-  maritalStatus,
-  data,
-}: {
-  maritalStatus: OptionsType[];
-  data: {
-    bpjsOfEmployment?: { link: string; mimetype: string };
-    bpjsOfHealth?: { link: string; mimetype: string };
-    createdAt: string;
-    fullname: string;
-    id: string;
-    status: string;
-    identityCard: { link: string; mimetype: string };
-    marriageCertificate: { link: string; mimetype: string };
-    personRelatedId: string;
-    phoneNumber: string;
-    photograph?: { link: string; mimetype: string };
-    profession: string;
-    updatedAt: string;
-  }[];
-}) => {
+const EducationHistoryTable = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
   const [pageSize, setPageSize] = useState<number>(5);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [rows, setRows] = useState<MarriageHistoryTable[]>(
-    data.map((i, index) => {
-      return {
-        fullname: i.fullname,
-        aksi: "",
-        id: i.id,
-        no: index + 1,
-        phoneNumber: i.phoneNumber,
-        profession: i.profession,
-        status: i.status,
-      };
-    })
-  );
-  const [maritalStatusOption, setMaritalStatusOption] = useState<string[]>(
-    maritalStatus.map((e) => e.name)
-  );
+  const [rows, setRows] = useState<EducationHistoryTable[]>([
+    {
+      address: "Mahkota Alam Permai",
+      aksi: "",
+      educationLevel: "S1",
+      educationPlace: "Universitas Mercu Buana",
+      graduationYear: "2022",
+      id: `${Math.floor(Math.random() * 1000)}`,
+      major: "Computer Engineering",
+      no: 1,
+    },
+  ]);
+  const [maritalStatusOption, setMaritalStatusOption] = useState<string[]>([]);
   const [editedRows, setEditedRows] = useState<Data>({});
   const [totalData, setTotalData] = useState<number>(rows.length);
   const [pageTick, setPageTick] = useState<number>(0);
   const router = useRouter();
 
-  const columns: ColumnDef<MarriageHistoryTable>[] = [
+  const columns: ColumnDef<EducationHistoryTable>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -362,7 +337,28 @@ const MarriageHistoryTable = ({
   return (
     <div className="bg-white p-4 drop-shadow-2xl rounded-xl">
       <div className="flex justify-between">
-        <span className="text-lg font-medium">Data Riwayat Pernikahan</span>
+        <span className="text-lg font-medium">Data Riwayat Pendidikan</span>
+
+        {/* <Button
+          variant={"default"}
+          className="flex gap-2 items-center"
+          onClick={async () => {
+            const fetching = POSTAddPartner({ partnertData: rows });
+            toast.promise(fetching, {
+              loading: "Uploading partner data",
+              success: async (data) => {
+                console.log(data);
+                await action();
+                return "Upload user data success";
+              },
+              error: "Upload partner data failed",
+            });
+          }}
+          // disabled={isSubmitDisabled}
+          type="button"
+        >
+          <FaPlus /> Data
+        </Button> */}
       </div>
       <DataTableServerside
         isServerSearch={true}
@@ -382,40 +378,18 @@ const MarriageHistoryTable = ({
         onPageSizeChange={(e) => setPageSize(e)}
         onPageChange={(e) => setCurrentPage(e)}
         initialData={{
-          id: `${Math.floor(Math.random() * 1000)}`,
+          address: "",
           aksi: "",
-          fullname: "",
+          educationLevel: "",
+          educationPlace: "",
+          graduationYear: "",
+          id: `${Math.floor(Math.random() * 1000)}`,
+          major: "",
           no: 1,
-          phoneNumber: "",
-          profession: "",
-          status: "",
-        }}
-        onFinishAddData={async () => {
-          const fetching = POSTAddPartner({ partnertData: rows });
-          toast.promise(fetching, {
-            loading: "Uploading partner data",
-            success: async (data) => {
-              console.log(data);
-              await action();
-              return "Upload user data success";
-            },
-            error: "Upload partner data failed",
-          });
-        }}
-        onDeleteData={(e) => {
-          const fetching = DELETEPartner(e?.id as string);
-          toast.promise(fetching, {
-            loading: "Deleting partner data...",
-            success: async (data) => {
-              console.log(data);
-              return "Delete partner data success";
-            },
-            error: "Delete partner data failed",
-          });
         }}
       />
     </div>
   );
 };
 
-export default MarriageHistoryTable;
+export default EducationHistoryTable;

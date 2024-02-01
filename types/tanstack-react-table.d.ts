@@ -11,5 +11,7 @@ declare module "@tanstack/react-table" {
     editedRow?: Data;
     setEditedRow?: Dispatch<SetStateAction<Data>>;
     revertData: (rowIndex: number, revert: boolean) => void;
+    onDeleteData?: (e?: TData) => void | Promise<void>;
+    onFinishAddData?: (e?: TData) => void | Promise<void>;
   }
 }

@@ -52,6 +52,8 @@ export function DataTableServerside<TData, TValue>({
   onPageSizeChange,
   canAddData = false,
   initialData,
+  onDeleteData,
+  onFinishAddData,
 }: {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -70,6 +72,8 @@ export function DataTableServerside<TData, TValue>({
   setEditedRows?: Dispatch<SetStateAction<Data>>;
   canAddData?: boolean;
   initialData?: TData;
+  onDeleteData?: (e?: TData) => void | Promise<void>;
+  onFinishAddData?: (e?: TData) => void | Promise<void>;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -169,6 +173,8 @@ export function DataTableServerside<TData, TValue>({
       },
       editedRow: editedRows,
       setEditedRow: setEditedRows,
+      onDeleteData: onDeleteData,
+      onFinishAddData: onFinishAddData,
     },
     debugTable: true,
   });

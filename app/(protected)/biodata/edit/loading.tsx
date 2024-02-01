@@ -1,7 +1,7 @@
 import LoadingScreen from "@/components/ui/loading-screen";
 
-const LoadingAdmin = () => {
+const LoadingEditBiodata = () => {
   return <LoadingScreen />;
 };
 
-export default LoadingAdmin;
+export default LoadingEditBiodata;

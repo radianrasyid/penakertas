@@ -105,7 +105,6 @@ export const GETEmployeeDetail = async (id: string) => {
     headers: {
       "Content-Type": "application/json",
     },
-    cache: "no-cache",
     requestInit: {
       next: {
         tags: ["employee"],
@@ -160,6 +159,19 @@ export const POSTAddPartner = async ({
     method: "POST",
     body: JSON.stringify({ partnerData: partnertData }),
     cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res;
+};
+
+export const DELETEPartner = async (id: string) => {
+  const res = await useFetch({
+    url: `/api/relationship/${id}`,
+    method: "DELETE",
+    cache: "no-store",
     headers: {
       "Content-Type": "application/json",
     },

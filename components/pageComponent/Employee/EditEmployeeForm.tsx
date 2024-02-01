@@ -34,6 +34,7 @@ import { CalendarIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { toast } from "sonner";
+import EducationHistoryTable from "./Tables/EducationHistoryTable";
 import MarriageHistoryTable from "./Tables/MarriageHistoryTable";
 
 const EditEmployeeForm = ({
@@ -67,7 +68,6 @@ const EditEmployeeForm = ({
   const [subdistrictList, setSubdistrictList] = useState<OptionsType[]>([]);
   const [wardList, setWardList] = useState<OptionsType[]>([]);
   const decisionLetterRef = useRef<any>(null);
-  const [editedRows, setEditedRows] = useState<Data>({});
 
   const { setFieldValue, values, handleSubmit, handleChange } = useFormik({
     initialValues: {
@@ -1485,7 +1485,14 @@ const EditEmployeeForm = ({
           </div>
         </div>
       </form>
-      <MarriageHistoryTable maritalStatus={maritalStatusList} />
+      <MarriageHistoryTable
+        data={userData.data.relationships}
+        maritalStatus={maritalStatusList}
+      />
+      <div className="my-2">
+        <span></span>
+      </div>
+      <EducationHistoryTable />
     </div>
   );
 };

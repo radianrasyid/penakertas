@@ -40,7 +40,7 @@ const ProtectedLayout = async ({ children }: { children: ReactNode }) => {
         <NavbarPartial />
 
         {/* CONTENT */}
-        <main className="transition-all flex-1 px-3 max-w-[92vw] min-w-full min-h-screen md:pt-3">
+        <main className="transition-all flex-1 px-3 max-w-[92vw] min-w-full min-h-[89vh] md:pt-3 pb-2">
           {children}
         </main>
       </div>
