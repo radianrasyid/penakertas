@@ -31,6 +31,7 @@ const FileViewerPartial = dynamic(
 
 const BiodataPage = async () => {
   const data: Data = await getData();
+  console.log("ini data user", data);
   const processFile = Object.keys(data)
     .map((i) => {
       if (!!data[i]?.mimetype) {
@@ -53,6 +54,7 @@ const BiodataPage = async () => {
     }) as IDocument[];
   return (
     <>
+      <span className="mb-3 text-xl font-semibold">User Detail</span>
       <div className="bg-white rounded-lg p-4 mb-2">
         <div className="grid grid-cols-12 gap-x-3 md:grid-cols-1 sm:grid-cols-1">
           <div className="col-span-2 md:col-span-full md:flex-1">
@@ -217,6 +219,11 @@ const BiodataPage = async () => {
           </div>
         </div>
       </div>
+
+      {/* TIMELINE SECTION */}
+      {/* <div className=""></div> */}
+
+      {/* FILE VIEWER SECTION */}
       <div className="bg-white rounded-lg p-4">
         <FileViewerPartial docs={processFile} />
       </div>
