@@ -3,9 +3,12 @@ import { GetSessionData } from "@/lib/actions";
 import { GETProvinceList } from "@/services/geolocation/api";
 import { GETEmployeeDetail } from "@/services/user/api";
 import {
+  GETListChildStatus,
   GETListEducationLevel,
   GETListGender,
+  GETListLeaveType,
   GETListMaritalStatus,
+  GETListParentStatus,
   GETListReligion,
   GETListWorkGroup,
   GETListWorkPart,
@@ -32,6 +35,9 @@ const getData = async () => {
   const educationLevelData = GETListEducationLevel();
   const maritalStatusData = GETListMaritalStatus();
   const userData = GETEmployeeDetail(authData?.user?.email as string);
+  const childStatusList = GETListChildStatus();
+  const parentStatusList = GETListParentStatus();
+  const leaveTypeList = GETListLeaveType();
   const test = (await Promise.allSettled([
     provinceData,
     workGroupData,
@@ -42,7 +48,11 @@ const getData = async () => {
     educationLevelData,
     maritalStatusData,
     userData,
+    childStatusList,
+    parentStatusList,
+    leaveTypeList,
   ])) as PromiseAllResponseType[];
+  console.log("ini test", test[9].value);
   return {
     province: test[0].value.data,
     workGroup: test[1].value.data,
@@ -53,6 +63,9 @@ const getData = async () => {
     educationLevel: test[6].value.data,
     maritalStatus: test[7].value.data,
     userData: test[8].value,
+    childStatusList: test[9].value.data,
+    parentStatusList: test[10].value.data,
+    leaveTypeList: test[11].value.data,
   };
 };
 
@@ -69,6 +82,9 @@ const EditEmployee = async () => {
       workPartList={data.workPart}
       workUnitList={data.workUnit}
       userData={data.userData}
+      childStatusList={data.childStatusList}
+      parentStatusList={data.parentStatusList}
+      leaveTypeList={data.leaveTypeList}
     />
   );
 };

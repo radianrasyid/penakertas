@@ -32,14 +32,26 @@ export type EducationHistoryTable = {
   educationLevel: string;
   address: string;
   major: string;
-  graduationYear: string;
+  graduationYear: string | Date;
   aksi: null | string;
 };
 
 const EducationHistoryTable = ({
   educationLevelList,
+  data,
 }: {
   educationLevelList: OptionsType[];
+  data: {
+    address: string;
+    createdAt: string;
+    educationLevel: string;
+    educationPlace: string;
+    graduationYear: string;
+    id: string;
+    major: string;
+    personRelatedId: string;
+    updatedAt: string;
+  }[];
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
@@ -47,7 +59,20 @@ const EducationHistoryTable = ({
   const [pageSize, setPageSize] = useState<number>(5);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [rows, setRows] = useState<EducationHistoryTable[]>([]);
+  const [rows, setRows] = useState<EducationHistoryTable[]>(
+    data.map((i, index) => {
+      return {
+        address: i.address,
+        aksi: "",
+        educationLevel: i.educationLevel,
+        educationPlace: i.educationPlace,
+        graduationYear: new Date(i.graduationYear),
+        id: i.id,
+        major: i.major,
+        no: index + 1,
+      };
+    })
+  );
   const [maritalStatusOption, setMaritalStatusOption] = useState<string[]>([]);
   const [editedRows, setEditedRows] = useState<Data>({});
   const [totalData, setTotalData] = useState<number>(rows.length);
@@ -307,7 +332,11 @@ const EducationHistoryTable = ({
               className="w-full"
               inputClassname="w-full text-center"
               id="period-search-textfield"
-              value={dayjs().format("DD MMMM YYYY")}
+              value={
+                !!value
+                  ? dayjs(new Date(value)).format("DD MMMM YYYY")
+                  : dayjs(new Date()).format("DD MMMM YYYY")
+              }
               name="periode"
               onClick={() =>
                 document.getElementById("period-search-trigger")?.click()
@@ -328,17 +357,15 @@ const EducationHistoryTable = ({
                   <PopoverContent className="w-max">
                     <Calendar
                       toYear={new Date().getFullYear()}
+                      fromYear={1900}
                       captionLayout="dropdown"
                       className="rounded-lg"
-                      defaultMonth={
-                        !!new Date(value) ? new Date(value) : new Date()
-                      }
+                      defaultMonth={!!value ? new Date(value) : new Date()}
                       mode="single"
-                      selected={
-                        !!new Date(value) ? new Date(value) : new Date()
-                      }
+                      selected={!!value ? new Date(value) : new Date()}
                       onSelect={(e, d) => {
                         setValue(d);
+                        tableMeta.updateData(row.index, column.id, d);
                       }}
                     />
                   </PopoverContent>
@@ -346,11 +373,21 @@ const EducationHistoryTable = ({
               }
             />
           ) : (
-            <span>{dayjs(new Date(value)).format("DD MMMM YYYY")}</span>
+            <span>
+              {dayjs(!!value ? new Date(value) : new Date()).format(
+                "DD MMMM YYYY"
+              )}
+            </span>
           );
         }
 
-        return <span>{dayjs(new Date(value)).format("DD MMMM YYYY")}</span>;
+        return (
+          <span>
+            {dayjs(!!value ? new Date(value) : new Date()).format(
+              "DD MMMM YYYY"
+            )}
+          </span>
+        );
       },
     },
     {

@@ -196,3 +196,39 @@ export const GETMaritalStatusPaginate = async ({
 
   return res;
 };
+
+export const GETListChildStatus = async () => {
+  const res = await useFetch({
+    url: `/api/child-status`,
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res;
+};
+
+export const GETListParentStatus = async () => {
+  const res = await useFetch({
+    url: `/api/parent`,
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res;
+};
+
+export const GETListLeaveType = async () => {
+  const res = await useFetch({
+    url: `/api/leave-type`,
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res;
+};

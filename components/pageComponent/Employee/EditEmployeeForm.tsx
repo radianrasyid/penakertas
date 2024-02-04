@@ -40,6 +40,10 @@ import LeaveDataTable from "./Tables/LeaveDataTable";
 import MarriageHistoryTable from "./Tables/MarriageHistoryTable";
 import ParentDataTable from "./Tables/ParentDataTable";
 
+interface leaveTypeOptions extends OptionsType {
+  description: string;
+}
+
 const EditEmployeeForm = ({
   provinceList = [],
   educationLevelList = [],
@@ -49,6 +53,9 @@ const EditEmployeeForm = ({
   workGroupList = [],
   workPartList = [],
   workUnitList = [],
+  childStatusList = [],
+  parentStatusList = [],
+  leaveTypeList = [],
   userData,
 }: {
   provinceList: OptionsType[];
@@ -59,6 +66,9 @@ const EditEmployeeForm = ({
   genderList: OptionsType[];
   educationLevelList: OptionsType[];
   maritalStatusList: OptionsType[];
+  childStatusList: OptionsType[];
+  parentStatusList: OptionsType[];
+  leaveTypeList: leaveTypeOptions[];
   userData: UserDetailResponseType;
 }) => {
   const [provinceOptions, setProvinceOptions] =
@@ -1502,19 +1512,31 @@ const EditEmployeeForm = ({
       <div className="my-2">
         <span></span>
       </div>
-      <EducationHistoryTable educationLevelList={educationLevelList} />
+      <EducationHistoryTable
+        data={userData.data.educations}
+        educationLevelList={educationLevelList}
+      />
       <div className="my-2">
         <span></span>
       </div>
-      <ChildDataTable />
+      <ChildDataTable
+        data={userData.data.childs}
+        childStatusList={childStatusList}
+      />
       <div className="my-2">
         <span></span>
       </div>
-      <ParentDataTable />
+      <ParentDataTable
+        parentStatusList={parentStatusList}
+        data={userData.data.parents}
+      />
       <div className="my-2">
         <span></span>
       </div>
-      <LeaveDataTable />
+      <LeaveDataTable
+        leaveTypeList={leaveTypeList}
+        data={userData.data.leaves}
+      />
     </div>
   );
 };

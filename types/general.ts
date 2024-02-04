@@ -159,6 +159,7 @@ interface User {
   email: string;
   username: string;
   employmentId: string;
+  parents: any[];
   firstName: string;
   lastName: string;
   frontTitle: string;
@@ -172,6 +173,7 @@ interface User {
   leaves: any[]; // Adjust type if necessary
   childs: any[]; // Adjust type if necessary
   relationships: any[]; // Adjust type if necessary
+  educations: any[];
   identity?: {
     mimetype: string;
     link: string;

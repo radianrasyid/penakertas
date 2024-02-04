@@ -4,7 +4,6 @@ export const authConfig: NextAuthConfig = {
   pages: {
     signIn: "/sign-in",
   },
-  useSecureCookies: process.env.NODE_ENV === "production" ? true : false,
   trustHost: true,
   callbacks: {
     authorized: ({ auth, request: { nextUrl } }) => {

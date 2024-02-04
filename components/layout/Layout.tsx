@@ -70,7 +70,7 @@ const Sidebar = ({ role }: { role: string }) => {
                   />
                 </div>
                 <span
-                  className="text-sm text-slate-100 text-center flex-1 font-bold"
+                  className="text-xs text-slate-100 text-center flex-1 font-bold"
                   onClick={async () => {
                     console.log(await GetSessionData());
                   }}
@@ -93,10 +93,10 @@ const Sidebar = ({ role }: { role: string }) => {
                     return (
                       <Button
                         key={`${index}-${item.name}`}
-                        className={`flex gap-2 w-full text-slate-400 justify-start items-center bg-transparent shadow-none mb-2 ${
+                        className={`flex gap-2 w-full text-slate-400 text-xs justify-start items-center bg-transparent shadow-none mb-2 ${
                           pathname === "/"
-                            ? "transition-all text-white bg-primary/50 hover:text-[1rem]"
-                            : "hover:text-white hover:bg-primary/50 hover:text-[1rem]"
+                            ? "transition-all text-white bg-primary/50 hover:text-[0.9rem]"
+                            : "hover:text-white hover:bg-primary/50 hover:text-[0.9rem]"
                         }`}
                         onClick={() => {
                           router.push(item.route);
@@ -110,10 +110,10 @@ const Sidebar = ({ role }: { role: string }) => {
                     return (
                       <Button
                         key={`${index}-${item.name}`}
-                        className={`flex gap-2 w-full text-slate-400 justify-start items-center bg-transparent shadow-none mb-2 ${
+                        className={`flex gap-2 w-full text-slate-400 justify-start items-center text-xs bg-transparent shadow-none mb-2 ${
                           pathname.includes(item.route)
-                            ? "transition-all text-white bg-primary/50 hover:text-[1rem]"
-                            : "hover:text-white hover:bg-primary/50 hover:text-[1rem]"
+                            ? "transition-all text-white bg-primary/50 hover:text-[0.9rem]"
+                            : "hover:text-white hover:bg-primary/50 hover:text-[0.9rem]"
                         }`}
                         onClick={() => {
                           router.push(item.route);
@@ -135,13 +135,13 @@ const Sidebar = ({ role }: { role: string }) => {
                           <AccordionTrigger
                             className={`w-full mb-2 hover:bg-primary/90 text-slate-400 rounded-md flex justify-start items-center gap-2 p-0 px-4 py-2 hover:no-underline ${
                               pathname.includes(item.route)
-                                ? "transition-all text-white bg-primary/50 hover:text-[1rem]"
-                                : "hover:text-white hover:bg-primary/50 hover:text-[1rem]"
+                                ? "transition-all text-white bg-primary/50 hover:text-[1.2rem]"
+                                : "hover:text-white hover:bg-primary/50 hover:text-[1.2rem]"
                             }`}
                           >
                             <div className="flex gap-2 flex-1 items-center">
                               {item.icon}
-                              <span className="text-sm font-medium">
+                              <span className="text-xs font-medium">
                                 {item.name}
                               </span>
                             </div>
@@ -152,10 +152,10 @@ const Sidebar = ({ role }: { role: string }) => {
                                 return (
                                   <li
                                     key={ind + 3}
-                                    className={`cursor-pointer hover:bg-primary/90 w-full flex items-center justify-start pl-3 py-2 rounded-md transition-all ${
+                                    className={`cursor-pointer text-xs hover:bg-primary/90 w-full flex items-center justify-start pl-3 py-2 rounded-md transition-all ${
                                       pathname !== "/" &&
                                       pathname.includes(i.route)
-                                        ? "transition-all text-white bg-primary/50 hover:text-[1rem]"
+                                        ? "transition-all text-white bg-primary/50 hover:text-[0.9rem]"
                                         : "hover:text-white hover:bg-primary/50 hover:text-[0.9rem]"
                                     } mb-1`}
                                     onClick={() => {
@@ -196,8 +196,8 @@ const Sidebar = ({ role }: { role: string }) => {
                       <Button
                         className={`bg-transparent shadow-none text-slate-400 mb-1 ${
                           pathname === "/"
-                            ? "transition-all text-white bg-primary/50 mb-1 hover:text-[1rem]"
-                            : "hover:text-white hover:bg-primary/50 hover:text-[1rem]"
+                            ? "transition-all text-white bg-primary/50 mb-1 hover:text-[0.9rem]"
+                            : "hover:text-white hover:bg-primary/50 hover:text-[0.9rem]"
                         }`}
                         onClick={() => router.push(item.route)}
                         key={index + 4}
@@ -211,7 +211,7 @@ const Sidebar = ({ role }: { role: string }) => {
                         className={`bg-transparent shadow-none text-slate-400 mb-1 ${
                           pathname.includes(item.route)
                             ? "text-white bg-primary/50 mb-1"
-                            : "hover:text-white hover:bg-primary/50 hover:text-[1rem]"
+                            : "hover:text-white hover:bg-primary/50 hover:text-[0.9rem]"
                         }`}
                         onClick={() => router.push(item.route)}
                         key={index + 4}
@@ -226,8 +226,8 @@ const Sidebar = ({ role }: { role: string }) => {
                           <Button
                             className={`shadow-none ${
                               pathname.includes(item.route)
-                                ? "transition-all text-white bg-primary/50 mb-1 hover:text-[1rem]"
-                                : "bg-transparent text-slate-400 hover:text-white hover:bg-primary/50 hover:text-[1rem]"
+                                ? "transition-all text-white bg-primary/50 mb-1 hover:text-[0.9rem]"
+                                : "bg-transparent text-slate-400 hover:text-white hover:bg-primary/50 hover:text-[0.9rem]"
                             }`}
                             onClick={() => router.push(item.children[0].route)}
                           >

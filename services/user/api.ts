@@ -190,7 +190,7 @@ export const POSTAddEducation = async ({
     educationLevel: string;
     address: string;
     major: string;
-    graduationYear: string;
+    graduationYear: string | Date;
     aksi: null | string;
   }[];
 }) => {
@@ -226,7 +226,7 @@ export const POSTAddChild = async ({
   childData: {
     id: string;
     no: number;
-    fullname: string;
+    name: string;
     status: string;
     childOrder: string | number;
     aksi: null | string;
@@ -237,8 +237,11 @@ export const POSTAddChild = async ({
     method: "POST",
     cache: "no-store",
     headers: {
-      "Conten-Type": "application/json",
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      childData,
+    }),
   });
 
   return res;
@@ -276,7 +279,7 @@ export const POSTAddParent = async ({
       "Content-Type": "application/json",
     },
     cache: "no-store",
-    body: JSON.stringify(parentData),
+    body: JSON.stringify({ parentData }),
   });
 
   return res;
@@ -316,7 +319,7 @@ export const POSTAddLeave = async ({
       "Content-Type": "application/json",
     },
     cache: "no-store",
-    body: JSON.stringify(leaveData),
+    body: JSON.stringify({ leaveData }),
   });
 
   return res;

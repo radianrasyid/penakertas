@@ -8,38 +8,58 @@ import { Button } from "@/components/ui/button";
 import { Checkbox as CheckboxShad } from "@/components/ui/checkbox";
 import { CustomTextfield } from "@/components/ui/custom-textfield-mui";
 import { Input } from "@/components/ui/input";
+import { DELETEChild, POSTAddChild } from "@/services/user/api";
+import { OptionsType } from "@/types/forms";
 import { Data } from "@/types/general";
 import { Autocomplete, Checkbox } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
+import { toast } from "sonner";
 
 export type ChildDataTable = {
   id: string;
   no: number;
-  fullname: string;
+  name: string;
   status: string;
   childOrder: string | number;
   aksi: null | string;
 };
 
-const ChildDataTable = () => {
+const ChildDataTable = ({
+  childStatusList,
+  data,
+}: {
+  childStatusList: OptionsType[];
+  data: {
+    activity?: string;
+    childOrder: number;
+    createdAt: string;
+    id: string;
+    name: string;
+    parentId: string;
+    status: string;
+    updatedAt: string;
+  }[];
+}) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
   const [pageSize, setPageSize] = useState<number>(5);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [rows, setRows] = useState<ChildDataTable[]>([
-    {
-      aksi: "",
-      id: `${Math.floor(Math.random() * 1000)}`,
-      childOrder: 1,
-      fullname: "Muhammad Radian Rasyid",
-      status: "Anak",
-      no: 1,
-    },
-  ]);
+  const [rows, setRows] = useState<ChildDataTable[]>(
+    data.map((i, index) => {
+      return {
+        aksi: "",
+        childOrder: i.childOrder.toString(),
+        name: i.name,
+        id: i.id,
+        no: index + 1,
+        status: i.status,
+      };
+    })
+  );
   const [maritalStatusOption, setMaritalStatusOption] = useState<string[]>([]);
   const [editedRows, setEditedRows] = useState<Data>({});
   const [totalData, setTotalData] = useState<number>(rows.length);
@@ -74,7 +94,7 @@ const ChildDataTable = () => {
       header: "No",
     },
     {
-      accessorKey: "fullname",
+      accessorKey: "name",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -98,46 +118,12 @@ const ChildDataTable = () => {
 
         if (tableMeta?.editedRow) {
           return tableMeta.editedRow[row.id] ? (
-            <Autocomplete
-              size="small"
-              options={maritalStatusOption}
-              onBlur={onBlur}
-              disabled={maritalStatusOption.length == 0}
+            <Input
               value={value}
-              disableCloseOnSelect
-              getOptionLabel={(opt) => opt}
-              renderOption={(props, option, { selected }) => {
-                return (
-                  <li {...props}>
-                    <Checkbox
-                      icon={<MdCheckBoxOutlineBlank />}
-                      checkedIcon={<MdCheckBox />}
-                      style={{ marginRight: 2 }}
-                      checked={selected}
-                      sx={{
-                        fontFamily: "Poppins",
-                      }}
-                    />
-                    {option}
-                  </li>
-                );
+              onChange={(e) => {
+                setValue(e.target.value);
               }}
-              slotProps={{
-                paper: {
-                  sx: {
-                    borderRadius: "10px",
-                    fontFamily: "Poppins",
-                    fontSize: "12px",
-                  },
-                },
-              }}
-              fullWidth
-              onChange={(e, v) => {
-                setValue(v as string);
-              }}
-              renderInput={(params) => (
-                <CustomTextfield {...params} placeholder="Kelompok pekerjaan" />
-              )}
+              onBlur={onBlur}
             />
           ) : (
             <span>{value}</span>
@@ -174,12 +160,46 @@ const ChildDataTable = () => {
 
         if (tableMeta?.editedRow) {
           return tableMeta.editedRow[row.id] ? (
-            <Input
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-              }}
+            <Autocomplete
+              size="small"
+              options={childStatusList.map((i) => i.name)}
               onBlur={onBlur}
+              disabled={childStatusList.length == 0}
+              value={value}
+              disableCloseOnSelect
+              getOptionLabel={(opt) => opt}
+              renderOption={(props, option, { selected }) => {
+                return (
+                  <li {...props}>
+                    <Checkbox
+                      icon={<MdCheckBoxOutlineBlank />}
+                      checkedIcon={<MdCheckBox />}
+                      style={{ marginRight: 2 }}
+                      checked={selected}
+                      sx={{
+                        fontFamily: "Poppins",
+                      }}
+                    />
+                    {option}
+                  </li>
+                );
+              }}
+              slotProps={{
+                paper: {
+                  sx: {
+                    borderRadius: "10px",
+                    fontFamily: "Poppins",
+                    fontSize: "12px",
+                  },
+                },
+              }}
+              fullWidth
+              onChange={(e, v) => {
+                setValue(v as string);
+              }}
+              renderInput={(params) => (
+                <CustomTextfield {...params} placeholder="Kelompok pekerjaan" />
+              )}
             />
           ) : (
             <span>{value}</span>
@@ -282,9 +302,36 @@ const ChildDataTable = () => {
           aksi: "",
           id: `${Math.floor(Math.random() * 1000)}`,
           childOrder: "",
-          fullname: "",
+          name: "",
           status: "",
           no: 1,
+        }}
+        onFinishAddData={() => {
+          const fetching = POSTAddChild({
+            childData: rows,
+          });
+          console.log(
+            rows.map((i) => {
+              return {
+                ...i,
+                childOrder: Number(i.childOrder),
+              };
+            })
+          );
+          toast.promise(fetching, {
+            loading: "Uploading child data...",
+            success: "Upload child data success",
+            error: "Something went wrong!",
+          });
+        }}
+        onDeleteData={(e) => {
+          console.log(e);
+          const fetching = DELETEChild(e?.id as string);
+          toast.promise(fetching, {
+            loading: "Deleting child data...",
+            success: "Child data deleted successfully",
+            error: "Something went wrong",
+          });
         }}
       />
     </div>

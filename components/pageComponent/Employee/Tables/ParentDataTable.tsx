@@ -8,11 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Checkbox as CheckboxShad } from "@/components/ui/checkbox";
 import { CustomTextfield } from "@/components/ui/custom-textfield-mui";
 import { Input } from "@/components/ui/input";
+import { DELETEParent, POSTAddParent } from "@/services/user/api";
+import { OptionsType } from "@/types/forms";
 import { Data } from "@/types/general";
 import { Autocomplete, Checkbox } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
+import { toast } from "sonner";
 
 export type ParentDataTable = {
   id: string;
@@ -23,23 +26,39 @@ export type ParentDataTable = {
   aksi: null | string;
 };
 
-const ParentDataTable = () => {
+const ParentDataTable = ({
+  parentStatusList,
+  data,
+}: {
+  parentStatusList: OptionsType[];
+  data: {
+    createdAt: string;
+    fullname: string;
+    id: string;
+    personRelatedId: string;
+    profession: string;
+    status: string;
+    updatedAt: string;
+  }[];
+}) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
   const [pageSize, setPageSize] = useState<number>(5);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [rows, setRows] = useState<ParentDataTable[]>([
-    {
-      aksi: "",
-      id: `${Math.floor(Math.random() * 1000)}`,
-      profession: "ASN",
-      fullname: "Muhammad Radian Rasyid",
-      status: "Anak",
-      no: 1,
-    },
-  ]);
+  const [rows, setRows] = useState<ParentDataTable[]>(
+    data.map((i, index) => {
+      return {
+        aksi: "",
+        fullname: i.fullname,
+        id: i.id,
+        no: index + 1,
+        profession: i.profession,
+        status: i.status,
+      };
+    })
+  );
   const [maritalStatusOption, setMaritalStatusOption] = useState<string[]>([]);
   const [editedRows, setEditedRows] = useState<Data>({});
   const [totalData, setTotalData] = useState<number>(rows.length);
@@ -98,46 +117,12 @@ const ParentDataTable = () => {
 
         if (tableMeta?.editedRow) {
           return tableMeta.editedRow[row.id] ? (
-            <Autocomplete
-              size="small"
-              options={maritalStatusOption}
-              onBlur={onBlur}
-              disabled={maritalStatusOption.length == 0}
+            <Input
               value={value}
-              disableCloseOnSelect
-              getOptionLabel={(opt) => opt}
-              renderOption={(props, option, { selected }) => {
-                return (
-                  <li {...props}>
-                    <Checkbox
-                      icon={<MdCheckBoxOutlineBlank />}
-                      checkedIcon={<MdCheckBox />}
-                      style={{ marginRight: 2 }}
-                      checked={selected}
-                      sx={{
-                        fontFamily: "Poppins",
-                      }}
-                    />
-                    {option}
-                  </li>
-                );
+              onChange={(e) => {
+                setValue(e.target.value);
               }}
-              slotProps={{
-                paper: {
-                  sx: {
-                    borderRadius: "10px",
-                    fontFamily: "Poppins",
-                    fontSize: "12px",
-                  },
-                },
-              }}
-              fullWidth
-              onChange={(e, v) => {
-                setValue(v as string);
-              }}
-              renderInput={(params) => (
-                <CustomTextfield {...params} placeholder="Kelompok pekerjaan" />
-              )}
+              onBlur={onBlur}
             />
           ) : (
             <span>{value}</span>
@@ -174,12 +159,46 @@ const ParentDataTable = () => {
 
         if (tableMeta?.editedRow) {
           return tableMeta.editedRow[row.id] ? (
-            <Input
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-              }}
+            <Autocomplete
+              size="small"
+              options={[...parentStatusList].map((i) => i.name)}
               onBlur={onBlur}
+              disabled={[...parentStatusList].length == 0}
+              value={value}
+              disableCloseOnSelect
+              getOptionLabel={(opt) => opt}
+              renderOption={(props, option, { selected }) => {
+                return (
+                  <li {...props}>
+                    <Checkbox
+                      icon={<MdCheckBoxOutlineBlank />}
+                      checkedIcon={<MdCheckBox />}
+                      style={{ marginRight: 2 }}
+                      checked={selected}
+                      sx={{
+                        fontFamily: "Poppins",
+                      }}
+                    />
+                    {option}
+                  </li>
+                );
+              }}
+              slotProps={{
+                paper: {
+                  sx: {
+                    borderRadius: "10px",
+                    fontFamily: "Poppins",
+                    fontSize: "12px",
+                  },
+                },
+              }}
+              fullWidth
+              onChange={(e, v) => {
+                setValue(v as string);
+              }}
+              renderInput={(params) => (
+                <CustomTextfield {...params} placeholder="Kelompok pekerjaan" />
+              )}
             />
           ) : (
             <span>{value}</span>
@@ -285,6 +304,26 @@ const ParentDataTable = () => {
           fullname: "",
           status: "",
           no: 1,
+        }}
+        onFinishAddData={() => {
+          const fetching = POSTAddParent({
+            parentData: rows,
+          });
+
+          toast.promise(fetching, {
+            loading: "Uploading parent data...",
+            success: "Upload parent data success",
+            error: "Something went wrong",
+          });
+        }}
+        onDeleteData={(e) => {
+          console.log(e);
+          const fetching = DELETEParent(e?.id as string);
+          toast.promise(fetching, {
+            loading: "Deleting child data...",
+            success: "Child data deleted successfully",
+            error: "Something went wrong",
+          });
         }}
       />
     </div>

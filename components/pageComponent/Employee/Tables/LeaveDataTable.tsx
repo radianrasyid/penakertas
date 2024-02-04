@@ -15,13 +15,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { DELETELeave, POSTAddLeave } from "@/services/user/api";
+import { OptionsType } from "@/types/forms";
 import { Data } from "@/types/general";
 import { Autocomplete, Checkbox } from "@mui/material";
-import { addDays } from "date-fns";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
+import { toast } from "sonner";
 
 export type LeaveDataTable = {
   id: string;
@@ -34,26 +36,48 @@ export type LeaveDataTable = {
   aksi: null | string;
 };
 
-const LeaveDataTable = () => {
+interface LeaveTypeOption extends OptionsType {
+  description: string;
+}
+
+const LeaveDataTable = ({
+  data,
+  leaveTypeList,
+}: {
+  leaveTypeList: LeaveTypeOption[];
+  data: {
+    createdAt: string;
+    description?: string;
+    endDate: string;
+    id: string;
+    leaveType: string;
+    personRelatedId: string;
+    skDate: string;
+    skNumber: string;
+    startDate: string;
+    updatedAt: string;
+  }[];
+}) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
   const [pageSize, setPageSize] = useState<number>(5);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [rows, setRows] = useState<LeaveDataTable[]>([
-    {
-      aksi: "",
-      id: `${Math.floor(Math.random() * 1000)}`,
-      skNumber: "12345678",
-      skDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      leaveType: "Cuti Sakit",
-      startDate: addDays(new Date(), 6),
-      no: 1,
-    },
-  ]);
-  const [maritalStatusOption, setMaritalStatusOption] = useState<string[]>([]);
+  const [rows, setRows] = useState<LeaveDataTable[]>(
+    data.map((i, index) => {
+      return {
+        aksi: "",
+        endDate: i.endDate,
+        id: i.id,
+        leaveType: i.leaveType,
+        no: index + 1,
+        skDate: i.skDate,
+        skNumber: i.skNumber,
+        startDate: i.startDate,
+      };
+    })
+  );
   const [editedRows, setEditedRows] = useState<Data>({});
   const [totalData, setTotalData] = useState<number>(rows.length);
   const [pageTick, setPageTick] = useState<number>(0);
@@ -113,9 +137,9 @@ const LeaveDataTable = () => {
           return tableMeta.editedRow[row.id] ? (
             <Autocomplete
               size="small"
-              options={maritalStatusOption}
+              options={[...leaveTypeList].map((i) => i.name)}
               onBlur={onBlur}
-              disabled={maritalStatusOption.length == 0}
+              disabled={[...leaveTypeList].length == 0}
               value={value}
               disableCloseOnSelect
               getOptionLabel={(opt) => opt}
@@ -258,6 +282,7 @@ const LeaveDataTable = () => {
                       mode="single"
                       selected={new Date(value)}
                       onSelect={(e, d) => {
+                        tableMeta.updateData(row.index, column.id, d);
                         setValue(d);
                       }}
                       onDayBlur={onBlur}
@@ -330,6 +355,7 @@ const LeaveDataTable = () => {
                       mode="single"
                       selected={new Date(value)}
                       onSelect={(e, d) => {
+                        tableMeta.updateData(row.index, column.id, d);
                         setValue(d);
                       }}
                       onDayBlur={onBlur}
@@ -402,6 +428,7 @@ const LeaveDataTable = () => {
                       mode="single"
                       selected={new Date(value)}
                       onSelect={(e, d) => {
+                        tableMeta.updateData(row.index, column.id, d);
                         setValue(d);
                       }}
                       onDayBlur={onBlur}
@@ -476,6 +503,26 @@ const LeaveDataTable = () => {
           leaveType: "",
           startDate: "",
           no: 1,
+        }}
+        onFinishAddData={() => {
+          const fetching = POSTAddLeave({
+            leaveData: rows,
+          });
+
+          toast.promise(fetching, {
+            loading: "Uploading leave data...",
+            success: "Leave data uploaded successfully",
+            error: "Something went wrong",
+          });
+        }}
+        onDeleteData={(e) => {
+          console.log(e);
+          const fetching = DELETELeave(e?.id as string);
+          toast.promise(fetching, {
+            loading: "Deleting child data...",
+            success: "Child data deleted successfully",
+            error: "Something went wrong",
+          });
         }}
       />
     </div>
