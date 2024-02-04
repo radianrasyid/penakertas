@@ -1,6 +1,6 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 
 import action from "@/app/action";
 import { DataTableServerside } from "@/components/table/DataTable";
@@ -8,15 +8,7 @@ import { EditCell } from "@/components/table/EditCell";
 import { Button } from "@/components/ui/button";
 import { Checkbox as CheckboxShad } from "@/components/ui/checkbox";
 import { CustomTextfield } from "@/components/ui/custom-textfield-mui";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { DELETEProvince } from "@/services/geolocation/api";
 import { DELETEPartner, POSTAddPartner } from "@/services/user/api";
 import { OptionsType } from "@/types/forms";
 import { Data } from "@/types/general";
@@ -307,52 +299,52 @@ const MarriageHistoryTable = ({
         return <span>{value}</span>;
       },
     },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row, table }) => {
-        const payment = row.original;
+    // {
+    //   id: "actions",
+    //   enableHiding: false,
+    //   cell: ({ row, table }) => {
+    //     const payment = row.original;
 
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => {
-                  router.push(`/data-master/province/edit/${payment.id}`);
-                }}
-              >
-                Ubah
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={async () => {
-                  const fetching = DELETEProvince({
-                    id: payment.id,
-                  });
-                  toast.promise(fetching, {
-                    loading: "Deleting data...",
-                    success: (data) => {
-                      setPageTick(pageTick + 1);
-                      return (data as any).message;
-                    },
-                    error: (data) => data.message,
-                  });
-                }}
-                className="hover:bg-red-500"
-              >
-                Hapus
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
+    //     return (
+    //       <DropdownMenu>
+    //         <DropdownMenuTrigger asChild>
+    //           <Button variant="ghost" className="h-8 w-8 p-0">
+    //             <span className="sr-only">Open menu</span>
+    //             <MoreHorizontal className="h-4 w-4" />
+    //           </Button>
+    //         </DropdownMenuTrigger>
+    //         <DropdownMenuContent align="end">
+    //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+    //           <DropdownMenuItem
+    //             onClick={() => {
+    //               router.push(`/data-master/province/edit/${payment.id}`);
+    //             }}
+    //           >
+    //             Ubah
+    //           </DropdownMenuItem>
+    //           <DropdownMenuItem
+    //             onClick={async () => {
+    //               const fetching = DELETEProvince({
+    //                 id: payment.id,
+    //               });
+    //               toast.promise(fetching, {
+    //                 loading: "Deleting data...",
+    //                 success: (data) => {
+    //                   setPageTick(pageTick + 1);
+    //                   return (data as any).message;
+    //                 },
+    //                 error: (data) => data.message,
+    //               });
+    //             }}
+    //             className="hover:bg-red-500"
+    //           >
+    //             Hapus
+    //           </DropdownMenuItem>
+    //         </DropdownMenuContent>
+    //       </DropdownMenu>
+    //     );
+    //   },
+    // },
     {
       id: "edit",
       cell: EditCell,

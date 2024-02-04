@@ -34,8 +34,11 @@ import { CalendarIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { toast } from "sonner";
+import ChildDataTable from "./Tables/ChildDataTable";
 import EducationHistoryTable from "./Tables/EducationHistoryTable";
+import LeaveDataTable from "./Tables/LeaveDataTable";
 import MarriageHistoryTable from "./Tables/MarriageHistoryTable";
+import ParentDataTable from "./Tables/ParentDataTable";
 
 const EditEmployeeForm = ({
   provinceList = [],
@@ -69,126 +72,129 @@ const EditEmployeeForm = ({
   const [wardList, setWardList] = useState<OptionsType[]>([]);
   const decisionLetterRef = useRef<any>(null);
 
-  const { setFieldValue, values, handleSubmit, handleChange } = useFormik({
-    initialValues: {
-      backTitle: undefined,
-      birthPlace: undefined,
-      bpjsOfEmployment: undefined,
-      bpjsOfHealth: undefined,
-      childs: undefined,
-      cityDistrict: undefined,
-      createdAt: undefined,
-      dateOfBirth: undefined,
-      decisionLetterNumber: undefined,
-      email: undefined,
-      employmentId: undefined,
-      familyCertificateNumber: undefined,
-      firstName: undefined,
-      frontTitle: undefined,
-      gender: undefined,
-      homeAddress: undefined,
-      identityNumber: undefined,
-      jobDescription: undefined,
-      lastName: undefined,
-      latestEducationLevel: undefined,
-      leaves: undefined,
-      maritalStatus: undefined,
-      neighborhood: undefined,
-      neighborhoodHead: undefined,
-      npwpNumber: undefined,
-      phoneNumber: undefined,
-      placementLocation: undefined,
-      Province: undefined,
-      relationships: undefined,
-      religion: undefined,
-      startingYear: undefined,
-      subdistrict: undefined,
-      telephone: undefined,
-      ward: undefined,
-      workGroup: undefined,
-      workPart: undefined,
-      workUnit: undefined,
-      bpjsOfEmploymentFile: undefined,
-      bpjsOfHealthFile: undefined,
-      decisionLetter: undefined,
-      familyCertificate: undefined,
-      identity: undefined,
-      npwp: undefined,
-      photograph: undefined,
-    } as EditEmployeeType,
-    validateOnChange: false,
-    onSubmit: async (values) => {
-      let currentData: Data = {
-        ...values,
-      };
+  const { setFieldValue, values, handleSubmit, handleChange, isSubmitting } =
+    useFormik({
+      initialValues: {
+        backTitle: undefined,
+        birthPlace: undefined,
+        bpjsOfEmployment: undefined,
+        bpjsOfHealth: undefined,
+        childs: undefined,
+        cityDistrict: undefined,
+        createdAt: undefined,
+        dateOfBirth: undefined,
+        decisionLetterNumber: undefined,
+        email: undefined,
+        employmentId: undefined,
+        familyCertificateNumber: undefined,
+        firstName: undefined,
+        frontTitle: undefined,
+        gender: undefined,
+        homeAddress: undefined,
+        identityNumber: undefined,
+        jobDescription: undefined,
+        lastName: undefined,
+        latestEducationLevel: undefined,
+        leaves: undefined,
+        maritalStatus: undefined,
+        neighborhood: undefined,
+        neighborhoodHead: undefined,
+        npwpNumber: undefined,
+        phoneNumber: undefined,
+        placementLocation: undefined,
+        Province: undefined,
+        relationships: undefined,
+        religion: undefined,
+        startingYear: undefined,
+        subdistrict: undefined,
+        telephone: undefined,
+        ward: undefined,
+        workGroup: undefined,
+        workPart: undefined,
+        workUnit: undefined,
+        bpjsOfEmploymentFile: undefined,
+        bpjsOfHealthFile: undefined,
+        decisionLetter: undefined,
+        familyCertificate: undefined,
+        identity: undefined,
+        npwp: undefined,
+        photograph: undefined,
+      } as EditEmployeeType,
+      validateOnChange: false,
+      onSubmit: async (values) => {
+        let currentData: Data = {
+          ...values,
+        };
 
-      await Object.keys(currentData).map((i) => {
-        const nowData = currentData[i];
-        nowData == null || nowData == undefined ? delete currentData[i] : null;
-        i === "id" || i === "username" ? delete currentData[i] : null;
-        if (nowData !== null) {
-          switch (true) {
-            case [
-              "Province",
-              "cityDistrict",
-              "subdistrict",
-              "ward",
-              "religion",
-              "gender",
-              "workGroup",
-              "workPart",
-              "workUnit",
-              "latestEducationLevel",
-              "maritalStatus",
-            ].some((e) => e === i):
-              if (!!nowData?.id) {
-                currentData[i] = currentData[i].name;
-              } else {
+        await Object.keys(currentData).map((i) => {
+          const nowData = currentData[i];
+          nowData == null || nowData == undefined
+            ? delete currentData[i]
+            : null;
+          i === "id" || i === "username" ? delete currentData[i] : null;
+          if (nowData !== null) {
+            switch (true) {
+              case [
+                "Province",
+                "cityDistrict",
+                "subdistrict",
+                "ward",
+                "religion",
+                "gender",
+                "workGroup",
+                "workPart",
+                "workUnit",
+                "latestEducationLevel",
+                "maritalStatus",
+              ].some((e) => e === i):
+                if (!!nowData?.id) {
+                  currentData[i] = currentData[i].name;
+                } else {
+                  delete currentData[i];
+                }
+                break;
+              case [
+                "bpjsOfEmploymentFile",
+                "bpjsOfHealthFile",
+                "decisionLetter",
+                "familyCertificate",
+                "npwp",
+                "photograph",
+                "identity",
+              ].some((e) => e === i):
+                if (!!nowData?.id) {
+                  currentData[i] = nowData.id;
+                }
+                break;
+              case Array.isArray(nowData):
+                nowData.length < 1 ? delete currentData[i] : null;
+                break;
+              case !nowData:
                 delete currentData[i];
-              }
-              break;
-            case [
-              "bpjsOfEmploymentFile",
-              "bpjsOfHealthFile",
-              "decisionLetter",
-              "familyCertificate",
-              "npwp",
-              "photograph",
-              "identity",
-            ].some((e) => e === i):
-              if (!!nowData?.id) {
-                currentData[i] = nowData.id;
-              }
-              break;
-            case Array.isArray(nowData):
-              nowData.length < 1 ? delete currentData[i] : null;
-              break;
-            case !nowData:
-              delete currentData[i];
-              break;
-            case ["createdAt", "updatedAt"].some((e) => e === i):
-              delete currentData[i];
-              break;
-            default:
-              currentData[i] = nowData;
-              break;
+                break;
+              case ["createdAt", "updatedAt"].some((e) => e === i):
+                delete currentData[i];
+                break;
+              default:
+                currentData[i] = nowData;
+                break;
+            }
           }
-        }
-        i === "id" || i === "username" ? delete currentData[i] : null;
-      });
+          i === "id" || i === "username" ? delete currentData[i] : null;
+        });
 
-      const fetching = PATCHUpdateUserInfo({
-        id: values.employmentId as string,
-        data: currentData,
-      });
+        const fetching = PATCHUpdateUserInfo({
+          id: values.employmentId as string,
+          data: currentData,
+        });
 
-      toast.promise(fetching, {
-        loading: "Updating your data...",
-        success: "SUCCESS",
-        error: "ERROR",
-      });
-    },
-  });
+        toast.promise(fetching, {
+          loading: "Updating your data...",
+          success: "SUCCESS",
+          error: "ERROR",
+        });
+      },
+    });
 
   const getDistrict = async () => {
     if (values.Province === undefined) return null;
@@ -1477,8 +1483,12 @@ const EditEmployeeForm = ({
                 />
               </div>
             </div>
-            <div className="flex justify-end md:mt-4">
-              <Button type="submit" className="md:w-full">
+            <div className="flex justify-end md:mt-4 mt-3">
+              <Button
+                type="submit"
+                className="md:w-full"
+                loading={isSubmitting}
+              >
                 Submit
               </Button>
             </div>
@@ -1492,7 +1502,19 @@ const EditEmployeeForm = ({
       <div className="my-2">
         <span></span>
       </div>
-      <EducationHistoryTable />
+      <EducationHistoryTable educationLevelList={educationLevelList} />
+      <div className="my-2">
+        <span></span>
+      </div>
+      <ChildDataTable />
+      <div className="my-2">
+        <span></span>
+      </div>
+      <ParentDataTable />
+      <div className="my-2">
+        <span></span>
+      </div>
+      <LeaveDataTable />
     </div>
   );
 };

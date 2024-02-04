@@ -179,3 +179,158 @@ export const DELETEPartner = async (id: string) => {
 
   return res;
 };
+
+export const POSTAddEducation = async ({
+  educationData,
+}: {
+  educationData: {
+    id: string;
+    no: number;
+    educationPlace: string;
+    educationLevel: string;
+    address: string;
+    major: string;
+    graduationYear: string;
+    aksi: null | string;
+  }[];
+}) => {
+  const res = await useFetch({
+    url: `/api/education-data`,
+    method: "POST",
+    body: JSON.stringify({ educationData }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
+
+  return res;
+};
+
+export const DELETEEducation = async (id: string) => {
+  const res = await useFetch({
+    url: `/api/education-data/${id}`,
+    method: "DELETE",
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res;
+};
+
+export const POSTAddChild = async ({
+  childData,
+}: {
+  childData: {
+    id: string;
+    no: number;
+    fullname: string;
+    status: string;
+    childOrder: string | number;
+    aksi: null | string;
+  }[];
+}) => {
+  const res = await useFetch({
+    url: `/api/child`,
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      "Conten-Type": "application/json",
+    },
+  });
+
+  return res;
+};
+
+export const DELETEChild = async (id: string) => {
+  const res = await useFetch({
+    url: `/api/child/${id}`,
+    method: "DELETE",
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res;
+};
+
+export const POSTAddParent = async ({
+  parentData,
+}: {
+  parentData: {
+    id: string;
+    no: number;
+    fullname: string;
+    status: string;
+    profession: string;
+    aksi: null | string;
+  }[];
+}) => {
+  const res = await useFetch({
+    url: `/api/parent`,
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+    body: JSON.stringify(parentData),
+  });
+
+  return res;
+};
+
+export const DELETEParent = async (id: string) => {
+  const res = await useFetch({
+    url: `/api/parent/${id}`,
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
+
+  return res;
+};
+
+export const POSTAddLeave = async ({
+  leaveData,
+}: {
+  leaveData: {
+    id: string;
+    no: number;
+    skNumber: string;
+    skDate: string | Date;
+    startDate: string | Date;
+    leaveType: string;
+    endDate: string | Date;
+    aksi: null | string;
+  }[];
+}) => {
+  const res = await useFetch({
+    url: `/api/leave`,
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+    body: JSON.stringify(leaveData),
+  });
+
+  return res;
+};
+
+export const DELETELeave = async (id: string) => {
+  const res = await useFetch({
+    url: `/api/leave/:id`,
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
+
+  return res;
+};

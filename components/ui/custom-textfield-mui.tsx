@@ -5,11 +5,12 @@ export const CustomTextfield = styled(TextField, {
   slot: "Root",
 })<TextFieldProps>(({ theme }) => ({
   "& .MuiInputBase-root": {
-    borderRadius: "6px",
-    border: "none",
+    borderRadius: "8px",
+    borderColor: "red !important",
   },
-  "& .MuiInputBase-input":{
+  "& .MuiInputBase-input": {
     fontFamily: "Poppins",
-    fontSize: '12px'
-  }
+    fontSize: "12px",
+    borderColor: "red !important",
+  },
 }));

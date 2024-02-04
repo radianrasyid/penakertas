@@ -1,5 +1,5 @@
 import { RowData } from "@tanstack/react-table";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from "react";
 import { Data } from "./general";
 
 declare module "@tanstack/react-table" {
@@ -13,5 +13,7 @@ declare module "@tanstack/react-table" {
     revertData: (rowIndex: number, revert: boolean) => void;
     onDeleteData?: (e?: TData) => void | Promise<void>;
     onFinishAddData?: (e?: TData) => void | Promise<void>;
+    type?: HTMLInputTypeAttribute | string;
+    options?: any[];
   }
 }

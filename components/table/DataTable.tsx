@@ -14,6 +14,7 @@ import {
 } from "@tanstack/react-table";
 import { ChevronDown, ChevronDownIcon } from "lucide-react";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { FaTrash } from "react-icons/fa6";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -54,6 +55,7 @@ export function DataTableServerside<TData, TValue>({
   initialData,
   onDeleteData,
   onFinishAddData,
+  onRemoveAllRows,
 }: {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -74,6 +76,7 @@ export function DataTableServerside<TData, TValue>({
   initialData?: TData;
   onDeleteData?: (e?: TData) => void | Promise<void>;
   onFinishAddData?: (e?: TData) => void | Promise<void>;
+  onRemoveAllRows?: (e?: TData[]) => void | Promise<void>;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -107,7 +110,7 @@ export function DataTableServerside<TData, TValue>({
       },
     },
     meta: {
-      updateData: (rowIndex, columnId, value) => {
+      updateData: (rowIndex: number, columnId: string, value: unknown) => {
         skipAutoResetPageIndex();
         if (!!dataSetter) {
           dataSetter((old) =>
@@ -123,7 +126,7 @@ export function DataTableServerside<TData, TValue>({
           );
         }
       },
-      revertData: (rowIndex, revert) => {
+      revertData: (rowIndex: number, revert: boolean) => {
         if (revert) {
           if (dataSetter && originalData) {
             dataSetter((old) =>
@@ -156,13 +159,13 @@ export function DataTableServerside<TData, TValue>({
           }
         }
       },
-      removeRow: (rowIndex) => {
+      removeRow: (rowIndex: number) => {
         if (!!dataSetter) {
           const process = data.filter((_row, index) => index !== rowIndex);
           dataSetter(process);
         }
       },
-      removeRows: (selectedRows) => {
+      removeRows: (selectedRows: number[]) => {
         if (dataSetter) {
           const setFilterFunc = (old: TData[]): TData[] => {
             return old.filter((row, index) => !selectedRows.includes(index));
@@ -178,6 +181,13 @@ export function DataTableServerside<TData, TValue>({
     },
     debugTable: true,
   });
+
+  const removeRows = () => {
+    table.options.meta?.removeRows(
+      table.getSelectedRowModel().rows.map((row) => row.index)
+    );
+    table.resetRowSelection();
+  };
 
   return (
     <div className="w-full">
@@ -245,7 +255,7 @@ export function DataTableServerside<TData, TValue>({
       </div>
       <div className="rounded-md border bg-white">
         <Table>
-          <TableHeader>
+          <TableHeader className="relative">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -262,6 +272,26 @@ export function DataTableServerside<TData, TValue>({
                 })}
               </TableRow>
             ))}
+            <div className="absolute right-0 top-0 pr-[0.1rem] pt-[0.1rem]">
+              {table.getSelectedRowModel().rows.length > 0 && (
+                <Button
+                  size={"icon"}
+                  variant={"outline"}
+                  onClick={async () => {
+                    if (!!onRemoveAllRows) {
+                      await onRemoveAllRows();
+                      removeRows();
+                      return;
+                    }
+
+                    removeRows();
+                  }}
+                  className="text-xs"
+                >
+                  <FaTrash /> All
+                </Button>
+              )}
+            </div>
           </TableHeader>
           <TableBody>
             {loading ? (

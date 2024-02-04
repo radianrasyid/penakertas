@@ -15,46 +15,51 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { DELETEEducation, POSTAddEducation } from "@/services/user/api";
-import { OptionsType } from "@/types/forms";
 import { Data } from "@/types/general";
 import { Autocomplete, Checkbox } from "@mui/material";
+import { addDays } from "date-fns";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
-import { toast } from "sonner";
 
-export type EducationHistoryTable = {
+export type LeaveDataTable = {
   id: string;
   no: number;
-  educationPlace: string;
-  educationLevel: string;
-  address: string;
-  major: string;
-  graduationYear: string;
+  skNumber: string;
+  skDate: string | Date;
+  startDate: string | Date;
+  leaveType: string;
+  endDate: string | Date;
   aksi: null | string;
 };
 
-const EducationHistoryTable = ({
-  educationLevelList,
-}: {
-  educationLevelList: OptionsType[];
-}) => {
+const LeaveDataTable = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
   const [pageSize, setPageSize] = useState<number>(5);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [rows, setRows] = useState<EducationHistoryTable[]>([]);
+  const [rows, setRows] = useState<LeaveDataTable[]>([
+    {
+      aksi: "",
+      id: `${Math.floor(Math.random() * 1000)}`,
+      skNumber: "12345678",
+      skDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      leaveType: "Cuti Sakit",
+      startDate: addDays(new Date(), 6),
+      no: 1,
+    },
+  ]);
   const [maritalStatusOption, setMaritalStatusOption] = useState<string[]>([]);
   const [editedRows, setEditedRows] = useState<Data>({});
   const [totalData, setTotalData] = useState<number>(rows.length);
   const [pageTick, setPageTick] = useState<number>(0);
   const router = useRouter();
 
-  const columns: ColumnDef<EducationHistoryTable>[] = [
+  const columns: ColumnDef<LeaveDataTable>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -82,13 +87,13 @@ const EducationHistoryTable = ({
       header: "No",
     },
     {
-      accessorKey: "educationPlace",
+      accessorKey: "leaveType",
       header: ({ column }) => (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nama Instansi
+          Jenis Cuti
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
@@ -106,52 +111,11 @@ const EducationHistoryTable = ({
 
         if (tableMeta?.editedRow) {
           return tableMeta.editedRow[row.id] ? (
-            <Input
-              onBlur={onBlur}
-              onChange={(e) => setValue(e.target.value)}
-              type="text"
-              value={value}
-            />
-          ) : (
-            <span>{value}</span>
-          );
-        }
-
-        return <span>{value}</span>;
-      },
-    },
-    {
-      accessorKey: "educationLevel",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => {
-            column.toggleSorting(column.getIsSorted() === "asc");
-          }}
-        >
-          Pendidikan
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ getValue, row, column, table }) => {
-        const initialValue: string = getValue() as string;
-        const tableMeta = table.options.meta;
-        const [value, setValue] = useState<any | OptionsType>(initialValue);
-
-        const onBlur = () => {
-          tableMeta?.updateData(row.index, column.id, value);
-        };
-        useEffect(() => {
-          setValue(initialValue);
-        }, [initialValue]);
-
-        if (tableMeta?.editedRow) {
-          return tableMeta.editedRow[row.id] ? (
             <Autocomplete
               size="small"
-              options={[...educationLevelList].map((i) => i.name)}
+              options={maritalStatusOption}
               onBlur={onBlur}
-              disabled={[...educationLevelList].length == 0}
+              disabled={maritalStatusOption.length == 0}
               value={value}
               disableCloseOnSelect
               getOptionLabel={(opt) => opt}
@@ -197,13 +161,15 @@ const EducationHistoryTable = ({
       },
     },
     {
-      accessorKey: "address",
+      accessorKey: "skNumber",
       header: ({ column }) => (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => {
+            column.toggleSorting(column.getIsSorted() === "asc");
+          }}
         >
-          Alamat
+          Nomor SK
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
@@ -233,72 +199,30 @@ const EducationHistoryTable = ({
           );
         }
 
-        return <span>{value}</span>;
+        return <span>{value.toString()}</span>;
       },
     },
     {
-      accessorKey: "major",
+      accessorKey: "skDate",
       header: ({ column }) => (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Jurusan
+          Tanggal SK
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
       cell: ({ getValue, row, column, table }) => {
         const initialValue: string = getValue() as string;
         const tableMeta = table.options.meta;
-        const [value, setValue] = useState<string>(initialValue);
+        const [value, setValue] = useState<any>(initialValue);
 
         const onBlur = () => {
           tableMeta?.updateData(row.index, column.id, value);
         };
         useEffect(() => {
           setValue(initialValue);
-        }, [initialValue]);
-
-        if (tableMeta?.editedRow) {
-          return tableMeta.editedRow[row.id] ? (
-            <Input
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-              }}
-              onBlur={onBlur}
-            />
-          ) : (
-            <span>{value}</span>
-          );
-        }
-
-        return <span>{value}</span>;
-      },
-    },
-    {
-      accessorKey: "graduationYear",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Tahun Lulus
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ getValue, row, column, table }) => {
-        const initialValue = getValue();
-        const tableMeta = table.options.meta;
-        const [value, setValue] = useState<Date>(
-          new Date(initialValue as unknown as string)
-        );
-
-        const onBlur = () => {
-          tableMeta?.updateData(row.index, column.id, value);
-        };
-        useEffect(() => {
-          setValue(initialValue as Date);
         }, [initialValue]);
 
         if (tableMeta?.editedRow) {
@@ -307,7 +231,7 @@ const EducationHistoryTable = ({
               className="w-full"
               inputClassname="w-full text-center"
               id="period-search-textfield"
-              value={dayjs().format("DD MMMM YYYY")}
+              value={dayjs(new Date(value)).format("DD MMMM YYYY")}
               name="periode"
               onClick={() =>
                 document.getElementById("period-search-trigger")?.click()
@@ -327,19 +251,16 @@ const EducationHistoryTable = ({
                   </PopoverTrigger>
                   <PopoverContent className="w-max">
                     <Calendar
+                      fromYear={1900}
                       toYear={new Date().getFullYear()}
                       captionLayout="dropdown"
                       className="rounded-lg"
-                      defaultMonth={
-                        !!new Date(value) ? new Date(value) : new Date()
-                      }
                       mode="single"
-                      selected={
-                        !!new Date(value) ? new Date(value) : new Date()
-                      }
+                      selected={new Date(value)}
                       onSelect={(e, d) => {
                         setValue(d);
                       }}
+                      onDayBlur={onBlur}
                     />
                   </PopoverContent>
                 </Popover>
@@ -350,7 +271,151 @@ const EducationHistoryTable = ({
           );
         }
 
-        return <span>{dayjs(new Date(value)).format("DD MMMM YYYY")}</span>;
+        return <span>{value.toString()}</span>;
+      },
+    },
+    {
+      accessorKey: "startDate",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Tanggal Mulai
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ getValue, row, column, table }) => {
+        const initialValue: string = getValue() as string;
+        const tableMeta = table.options.meta;
+        const [value, setValue] = useState<any>(initialValue);
+
+        const onBlur = () => {
+          tableMeta?.updateData(row.index, column.id, value);
+        };
+        useEffect(() => {
+          setValue(initialValue);
+        }, [initialValue]);
+
+        if (tableMeta?.editedRow) {
+          return tableMeta.editedRow[row.id] ? (
+            <InputCustom
+              className="w-full"
+              inputClassname="w-full text-center"
+              id="period-search-textfield"
+              value={dayjs(new Date(value)).format("DD MMMM YYYY")}
+              name="periode"
+              onClick={() =>
+                document.getElementById("period-search-trigger")?.click()
+              }
+              // onChange={handleChange}
+              suffixIcon={
+                <Popover>
+                  <PopoverTrigger asChild id="period-search-trigger">
+                    <Button
+                      size={"icon"}
+                      type="button"
+                      variant={"secondary"}
+                      className="bg-transparent"
+                    >
+                      <CalendarIcon />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-max">
+                    <Calendar
+                      fromYear={1900}
+                      toYear={new Date().getFullYear()}
+                      captionLayout="dropdown"
+                      className="rounded-lg"
+                      mode="single"
+                      selected={new Date(value)}
+                      onSelect={(e, d) => {
+                        setValue(d);
+                      }}
+                      onDayBlur={onBlur}
+                    />
+                  </PopoverContent>
+                </Popover>
+              }
+            />
+          ) : (
+            <span>{dayjs(new Date(value)).format("DD MMMM YYYY")}</span>
+          );
+        }
+
+        return <span>{value.toString()}</span>;
+      },
+    },
+    {
+      accessorKey: "endDate",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Tanggal Akhir
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ getValue, row, column, table }) => {
+        const initialValue: string = getValue() as string;
+        const tableMeta = table.options.meta;
+        const [value, setValue] = useState<any>(initialValue);
+
+        const onBlur = () => {
+          tableMeta?.updateData(row.index, column.id, value);
+        };
+        useEffect(() => {
+          setValue(initialValue);
+        }, [initialValue]);
+
+        if (tableMeta?.editedRow) {
+          return tableMeta.editedRow[row.id] ? (
+            <InputCustom
+              className="w-full"
+              inputClassname="w-full text-center"
+              id="period-search-textfield"
+              value={dayjs(new Date(value)).format("DD MMMM YYYY")}
+              name="periode"
+              onClick={() =>
+                document.getElementById("period-search-trigger")?.click()
+              }
+              // onChange={handleChange}
+              suffixIcon={
+                <Popover>
+                  <PopoverTrigger asChild id="period-search-trigger">
+                    <Button
+                      size={"icon"}
+                      type="button"
+                      variant={"secondary"}
+                      className="bg-transparent"
+                    >
+                      <CalendarIcon />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-max">
+                    <Calendar
+                      fromYear={1900}
+                      toYear={new Date().getFullYear()}
+                      captionLayout="dropdown"
+                      className="rounded-lg"
+                      mode="single"
+                      selected={new Date(value)}
+                      onSelect={(e, d) => {
+                        setValue(d);
+                      }}
+                      onDayBlur={onBlur}
+                    />
+                  </PopoverContent>
+                </Popover>
+              }
+            />
+          ) : (
+            <span>{dayjs(new Date(value)).format("DD MMMM YYYY")}</span>
+          );
+        }
+
+        return <span>{value.toString()}</span>;
       },
     },
     {
@@ -362,12 +427,28 @@ const EducationHistoryTable = ({
   return (
     <div className="bg-white p-4 drop-shadow-2xl rounded-xl">
       <div className="flex justify-between">
-        <span
-          className="text-lg font-medium"
-          onClick={() => console.log(educationLevelList)}
+        <span className="text-lg font-medium">Data Cuti</span>
+
+        {/* <Button
+          variant={"default"}
+          className="flex gap-2 items-center"
+          onClick={async () => {
+            const fetching = POSTAddPartner({ partnertData: rows });
+            toast.promise(fetching, {
+              loading: "Uploading partner data",
+              success: async (data) => {
+                console.log(data);
+                await action();
+                return "Upload user data success";
+              },
+              error: "Upload partner data failed",
+            });
+          }}
+          // disabled={isSubmitDisabled}
+          type="button"
         >
-          Data Riwayat Pendidikan
-        </span>
+          <FaPlus /> Data
+        </Button> */}
       </div>
       <DataTableServerside
         isServerSearch={true}
@@ -387,34 +468,18 @@ const EducationHistoryTable = ({
         onPageSizeChange={(e) => setPageSize(e)}
         onPageChange={(e) => setCurrentPage(e)}
         initialData={{
-          address: "",
           aksi: "",
-          educationLevel: "",
-          educationPlace: "",
-          graduationYear: "",
           id: `${Math.floor(Math.random() * 1000)}`,
-          major: "",
+          skNumber: "",
+          skDate: "",
+          endDate: "",
+          leaveType: "",
+          startDate: "",
           no: 1,
-        }}
-        onFinishAddData={async () => {
-          const fetching = POSTAddEducation({ educationData: rows });
-          toast.promise(fetching, {
-            loading: "Adding education data",
-            success: "education data successfully added",
-            error: "Something went wrong",
-          });
-        }}
-        onDeleteData={async (e) => {
-          const fetching = DELETEEducation(e?.id as string);
-          toast.promise(fetching, {
-            loading: "Deleting education data...",
-            success: "education data successfully deleted",
-            error: "Something went wrong",
-          });
         }}
       />
     </div>
   );
 };
 
-export default EducationHistoryTable;
+export default LeaveDataTable;
