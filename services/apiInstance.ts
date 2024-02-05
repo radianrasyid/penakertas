@@ -22,7 +22,7 @@ export async function useFetch({
   requestInit,
 }: FetchArgs) {
   const authData = await GetSessionData();
-  const result = await fetch(`http://localhost:52000${url}`, {
+  const result = await fetch(` http://localhost:52000${url}`, {
     method,
     headers: !!authData?.user?.jwt
       ? {
