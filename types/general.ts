@@ -87,6 +87,11 @@ export interface WhoAmIResponseType {
   religion?: string;
   identityNumber: string;
   npwpNumber: string;
+  relationships: Relationship[];
+  educations: Education[];
+  parents: Parent[];
+  leaves: Leave[];
+  childs: Child[];
   familyCertificateNumber?: string;
   jobDescription?: string;
   placementLocation?: string;
@@ -269,4 +274,81 @@ export type UserDataJwtDecode = {
   expire: number;
   access: AccessData;
   iat: number;
+};
+
+export type Relationship = {
+  bpjsOfEmployent?: {
+    link: string;
+    mimetype: string;
+  };
+  bpjsOfHealth?: {
+    link: string;
+    mimetype: string;
+  };
+  createdAt: string;
+  fullname: string;
+  id: string;
+  identityCard?: {
+    link: string;
+    mimetype: string;
+  };
+  marriageCertificate?: {
+    link: string;
+    mimetype: string;
+  };
+  personRelatedId: string;
+  phoneNumber: string;
+  photograph?: {
+    link: string;
+    mimetype: string;
+  };
+  profession: string;
+  status: string;
+  updatedAt: string;
+};
+
+export type Parent = {
+  createdAt: string;
+  fullname: string;
+  id: string;
+  personRelatedId: string;
+  profession: string;
+  status: string;
+  updatedAt: string;
+};
+
+export type Leave = {
+  createdAt: string;
+  description?: string;
+  endDate: string;
+  id: string;
+  leaveType: string;
+  personRelatedId: string;
+  skDate: string;
+  skNumber: string;
+  startDate: string;
+  updatedAt: string;
+};
+
+export type Education = {
+  address: string;
+  createdAt: string;
+  educationLevel: string;
+  educationPlace: string;
+  graduationYear: string;
+  id: string;
+  major: string;
+  personRelatedId: string;
+  updatedAt: string;
+};
+
+export type Child = {
+  activity?: string;
+  childOrder: number;
+  createdAt: string;
+  id: string;
+  name: string;
+  parentId: string;
+  status: string;
+  updatedAt: string;
 };

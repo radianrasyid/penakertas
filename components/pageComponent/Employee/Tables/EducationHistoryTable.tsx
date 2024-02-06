@@ -360,6 +360,7 @@ const EducationHistoryTable = ({
                       fromYear={1900}
                       captionLayout="dropdown"
                       className="rounded-lg"
+                      onDayBlur={onBlur}
                       defaultMonth={!!value ? new Date(value) : new Date()}
                       mode="single"
                       selected={!!value ? new Date(value) : new Date()}
@@ -428,7 +429,7 @@ const EducationHistoryTable = ({
           aksi: "",
           educationLevel: "",
           educationPlace: "",
-          graduationYear: "",
+          graduationYear: new Date(),
           id: `${Math.floor(Math.random() * 1000)}`,
           major: "",
           no: 1,

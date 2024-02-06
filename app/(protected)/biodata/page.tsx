@@ -14,6 +14,7 @@ import { FaPhone } from "react-icons/fa6";
 
 import { HiLocationMarker } from "react-icons/hi";
 import { MdAddPhotoAlternate, MdEmail } from "react-icons/md";
+import CardSection from "./_components/cardSection/CardSection";
 
 const getData = async () => {
   const fetching = await GETWhoAmI();
@@ -103,7 +104,7 @@ const BiodataPage = async () => {
                 </Button>
               </Link>
             </div>
-            <div className="bg-slate-300 p-2 rounded-lg max-w-fit items-center flex md:flex-col mb-1">
+            <div className="bg-slate-100 p-2 rounded-lg max-w-fit items-center flex md:flex-col mb-1">
               <span className="text-xs text-primary md:hidden">
                 <span className="font-bold">{data.workGroup} </span>
                 {`- ${data.workUnit} - ${data.workPart}`}
@@ -144,75 +145,81 @@ const BiodataPage = async () => {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-1 text-xs">
               <div className="">
-                <div className="flex flex-wrap">
-                  <span className="flex-1">Agama :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">Agama :</span>
                   <span className="flex-1">{data.religion}</span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">Jenis Kelamin :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">Jenis Kelamin :</span>
                   <span className="flex-1">
                     {data.gender === "MALE" ? "Laki-laki" : "Perempuan"}
                   </span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">TTL :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">TTL :</span>
                   <span className="flex-1">{`${data.birthPlace}, ${dayjs(
                     new Date(data.dateOfBirth as string)
                   ).format("DD MMMM YYYY")}`}</span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">Pendidikan Terakhir :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">
+                    Pendidikan Terakhir :
+                  </span>
                   <span className="flex-1">{data.latestEducationLevel}</span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">Status Perkawinan :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">
+                    Status Perkawinan :
+                  </span>
                   <span className="flex-1">{data.maritalStatus}</span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">Nomor KK :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">Nomor KK :</span>
                   <span className="flex-1">{data.familyCertificateNumber}</span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">NIK :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">NIK :</span>
                   <span className="flex-1">{data.identityNumber}</span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">NPWP :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">NPWP :</span>
                   <span className="flex-1">{data.npwpNumber}</span>
-                </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">BPJS Tenaga Kerja :</span>
-                  <span className="flex-1">{data.bpjsOfEmployment}</span>
-                </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">BPJS Kesehatan :</span>
-                  <span className="flex-1">{data.bpjsOfHealth}</span>
                 </div>
               </div>
               <div className="">
-                <div className="flex flex-wrap">
-                  <span className="flex-1">Alamat Rumah :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">Alamat Rumah :</span>
                   <span className="flex-1">{data.homeAddress}</span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">RT/RW :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">RT/RW :</span>
                   <span className="flex-1">{`${data.neighborhood}/${data.neighborhoodHead}`}</span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">Kelurahan :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">Kelurahan :</span>
                   <span className="flex-1">{data.ward}</span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">Kecamatan :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">Kecamatan :</span>
                   <span className="flex-1">{data.subdistrict}</span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">Kota/Kabupaten :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">Kota/Kabupaten :</span>
                   <span className="flex-1">{data.cityDistrict}</span>
                 </div>
-                <div className="flex flex-wrap">
-                  <span className="flex-1">Provinsi :</span>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">Provinsi :</span>
                   <span className="flex-1">{data.Province}</span>
+                </div>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">
+                    BPJS Tenaga Kerja :
+                  </span>
+                  <span className="flex-1">{data.bpjsOfEmployment}</span>
+                </div>
+                <div className="flex flex-wrap mb-[0.3rem]">
+                  <span className="flex-1 font-medium">BPJS Kesehatan :</span>
+                  <span className="flex-1">{data.bpjsOfHealth}</span>
                 </div>
               </div>
             </div>
@@ -221,10 +228,10 @@ const BiodataPage = async () => {
       </div>
 
       {/* TIMELINE SECTION */}
-      {/* <div className=""></div> */}
+      <CardSection userData={data as WhoAmIResponseType} />
 
       {/* FILE VIEWER SECTION */}
-      <div className="bg-white rounded-lg p-4">
+      <div className="bg-white rounded-lg p-4 mt-2">
         <FileViewerPartial docs={processFile} />
       </div>
     </>
