@@ -1,12 +1,5 @@
-import { ReactNode } from "react";
-
-const EducationHistoryMainPage = ({ auth }: { auth: ReactNode }) => {
-  return (
-    <div>
-      EducationHistoryMainPage
-      {auth}
-    </div>
-  );
+const EducationHistoryMainPage = () => {
+  return <div>EducationHistoryMainPage</div>;
 };
 
 export default EducationHistoryMainPage;
