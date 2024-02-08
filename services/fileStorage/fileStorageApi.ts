@@ -26,3 +26,23 @@ export const POSTUploadPerFile = async ({
 
   return res;
 };
+
+export const POSTGetPdf = async ({
+  workGroup,
+  workUnit,
+}: {
+  workGroup: string;
+  workUnit: string;
+}) => {
+  const res = await useFetch({
+    url: `/api/get-pdf`,
+    method: "POST",
+    body: JSON.stringify({
+      workGroup,
+      workUnit,
+    }),
+    cache: "no-store",
+  });
+
+  return res;
+};

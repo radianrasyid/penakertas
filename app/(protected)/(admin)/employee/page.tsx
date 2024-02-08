@@ -13,7 +13,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { GETEmployeePaginated } from "@/services/user/api";
 import { UserListPaginatedResponseType } from "@/types/general";
 import { useRouter } from "next/navigation";
@@ -90,23 +89,6 @@ const ProvinceMasterPage = () => {
             NRPT/PIN
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        );
-      },
-      cell: ({ row: { index }, column: { id }, getValue, table }) => {
-        const initialValue = getValue();
-        const [value, setValue] = useState(initialValue);
-        const onBlur = () => table.options.meta?.updateData(index, id, value);
-
-        useMemo(() => {
-          setValue(initialValue);
-        }, [initialValue]);
-
-        return (
-          <Input
-            value={value as string}
-            onChange={(e) => setValue(e.target.value)}
-            onBlur={onBlur}
-          />
         );
       },
     },
@@ -233,6 +215,7 @@ const ProvinceMasterPage = () => {
       });
 
       setRows(process);
+      setTotalData(fetching.totalData);
     } catch (error) {
     } finally {
       setLoadingTable(false);
@@ -241,7 +224,7 @@ const ProvinceMasterPage = () => {
 
   useMemo(() => {
     getData();
-  }, []);
+  }, [currentPage, pageSize]);
   return (
     <div className="bg-white p-4 drop-shadow-2xl rounded-xl">
       <div className="flex justify-between">

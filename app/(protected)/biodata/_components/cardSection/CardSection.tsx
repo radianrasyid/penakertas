@@ -9,7 +9,7 @@ import { GoDotFill } from "react-icons/go";
 const CardSection = ({ userData }: { userData: WhoAmIResponseType }) => {
   return (
     <div>
-      <div className="grid grid-cols-3 grid-flow-row gap-x-2 mb-2">
+      <div className="grid grid-cols-3 sm:grid-cols-1 md:grid-cols-1 sm:gap-y-2 md:gap-y-2 grid-flow-row gap-x-2 mb-2">
         <Container>
           <h2
             className="text-sm font-semibold mb-3"
@@ -71,7 +71,7 @@ const CardSection = ({ userData }: { userData: WhoAmIResponseType }) => {
           </div>
         </Container>
       </div>
-      <div className="grid grid-cols-2 grid-flow-row gap-x-2">
+      <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-1 sm:gap-y-2 md:gap-y-2 grid-flow-row gap-x-2">
         <Container>
           <h2 className="text-sm font-semibold mb-3">Data Pendidikan</h2>
           <div className="text-xs pl-2">

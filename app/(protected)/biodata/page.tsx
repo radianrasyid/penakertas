@@ -32,7 +32,6 @@ const FileViewerPartial = dynamic(
 
 const BiodataPage = async () => {
   const data: Data = await getData();
-  console.log("ini data user", data);
   const processFile = Object.keys(data)
     .map((i) => {
       if (!!data[i]?.mimetype) {
@@ -106,23 +105,23 @@ const BiodataPage = async () => {
             </div>
             <div className="bg-slate-100 p-2 rounded-lg max-w-fit items-center flex md:flex-col mb-1">
               <span className="text-xs text-primary md:hidden">
-                <span className="font-bold">{data.workGroup} </span>
-                {`- ${data.workUnit} - ${data.workPart}`}
+                <span className="font-bold">{data?.workGroup || "-"} </span>
+                {`- ${data?.workUnit || "-"} - ${data?.workPart || "-"}`}
               </span>
               <span className="xl:hidden lg:hidden 2xl:hidden text-xs text-primary">
-                {data.workGroup}
+                {data?.workGroup || "-"}
               </span>
               <span className="xl:hidden lg:hidden 2xl:hidden text-xs text-primary">
-                {data.workUnit}
+                {data?.workUnit || "-"}
               </span>
               <span className="xl:hidden lg:hidden 2xl:hidden text-xs text-primary">
-                {data.workPart}
+                {data?.workPart || "-"}
               </span>
             </div>
             <div className="mb-4 flex gap-x-3 items-center flex-wrap md:justify-center">
               <div className="flex flex-wrap text-[11px] items-center gap-x-1">
                 <MdEmail className="text-primary" />
-                <span className="font-semibold">{data.email}</span>
+                <span className="font-semibold">{data?.email || "-"}</span>
               </div>
               <Separator
                 orientation="vertical"
@@ -131,7 +130,9 @@ const BiodataPage = async () => {
               />
               <div className="flex flex-wrap text-[11px] items-center gap-x-1">
                 <BsFillPhoneVibrateFill className="text-primary" />
-                <span className="font-semibold">{data.phoneNumber}</span>
+                <span className="font-semibold">
+                  {data?.phoneNumber || "-"}
+                </span>
               </div>
               <Separator
                 orientation="vertical"
@@ -140,14 +141,14 @@ const BiodataPage = async () => {
               />
               <div className="flex flex-wrap text-[11px] items-center gap-x-1">
                 <FaPhone className="text-primary" />
-                <span className="font-semibold">{data.telephone}</span>
+                <span className="font-semibold">{data?.telephone || "-"}</span>
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-1 text-xs">
               <div className="">
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">Agama :</span>
-                  <span className="flex-1">{data.religion}</span>
+                  <span className="flex-1">{data?.religion || "-"}</span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">Jenis Kelamin :</span>
@@ -165,61 +166,69 @@ const BiodataPage = async () => {
                   <span className="flex-1 font-medium">
                     Pendidikan Terakhir :
                   </span>
-                  <span className="flex-1">{data.latestEducationLevel}</span>
+                  <span className="flex-1">
+                    {data?.latestEducationLevel || "-"}
+                  </span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">
                     Status Perkawinan :
                   </span>
-                  <span className="flex-1">{data.maritalStatus}</span>
+                  <span className="flex-1">{data?.maritalStatus || "-"}</span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">Nomor KK :</span>
-                  <span className="flex-1">{data.familyCertificateNumber}</span>
+                  <span className="flex-1">
+                    {data?.familyCertificateNumber || "-"}
+                  </span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">NIK :</span>
-                  <span className="flex-1">{data.identityNumber}</span>
+                  <span className="flex-1">{data?.identityNumber || "-"}</span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">NPWP :</span>
-                  <span className="flex-1">{data.npwpNumber}</span>
+                  <span className="flex-1">{data?.npwpNumber || "-"}</span>
                 </div>
               </div>
               <div className="">
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">Alamat Rumah :</span>
-                  <span className="flex-1">{data.homeAddress}</span>
+                  <span className="flex-1">{data?.homeAddress || "-"}</span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">RT/RW :</span>
-                  <span className="flex-1">{`${data.neighborhood}/${data.neighborhoodHead}`}</span>
+                  <span className="flex-1">{`${data?.neighborhood || "-"}/${
+                    data?.neighborhoodHead || "-"
+                  }`}</span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">Kelurahan :</span>
-                  <span className="flex-1">{data.ward}</span>
+                  <span className="flex-1">{data?.ward || "-"}</span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">Kecamatan :</span>
-                  <span className="flex-1">{data.subdistrict}</span>
+                  <span className="flex-1">{data?.subdistrict || "-"}</span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">Kota/Kabupaten :</span>
-                  <span className="flex-1">{data.cityDistrict}</span>
+                  <span className="flex-1">{data?.cityDistrict || "-"}</span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">Provinsi :</span>
-                  <span className="flex-1">{data.Province}</span>
+                  <span className="flex-1">{data?.Province || "-"}</span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">
                     BPJS Tenaga Kerja :
                   </span>
-                  <span className="flex-1">{data.bpjsOfEmployment}</span>
+                  <span className="flex-1">
+                    {data?.bpjsOfEmployment || "-"}
+                  </span>
                 </div>
                 <div className="flex flex-wrap mb-[0.3rem]">
                   <span className="flex-1 font-medium">BPJS Kesehatan :</span>
-                  <span className="flex-1">{data.bpjsOfHealth}</span>
+                  <span className="flex-1">{data?.bpjsOfHealth || "-"}</span>
                 </div>
               </div>
             </div>
