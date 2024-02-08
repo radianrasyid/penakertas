@@ -257,7 +257,12 @@ const ParentDataTable = ({
   return (
     <div className="bg-white p-4 drop-shadow-2xl rounded-xl">
       <div className="flex justify-between">
-        <span className="text-lg font-medium">Data Orang Tua</span>
+        <span
+          className="text-lg font-medium"
+          onClick={() => console.log("ini data orang tua", rows)}
+        >
+          Data Orang Tua
+        </span>
 
         {/* <Button
           variant={"default"}
@@ -312,7 +317,10 @@ const ParentDataTable = ({
 
           toast.promise(fetching, {
             loading: "Uploading parent data...",
-            success: "Upload parent data success",
+            success: (data) => {
+              setRows(data.data);
+              return "Upload parent data success";
+            },
             error: "Something went wrong",
           });
         }}

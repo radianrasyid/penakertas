@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
+import { revalidateEmployee } from "@/app/action";
 import { DataTableServerside } from "@/components/table/DataTable";
 import { EditCell } from "@/components/table/EditCell";
 import { Button } from "@/components/ui/button";
@@ -258,7 +259,12 @@ const ChildDataTable = ({
   return (
     <div className="bg-white p-4 drop-shadow-2xl rounded-xl">
       <div className="flex justify-between">
-        <span className="text-lg font-medium">Data Anak</span>
+        <span
+          className="text-lg font-medium"
+          onClick={() => console.log("ini data anak", rows)}
+        >
+          Data Anak
+        </span>
 
         {/* <Button
           variant={"default"}
@@ -320,7 +326,11 @@ const ChildDataTable = ({
           );
           toast.promise(fetching, {
             loading: "Uploading child data...",
-            success: "Upload child data success",
+            success: async (data) => {
+              await revalidateEmployee();
+              setRows(data.data);
+              return "Upload child data success";
+            },
             error: "Something went wrong!",
           });
         }}

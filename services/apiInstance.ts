@@ -22,21 +22,24 @@ export async function useFetch({
   requestInit,
 }: FetchArgs) {
   const authData = await GetSessionData();
-  const result = await fetch(` http://localhost:52000${url}`, {
-    method,
-    headers: !!authData?.user?.jwt
-      ? {
-          ...headers,
-          "ngrok-skip-browser-warning": "9901",
-          Authorization: `Bearer ${authData.user.jwt}`,
-        }
-      : {
-          ...headers,
-          "ngrok-skip-browser-warning": "9901",
-        },
-    body: body,
-    ...requestInit,
-  });
+  const result = await fetch(
+    ` https://relaxed-caiman-strongly.ngrok-free.app${url}`,
+    {
+      method,
+      headers: !!authData?.user?.jwt
+        ? {
+            ...headers,
+            "ngrok-skip-browser-warning": "9901",
+            Authorization: `Bearer ${authData.user.jwt}`,
+          }
+        : {
+            ...headers,
+            "ngrok-skip-browser-warning": "9901",
+          },
+      body: body,
+      ...requestInit,
+    }
+  );
   if (!result.ok) {
     throw new Error((await result.json())?.message || "Something went wrong");
   }

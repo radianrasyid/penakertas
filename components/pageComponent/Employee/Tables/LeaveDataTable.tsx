@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, CalendarIcon } from "lucide-react";
 
+import { revalidateEmployee } from "@/app/action";
 import { DataTableServerside } from "@/components/table/DataTable";
 import { EditCell } from "@/components/table/EditCell";
 import { Button } from "@/components/ui/button";
@@ -454,7 +455,12 @@ const LeaveDataTable = ({
   return (
     <div className="bg-white p-4 drop-shadow-2xl rounded-xl">
       <div className="flex justify-between">
-        <span className="text-lg font-medium">Data Cuti</span>
+        <span
+          className="text-lg font-medium"
+          onClick={() => console.log("ini data cuti", rows)}
+        >
+          Data Cuti
+        </span>
 
         {/* <Button
           variant={"default"}
@@ -511,7 +517,11 @@ const LeaveDataTable = ({
 
           toast.promise(fetching, {
             loading: "Uploading leave data...",
-            success: "Leave data uploaded successfully",
+            success: async (data) => {
+              await revalidateEmployee();
+              setRows(data.data);
+              return "Leave data uploaded successfully";
+            },
             error: "Something went wrong",
           });
         }}

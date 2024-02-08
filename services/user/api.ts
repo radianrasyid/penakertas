@@ -278,7 +278,7 @@ export const POSTAddParent = async ({
     headers: {
       "Content-Type": "application/json",
     },
-    cache: "no-store",
+    cache: "no-cache",
     body: JSON.stringify({ parentData }),
   });
 
@@ -327,7 +327,7 @@ export const POSTAddLeave = async ({
 
 export const DELETELeave = async (id: string) => {
   const res = await useFetch({
-    url: `/api/leave/:id`,
+    url: `/api/leave/${id}`,
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

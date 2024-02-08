@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, CalendarIcon } from "lucide-react";
 
+import { revalidateEmployee } from "@/app/action";
 import { DataTableServerside } from "@/components/table/DataTable";
 import { EditCell } from "@/components/table/EditCell";
 import { Button } from "@/components/ui/button";
@@ -402,7 +403,7 @@ const EducationHistoryTable = ({
       <div className="flex justify-between">
         <span
           className="text-lg font-medium"
-          onClick={() => console.log(educationLevelList)}
+          onClick={() => console.log("ini data pendidikan", rows)}
         >
           Data Riwayat Pendidikan
         </span>
@@ -438,7 +439,11 @@ const EducationHistoryTable = ({
           const fetching = POSTAddEducation({ educationData: rows });
           toast.promise(fetching, {
             loading: "Adding education data",
-            success: "education data successfully added",
+            success: async (data) => {
+              await revalidateEmployee();
+              setRows(data.data);
+              return "education data successfully added";
+            },
             error: "Something went wrong",
           });
         }}

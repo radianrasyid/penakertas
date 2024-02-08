@@ -2,7 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
-import action from "@/app/action";
+import { revalidateEmployee } from "@/app/action";
 import { DataTableServerside } from "@/components/table/DataTable";
 import { EditCell } from "@/components/table/EditCell";
 import { Button } from "@/components/ui/button";
@@ -354,7 +354,12 @@ const MarriageHistoryTable = ({
   return (
     <div className="bg-white p-4 drop-shadow-2xl rounded-xl">
       <div className="flex justify-between">
-        <span className="text-lg font-medium">Data Riwayat Pernikahan</span>
+        <span
+          className="text-lg font-medium"
+          onClick={() => console.log("ini data pernikahan", rows)}
+        >
+          Data Riwayat Pernikahan
+        </span>
       </div>
       <DataTableServerside
         isServerSearch={true}
@@ -387,8 +392,8 @@ const MarriageHistoryTable = ({
           toast.promise(fetching, {
             loading: "Uploading partner data",
             success: async (data) => {
-              console.log(data);
-              await action();
+              await revalidateEmployee();
+              setRows(data.data);
               return "Upload user data success";
             },
             error: "Upload partner data failed",
