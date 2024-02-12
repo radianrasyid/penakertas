@@ -2,12 +2,15 @@ import CardSection from "@/app/(protected)/biodata/_components/cardSection/CardS
 import { Button } from "@/components/ui/button";
 import LoadingScreen from "@/components/ui/loading-screen";
 import { Separator } from "@/components/ui/separator";
+import { GetSessionData } from "@/lib/actions";
 import { getMsOfficeExtension } from "@/lib/functions";
 import { GETEmployeeDetail } from "@/services/user/api";
-import { Data, WhoAmIResponseType } from "@/types/general";
+import { Data, JwtDecodedType, WhoAmIResponseType } from "@/types/general";
 import { IDocument } from "@cyntler/react-doc-viewer";
 import dayjs from "dayjs";
+import { jwtDecode } from "jwt-decode";
 import dynamic from "next/dynamic";
+import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { BsFillPhoneVibrateFill } from "react-icons/bs";
@@ -38,6 +41,7 @@ const BiodataPage = async ({
   };
 }) => {
   const data: Data = await getData(params.id);
+  const token = (await GetSessionData())?.user?.jwt;
   const processFile = Object.keys(data)
     .map((i) => {
       if (!!data[i]?.mimetype) {
@@ -58,6 +62,13 @@ const BiodataPage = async ({
         fileName: b?.data.filename,
       };
     }) as IDocument[];
+
+  const {
+    access: {
+      data: { access },
+    },
+  }: JwtDecodedType = jwtDecode(token as string);
+  console.log("ini data baru", headers().get("x-url"));
   return (
     <>
       <span className="mb-3 text-xl font-semibold">User Detail</span>
